@@ -22,7 +22,7 @@
  *  @return The size of the string stored in the vbuf buffer, if -1 then an
  *  error ocurred, verify the err_code and err_msg members of the bconn
  *  object for more details. */
-int bugzc_bugzilla_version(bugz_conn *bconn, char *vbuf, size_t vsize);
+int bugzc_bugzilla_version(bugzc_conn *bconn, char *vbuf, size_t vsize);
 
 #endif
 

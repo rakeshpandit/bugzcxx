@@ -13,6 +13,16 @@
 # PARTICULAR PURPOSE.
 
 @SET_MAKE@
+
+#  Bugzilla C/C++ XML-RPC proxy
+# 
+#  Copyright (C) Juan V. Guerrero 2007
+# 
+#  Juan V. Guerrero <mindstorm2600@users.sourceforge.net>
+# 
+#  This program is free software, distributed under the terms of
+#  the GNU General Public License Version 2. See the LICENSE file
+#  at the top of the source tree.
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
 VPATH = @srcdir@
@@ -38,7 +48,7 @@ host_triplet = @host@
 DIST_COMMON = README $(am__configure_deps) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in $(srcdir)/config.h.in \
 	$(top_srcdir)/configure AUTHORS COPYING ChangeLog INSTALL NEWS \
-	config.guess config.sub install-sh ltmain.sh missing
+	config.guess config.sub depcomp install-sh ltmain.sh missing
 subdir = .
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
@@ -142,6 +152,8 @@ VERSION = @VERSION@
 XMLRPCC_CFLAGS = @XMLRPCC_CFLAGS@
 XMLRPCC_LIBS = @XMLRPCC_LIBS@
 XMLRPC_C_CONFIG = @XMLRPC_C_CONFIG@
+XMLRPC_C_VERSION = @XMLRPC_C_VERSION@
+XMLRPC_C_VERSION_NUM = @XMLRPC_C_VERSION_NUM@
 ac_ct_CC = @ac_ct_CC@
 ac_ct_CXX = @ac_ct_CXX@
 ac_ct_F77 = @ac_ct_F77@
@@ -189,7 +201,7 @@ sbindir = @sbindir@
 sharedstatedir = @sharedstatedir@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
-SUBDIRS = src $(BUILD_CXX_DIR) $(API_DOCS_DIR)
+SUBDIRS = bugzc $(BUILD_CXX_DIR) $(API_DOCS_DIR)
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-recursive
 
@@ -390,7 +402,7 @@ distclean-tags:
 distdir: $(DISTFILES)
 	$(am__remove_distdir)
 	mkdir $(distdir)
-	$(mkdir_p) $(distdir)/api $(distdir)/src $(distdir)/src++
+	$(mkdir_p) $(distdir)/api $(distdir)/bugzc $(distdir)/bugzcxx
 	@srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`; \
 	topsrcdirstrip=`echo "$(top_srcdir)" | sed 's|.|.|g'`; \
 	list='$(DISTFILES)'; for file in $$list; do \
@@ -625,15 +637,6 @@ uninstall-info: uninstall-info-recursive
 	mostlyclean-libtool mostlyclean-recursive pdf pdf-am ps ps-am \
 	tags tags-recursive uninstall uninstall-am uninstall-info-am
 
-dnl  Bugzilla C/C++ XML-RPC proxy
-dnl 
-dnl  Copyright (C) Juan V. Guerrero 2007
-dnl 
-dnl  Juan V. Guerrero <mindstorm2600@users.sourceforge.net>
-dnl 
-dnl  This program is free software, distributed under the terms of
-dnl  the GNU General Public License Version 2. See the LICENSE file
-dnl  at the top of the source tree.
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

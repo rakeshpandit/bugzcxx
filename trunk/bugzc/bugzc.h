@@ -13,6 +13,7 @@
 #ifndef __BUGZC_H__
 #define __BUGZC_H__
 #include<bugzc/bugzc_version.h>
+#include<bugzc/bugz_errcodes.h>
 #include<xmlrpc-c/base.h>
 #include<xmlrpc-c/client.h>
 
@@ -35,8 +36,8 @@ typedef struct bugz_conn_s {
  * @param surl The amount of characters in url.
  * @return 0 on success, any other value on failure.
  ***************************************************************************/
-int bugzc_init(bugz_conn *bc, const char *url, size_t surl);
+int bugzc_init(bugzc_conn *bc, const char *url, size_t surl);
 
-#include<bugzc/bugzilla.h>
+#include<bugzc/bugzc_bugzilla.h>
 #endif
 

@@ -730,7 +730,7 @@ PACKAGE_VERSION=
 PACKAGE_STRING=
 PACKAGE_BUGREPORT=
 
-ac_unique_file="src/bugzc.h"
+ac_unique_file="bugzc/bugzc.h"
 # Factoring default headers for most tests.
 ac_includes_default="\
 #include <stdio.h>
@@ -881,6 +881,8 @@ BUILD_CXX_DIR
 XMLRPC_C_CONFIG
 XMLRPCC_CFLAGS
 XMLRPCC_LIBS
+XMLRPC_C_VERSION
+XMLRPC_C_VERSION_NUM
 DOXYGEN
 DOXYGEN_INPUT_DIR
 API_DOCS_DIR
@@ -1490,7 +1492,7 @@ Optional Features:
 
   --disable-cxx           Don't compile C++ support library
 
-  --enable-docs            Build library documentation
+  --enable-docs           Build library documentation
 
 
 Optional Packages:
@@ -4791,7 +4793,7 @@ ia64-*-hpux*)
   ;;
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 4794 "configure"' > conftest.$ac_ext
+  echo '#line 4796 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -7045,11 +7047,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:7048: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:7050: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:7052: \$? = $ac_status" >&5
+   echo "$as_me:7054: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -7313,11 +7315,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:7316: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:7318: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:7320: \$? = $ac_status" >&5
+   echo "$as_me:7322: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -7417,11 +7419,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:7420: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:7422: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:7424: \$? = $ac_status" >&5
+   echo "$as_me:7426: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -9714,7 +9716,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 9717 "configure"
+#line 9719 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -9814,7 +9816,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 9817 "configure"
+#line 9819 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -12150,11 +12152,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:12153: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:12155: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:12157: \$? = $ac_status" >&5
+   echo "$as_me:12159: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -12254,11 +12256,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:12257: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:12259: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:12261: \$? = $ac_status" >&5
+   echo "$as_me:12263: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -13815,11 +13817,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:13818: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:13820: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:13822: \$? = $ac_status" >&5
+   echo "$as_me:13824: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -13919,11 +13921,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:13922: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:13924: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:13926: \$? = $ac_status" >&5
+   echo "$as_me:13928: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -16106,11 +16108,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:16109: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:16111: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:16113: \$? = $ac_status" >&5
+   echo "$as_me:16115: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -16374,11 +16376,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:16377: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:16379: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:16381: \$? = $ac_status" >&5
+   echo "$as_me:16383: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -16478,11 +16480,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:16481: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:16483: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:16485: \$? = $ac_status" >&5
+   echo "$as_me:16487: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -19242,7 +19244,7 @@ else
 fi
 
 
-BUILD_CXX_DIR=src++
+BUILD_CXX_DIR=bugzcxx
 
 # Check whether --enable-cxx was given.
 if test "${enable_cxx+set}" = set; then
@@ -19311,14 +19313,28 @@ fi
 
 
 
-if  no$XMLRPC_C_CONFIG = "nono_xmlrpc" ; then
+XMLRPC_C_VERSION=""
+XMLRPC_C_VERSION_NUM=""
+if test "no$XMLRPC_C_CONFIG" = "nono_xmlrpc"
+then
 	echo "xmlrpc-c-config not found, install xmlrpc-c first. http://xmlrpc-c.sourceforge.net"
 	exit 1
+else
+	echo "Verifying that xmlrpc-c has been compiled with the curl transport..."
+	$XMLRPC_C_CONFIG --features | grep "curl-client" > /dev/null 2>&1
+	if test $? -ne 0
+	then
+		echo "xmlrpc-c was not compiled with cUrl transport, it is imperative to have it since Bugzilla's web services requires cookie handling"
+		exit 1
+	fi
+	XMLRPC_C_VERSION=`$XMLRPC_C_CONFIG --version`
 fi
 
 
 XMLRPCC_CFLAGS=`$XMLRPC_C_CONFIG client --cflags`
 XMLRPCC_LIBS=`$XMLRPC_C_CONFIG client --libs`
+
+
 
 
 
@@ -19392,7 +19408,7 @@ fi
 
 
 
-ac_config_files="$ac_config_files Makefile src/Makefile src/bugzc.pc src++/Makefile src++/bugzcxx.pc api/Makefile api/Doxyfile"
+ac_config_files="$ac_config_files Makefile bugzc/Makefile bugzc/bugzc.pc bugzc/bugzc_version.h bugzcxx/Makefile bugzcxx/bugzcxx.pc api/Makefile api/Doxyfile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -19980,10 +19996,11 @@ do
     "config.h") CONFIG_HEADERS="$CONFIG_HEADERS config.h" ;;
     "depfiles") CONFIG_COMMANDS="$CONFIG_COMMANDS depfiles" ;;
     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
-    "src/Makefile") CONFIG_FILES="$CONFIG_FILES src/Makefile" ;;
-    "src/bugzc.pc") CONFIG_FILES="$CONFIG_FILES src/bugzc.pc" ;;
-    "src++/Makefile") CONFIG_FILES="$CONFIG_FILES src++/Makefile" ;;
-    "src++/bugzcxx.pc") CONFIG_FILES="$CONFIG_FILES src++/bugzcxx.pc" ;;
+    "bugzc/Makefile") CONFIG_FILES="$CONFIG_FILES bugzc/Makefile" ;;
+    "bugzc/bugzc.pc") CONFIG_FILES="$CONFIG_FILES bugzc/bugzc.pc" ;;
+    "bugzc/bugzc_version.h") CONFIG_FILES="$CONFIG_FILES bugzc/bugzc_version.h" ;;
+    "bugzcxx/Makefile") CONFIG_FILES="$CONFIG_FILES bugzcxx/Makefile" ;;
+    "bugzcxx/bugzcxx.pc") CONFIG_FILES="$CONFIG_FILES bugzcxx/bugzcxx.pc" ;;
     "api/Makefile") CONFIG_FILES="$CONFIG_FILES api/Makefile" ;;
     "api/Doxyfile") CONFIG_FILES="$CONFIG_FILES api/Doxyfile" ;;
 
@@ -20203,6 +20220,8 @@ BUILD_CXX_DIR!$BUILD_CXX_DIR$ac_delim
 XMLRPC_C_CONFIG!$XMLRPC_C_CONFIG$ac_delim
 XMLRPCC_CFLAGS!$XMLRPCC_CFLAGS$ac_delim
 XMLRPCC_LIBS!$XMLRPCC_LIBS$ac_delim
+XMLRPC_C_VERSION!$XMLRPC_C_VERSION$ac_delim
+XMLRPC_C_VERSION_NUM!$XMLRPC_C_VERSION_NUM$ac_delim
 DOXYGEN!$DOXYGEN$ac_delim
 DOXYGEN_INPUT_DIR!$DOXYGEN_INPUT_DIR$ac_delim
 API_DOCS_DIR!$API_DOCS_DIR$ac_delim
@@ -20210,7 +20229,7 @@ LIBOBJS!$LIBOBJS$ac_delim
 LTLIBOBJS!$LTLIBOBJS$ac_delim
 _ACEOF
 
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 22; then
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 24; then
     break
   elif $ac_last_try; then
     { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5
@@ -20809,4 +20828,5 @@ echo "#"
 echo "#  Platform:              $host"
 echo "#  Debug mode:            $debug_mode_activated"
 echo "#  Generate docs:         $doxygen_docs"
-echo "#  Build C++ support:     $doxygen_docs"
+echo "#  Build C++ support:     $cxx_support"
+echo "#  xmlrpc-c version:      $XMLRPC_C_VERSION"

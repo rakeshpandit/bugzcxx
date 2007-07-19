@@ -13,7 +13,7 @@ dnl Initialization macros.
 dnl --------------------------------
 
 
-AC_INIT(src/bugzc.h)
+AC_INIT(bugzc/bugzc.h)
 AM_CONFIG_HEADER(config.h)
 
 dnl -----------------------------------------------
@@ -81,7 +81,7 @@ AC_ARG_ENABLE(debug, AC_HELP_STRING([--enable-debug          Build library in de
 	]
 )
 
-BUILD_CXX_DIR=src++
+BUILD_CXX_DIR=bugzcxx
 
 AC_ARG_ENABLE(cxx, AC_HELP_STRING([--disable-cxx           Don't compile C++ support library]), [
 		AC_DEFINE(USE_DEBUG, 1, [Activates debug mode])
@@ -101,9 +101,21 @@ dnl
 AC_PATH_PROG([XMLRPC_C_CONFIG], [xmlrpc-c-config], no_xmlrpc, [$PATH:/usr/local/bin:/opt:/opt/doxygen:/bin:/opt/bin:/opt/sfw/bin:/usr/ccs/bin]
 	     )
 
-if [ no$XMLRPC_C_CONFIG = "nono_xmlrpc" ]; then
+XMLRPC_C_VERSION=""
+XMLRPC_C_VERSION_NUM=""
+if test "no$XMLRPC_C_CONFIG" = "nono_xmlrpc" 
+then
 	echo "xmlrpc-c-config not found, install xmlrpc-c first. http://xmlrpc-c.sourceforge.net"
 	exit 1
+else
+	echo "Verifying that xmlrpc-c has been compiled with the curl transport..."
+	$XMLRPC_C_CONFIG --features | grep "curl-client" > /dev/null 2>&1
+	if test $? -ne 0
+	then
+		echo "xmlrpc-c was not compiled with cUrl transport, it is imperative to have it since Bugzilla's web services requires cookie handling"
+		exit 1
+	fi
+	XMLRPC_C_VERSION=`$XMLRPC_C_CONFIG --version`
 fi
 
 
@@ -112,6 +124,8 @@ XMLRPCC_LIBS=`$XMLRPC_C_CONFIG client --libs`
 
 AC_SUBST(XMLRPCC_CFLAGS)
 AC_SUBST(XMLRPCC_LIBS)
+AC_SUBST(XMLRPC_C_VERSION)
+AC_SUBST(XMLRPC_C_VERSION_NUM)
 
 
 dnl -----------------------------------------------------------
@@ -144,9 +158,9 @@ dnl Generates Makefile's, configuration files and scripts
 dnl -----------------------------------------------
 
 AC_OUTPUT(Makefile \
-          bugz/Makefile \
-          bugz/bugzc.pc \
-          bugz/bugzc_version.h \
+          bugzc/Makefile \
+          bugzc/bugzc.pc \
+          bugzc/bugzc_version.h \
           bugzcxx/Makefile \
           bugzcxx/bugzcxx.pc \
 	  api/Makefile \
@@ -161,3 +175,4 @@ echo "#  Platform:              $host"
 echo "#  Debug mode:            $debug_mode_activated"
 echo "#  Generate docs:         $doxygen_docs"
 echo "#  Build C++ support:     $cxx_support"
+echo "#  xmlrpc-c version:      $XMLRPC_C_VERSION"

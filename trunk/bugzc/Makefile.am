@@ -8,9 +8,12 @@
 #  the GNU General Public License Version 2. See the LICENSE file
 #  at the top of the source tree.
 
-h_sources = bugzc.h bugzc_version.h bugzc_bugzilla.h
+pkgconfigdir = $(libdir)/pkgconfig
+pkgconfig_DATA = bugzc.pc
 
-c_sources = bugzc.c bugzc_bugzilla.c
+h_sources = bugzc.h bugzc_version.h bugzc_bugzilla.h bugz_errcodes.h
+
+c_sources = bugzc.c bugzc_bugzilla.c bugz_errcodes.c
 
 library_includedir=$(includedir)/bugzc
 
