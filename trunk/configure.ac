@@ -146,6 +146,7 @@ dnl -----------------------------------------------
 AC_OUTPUT(Makefile \
           bugz/Makefile \
           bugz/bugzc.pc \
+          bugz/bugzc_version.h \
           bugzcxx/Makefile \
           bugzcxx/bugzcxx.pc \
 	  api/Makefile \
@@ -159,4 +160,4 @@ echo "#"
 echo "#  Platform:              $host"
 echo "#  Debug mode:            $debug_mode_activated"
 echo "#  Generate docs:         $doxygen_docs"
-echo "#  Build C++ support:     $doxygen_docs"
+echo "#  Build C++ support:     $cxx_support"
