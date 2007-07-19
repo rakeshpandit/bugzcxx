@@ -83,7 +83,7 @@ AC_ARG_ENABLE(debug, AC_HELP_STRING([--enable-debug          Build library in de
 
 BUILD_CXX_DIR=src++
 
-AC_ARG_ENABLE(cxx, AC_HELP_STRING([--disable-cxx            Don't compile C++ support library]), [
+AC_ARG_ENABLE(cxx, AC_HELP_STRING([--disable-cxx           Don't compile C++ support library]), [
 		AC_DEFINE(USE_DEBUG, 1, [Activates debug mode])
 		cxx_support=off
 		BUILD_CXX_DIR=""
@@ -126,7 +126,7 @@ AC_SUBST(DOXYGEN)
 
 
 API_DOCS_DIR=api
-AC_ARG_ENABLE(docs, AC_HELP_STRING([--enable-docs          Build library documentation]), [
+AC_ARG_ENABLE(docs, AC_HELP_STRING([--enable-docs           Build library documentation]), [
 		DOXYGEN_INPUT_DIR="api"
 		doxygen_docs=yes
 		API_DOCS_DIR=api
@@ -144,10 +144,10 @@ dnl Generates Makefile's, configuration files and scripts
 dnl -----------------------------------------------
 
 AC_OUTPUT(Makefile \
-          src/Makefile \
-          src/bugzc.pc \
-          src++/Makefile \
-          src++/bugzcxx.pc \
+          bugz/Makefile \
+          bugz/bugzc.pc \
+          bugzcxx/Makefile \
+          bugzcxx/bugzcxx.pc \
 	  api/Makefile \
 	  api/Doxyfile
 )

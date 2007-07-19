@@ -1488,9 +1488,9 @@ Optional Features:
   --disable-libtool-lock  avoid locking (might break parallel builds)
   --enable-debug          Build library in debug mode
 
-  --disable-cxx            Don't compile C++ support library
+  --disable-cxx           Don't compile C++ support library
 
-  --enable-docs          Build library documentation
+  --enable-docs            Build library documentation
 
 
 Optional Packages:

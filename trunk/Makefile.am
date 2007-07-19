@@ -8,4 +8,4 @@ dnl  This program is free software, distributed under the terms of
 dnl  the GNU General Public License Version 2. See the LICENSE file
 dnl  at the top of the source tree.
 
-SUBDIRS = src $(BUILD_CXX_DIR) $(API_DOCS_DIR)
+SUBDIRS = bugz $(BUILD_CXX_DIR) $(API_DOCS_DIR)
