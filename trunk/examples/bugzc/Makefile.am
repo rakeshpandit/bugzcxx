@@ -8,4 +8,9 @@
 #  the GNU General Public License Version 2. See the LICENSE file
 #  at the top of the source tree.
 
-SUBDIRS = bugzc $(BUILD_CXX_DIR) $(API_DOCS_DIR) $(EXAMPLES_DIR)
+bin_PROGRAMS = getversion
+
+getversion_SOURCES = getversion.c
+
+LDADD = ../../bugzc/libbugzc.la $(XMLRPCC_LIBS)
+AM_CFLAGS = $(XMLRPCC_CFLAGS)

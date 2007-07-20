@@ -103,6 +103,7 @@ CXX = @CXX@
 CXXCPP = @CXXCPP@
 CXXDEPMODE = @CXXDEPMODE@
 CXXFLAGS = @CXXFLAGS@
+CXX_EXAMPLES_DIR = @CXX_EXAMPLES_DIR@
 CYGPATH_W = @CYGPATH_W@
 DEFS = @DEFS@
 DEPDIR = @DEPDIR@
@@ -113,6 +114,7 @@ ECHO_C = @ECHO_C@
 ECHO_N = @ECHO_N@
 ECHO_T = @ECHO_T@
 EGREP = @EGREP@
+EXAMPLES_DIR = @EXAMPLES_DIR@
 EXEEXT = @EXEEXT@
 F77 = @F77@
 FFLAGS = @FFLAGS@
@@ -201,7 +203,7 @@ sbindir = @sbindir@
 sharedstatedir = @sharedstatedir@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
-SUBDIRS = bugzc $(BUILD_CXX_DIR) $(API_DOCS_DIR)
+SUBDIRS = bugzc $(BUILD_CXX_DIR) $(API_DOCS_DIR) $(EXAMPLES_DIR)
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-recursive
 

@@ -34,15 +34,18 @@ int bugzc_init(bugzc_conn *bc, const char *url, size_t surl){
 		bc->url = 0;
 		return -1;
 	}
-	bc = malloc(surl + 1);
+	bc->url = malloc(surl + 1);
 	strncpy(bc->url, url, surl);
 	bc->url[surl] = '\0';
 	global_xparms.transport = "curl";
 	xmlrpc_env_init(&bc->xenv);
+	xmlrpc_client_setup_global_const(&bc->xenv);
+
 	xmlrpc_client_create(&bc->xenv, XMLRPC_CLIENT_NO_FLAGS, 
 			BUGZCXX_CLIENT_NAME, BUGZCXX_VERSION_STRING, 
 			&global_xparms, 
 			sizeof(global_xparms), &bc->xcli);
 	bc->xsrv = xmlrpc_server_info_new(&bc->xenv, bc->url);
+	return 0;
 }
 

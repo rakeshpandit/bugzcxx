@@ -93,7 +93,22 @@ AC_ARG_ENABLE(cxx, AC_HELP_STRING([--disable-cxx           Don't compile C++ sup
 	]
 )
 
+CXX_EXAMPLES_DIR=bugzcxx
+EXAMPLES_DIR=examples
+AC_ARG_ENABLE(examples, AC_HELP_STRING([--disable-examples      Don't compile example programs]), [
+		AC_DEFINE(USE_DEBUG, 1, [Activates debug mode])
+		build_examples=off
+		CXX_EXAMPLES_DIR=""
+		EXAMPLES_DIR=""
+		AC_MSG_RESULT([ *** This library will not build any example programs *** ])
+	], [
+		build_examples=on
+	]
+)
+
 AC_SUBST(BUILD_CXX_DIR)
+AC_SUBST(CXX_EXAMPLES_DIR)
+AC_SUBST(EXAMPLES_DIR)
 
 dnl
 dnl xmlrpc-c stuff
@@ -164,7 +179,10 @@ AC_OUTPUT(Makefile \
           bugzcxx/Makefile \
           bugzcxx/bugzcxx.pc \
 	  api/Makefile \
-	  api/Doxyfile
+	  api/Doxyfile \
+	  examples/Makefile \
+	  examples/bugzc/Makefile \
+	  examples/bugzcxx/Makefile
 )
 
 echo
@@ -176,3 +194,4 @@ echo "#  Debug mode:            $debug_mode_activated"
 echo "#  Generate docs:         $doxygen_docs"
 echo "#  Build C++ support:     $cxx_support"
 echo "#  xmlrpc-c version:      $XMLRPC_C_VERSION"
+echo "#  Build examples:        $build_examples"
