@@ -34,7 +34,7 @@ int bugzc_bugzilla_version(bugzc_conn *bconn, char *vbuf, size_t vsize);
  *  	url of the Bugzilla server.
  *  @param tbuf A buffer where the timezone information is going to be
  *  	stored.
- *  @param vsize The size (in bytes) of the vbuf buffer.
+ *  @param tsize The size (in bytes) of the vbuf buffer.
  *  @return The size of the string stored in the tbuf buffer or -1 if an
  *  error ocurred, you must verify the err_code and err_msg members of the
  *  bconn object for more details. */

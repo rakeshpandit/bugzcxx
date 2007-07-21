@@ -18,9 +18,13 @@
 int main(int argc, char *argv[]){
 	char *url;
 	char version[12];
-	url = argv[1];
+	if(argc <= 1){
+		fprintf(stderr, "At least you must provide bugzilla's server url\n");
+		return 0;
+	}
 
 	bugzc_conn conn;
+	url = argv[1];
 
 	bugzc_init(&conn, url, strlen(url));
 	printf("Bugzilla version at: %s ", conn.url);

@@ -18,6 +18,8 @@ const char *_bugz_errmsg[] = {
 	".xenv.fault_code or .xenv.fault_string members of"
 	"the connection object for more information",
 	"Required operation requires user authentication, "
-	"please login first"
+	"please login first",
+	"Given username or password is not valid",
+	"Account is currently disabled"
 };
 

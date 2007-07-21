@@ -39,5 +39,6 @@ typedef struct bugz_conn_s {
 int bugzc_init(bugzc_conn *bc, const char *url, size_t surl);
 
 #include<bugzc/bugzc_bugzilla.h>
+#include<bugzc/bugzc_user.h>
 #endif
 

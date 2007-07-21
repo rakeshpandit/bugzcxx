@@ -28,5 +28,11 @@ xmlrpc_value *rpc_void_call(bugzc_conn *bconn, const char *mname);
 int rpc_void_call_ret_s(bugzc_conn *bconn, const char *mname, 
 				const char *vname, 
 				char *buf, size_t sbuf);
+/** @internal 
+ * @brief Eases calling an xml-rpc method which has no
+ * arguments and returns nothing.
+ * @return Returns non-zero if the operation failed
+ */
+int rpc_void_call_void(bugzc_conn *bconn, const char *mname);
 #endif
 

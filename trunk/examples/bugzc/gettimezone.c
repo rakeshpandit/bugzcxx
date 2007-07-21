@@ -18,9 +18,13 @@
 int main(int argc, char *argv[]){
 	char *url;
 	char timezone[36];
-	url = argv[1];
 
 	bugzc_conn conn;
+	url = argv[1];
+	if(argc <= 1){
+		fprintf(stderr, "At least you must provide bugzilla's server url\n");
+		return 0;
+	}
 
 	bugzc_init(&conn, url, strlen(url));
 	printf("Bugzilla timezone at: %s ", conn.url);
