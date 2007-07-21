@@ -17,19 +17,19 @@
 
 int main(int argc, char *argv[]){
 	char *url;
-	char version[12];
+	char timezone[36];
 	url = argv[1];
 
 	bugzc_conn conn;
 
 	bugzc_init(&conn, url, strlen(url));
-	printf("Bugzilla version at: %s ", conn.url);
+	printf("Bugzilla timezone at: %s ", conn.url);
 	fflush(stdout);
 	if(conn.xenv.fault_occurred){
 		fprintf(stderr, "%s\n", conn.xenv.fault_string);
 		return 1;
 	}
-	if(bugzc_bugzilla_version(&conn, version, 12) < 0){
+	if(bugzc_bugzilla_timezone(&conn, timezone, 36) < 0){
 		if(conn.err_code != 0){
 			fprintf(stderr, "\n");
 			if(conn.xenv.fault_occurred){
@@ -42,7 +42,7 @@ int main(int argc, char *argv[]){
 		}
 		return 1;
 	}
-	printf("is %s\n", version);
+	printf("is %s\n", timezone);
 
 	return 0;
 }

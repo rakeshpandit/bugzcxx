@@ -179,7 +179,10 @@ AC_OUTPUT(Makefile \
           bugzcxx/Makefile \
           bugzcxx/bugzcxx.pc \
 	  api/Makefile \
-	  api/Doxyfile \
+	  api/bugzc/Makefile \
+	  api/bugzc/Doxyfile \
+	  api/bugzcxx/Makefile \
+	  api/bugzcxx/Doxyfile \
 	  examples/Makefile \
 	  examples/bugzc/Makefile \
 	  examples/bugzcxx/Makefile

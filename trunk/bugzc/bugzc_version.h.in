@@ -12,6 +12,7 @@
 
 #ifndef __BUGZC_VERSION_H__
 #define __BUGZC_VERSION_H__
+/** \file bugzc/bugzc_version.h */
 
 #define BUGZCXX_VERSION @GENERIC_VERSION@
 #define BUGZCXX_VERSION_STRING "@GENERIC_VERSION@"

@@ -16,6 +16,7 @@
 #include<bugzc/bugz_errcodes.h>
 #include<xmlrpc-c/base.h>
 #include<xmlrpc-c/client.h>
+/** \file bugzc.h */
 
 typedef struct bugz_conn_s {
 	char *url;
@@ -23,18 +24,17 @@ typedef struct bugz_conn_s {
 	char *err_msg;
 	xmlrpc_env xenv;
 	xmlrpc_client *xcli;
-	xmlrpc_server_info *xsrv;
 } bugzc_conn;
 
-/****************************************************************************
- * Initializes bugzilla connection establishing its location url.
- * A call to this function will not perform any connection related
- * tests and will only initialize internal variables.
- * @param bc A bugz_conn connection element to be initialized.
- * @param url A null terminated string containing Bugzilla's URL, something
+/** @brief Initializes bugzilla connection establishing its location url.
+ *  A call to this function will not perform any connection related
+ *  tests and will only initialize internal variables.
+ *  @param bc A bugz_conn connection element to be initialized.
+ *  @param url A null terminated string containing Bugzilla's URL, something
  * 	like: http://bugzilla.example.com/xmlrpc.cgi
- * @param surl The amount of characters in url.
- * @return 0 on success, any other value on failure.
+ *  @param surl The amount of characters in url.
+ *  @return 0 on success, any other value on failure.
+ *  @todo Perform url validation
  ***************************************************************************/
 int bugzc_init(bugzc_conn *bc, const char *url, size_t surl);
 

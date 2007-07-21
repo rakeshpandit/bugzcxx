@@ -19438,7 +19438,7 @@ fi
 
 
 
-ac_config_files="$ac_config_files Makefile bugzc/Makefile bugzc/bugzc.pc bugzc/bugzc_version.h bugzcxx/Makefile bugzcxx/bugzcxx.pc api/Makefile api/Doxyfile examples/Makefile examples/bugzc/Makefile examples/bugzcxx/Makefile"
+ac_config_files="$ac_config_files Makefile bugzc/Makefile bugzc/bugzc.pc bugzc/bugzc_version.h bugzcxx/Makefile bugzcxx/bugzcxx.pc api/Makefile api/bugzc/Makefile api/bugzc/Doxyfile api/bugzcxx/Makefile api/bugzcxx/Doxyfile examples/Makefile examples/bugzc/Makefile examples/bugzcxx/Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -20032,7 +20032,10 @@ do
     "bugzcxx/Makefile") CONFIG_FILES="$CONFIG_FILES bugzcxx/Makefile" ;;
     "bugzcxx/bugzcxx.pc") CONFIG_FILES="$CONFIG_FILES bugzcxx/bugzcxx.pc" ;;
     "api/Makefile") CONFIG_FILES="$CONFIG_FILES api/Makefile" ;;
-    "api/Doxyfile") CONFIG_FILES="$CONFIG_FILES api/Doxyfile" ;;
+    "api/bugzc/Makefile") CONFIG_FILES="$CONFIG_FILES api/bugzc/Makefile" ;;
+    "api/bugzc/Doxyfile") CONFIG_FILES="$CONFIG_FILES api/bugzc/Doxyfile" ;;
+    "api/bugzcxx/Makefile") CONFIG_FILES="$CONFIG_FILES api/bugzcxx/Makefile" ;;
+    "api/bugzcxx/Doxyfile") CONFIG_FILES="$CONFIG_FILES api/bugzcxx/Doxyfile" ;;
     "examples/Makefile") CONFIG_FILES="$CONFIG_FILES examples/Makefile" ;;
     "examples/bugzc/Makefile") CONFIG_FILES="$CONFIG_FILES examples/bugzc/Makefile" ;;
     "examples/bugzcxx/Makefile") CONFIG_FILES="$CONFIG_FILES examples/bugzcxx/Makefile" ;;

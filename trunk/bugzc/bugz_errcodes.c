@@ -13,6 +13,11 @@
 const char *_bugz_errmsg[] = {
 	"",
 	"bugzcxx has not been properly initialized",
-	"Given buffer is too small in size"
+	"Given buffer is too small in size",
+	"An XML-RPC failure has been detected look at the"
+	".xenv.fault_code or .xenv.fault_string members of"
+	"the connection object for more information",
+	"Required operation requires user authentication, "
+	"please login first"
 };
 

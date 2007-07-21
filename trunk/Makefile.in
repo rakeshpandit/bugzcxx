@@ -47,8 +47,12 @@ build_triplet = @build@
 host_triplet = @host@
 DIST_COMMON = README $(am__configure_deps) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in $(srcdir)/config.h.in \
-	$(top_srcdir)/configure AUTHORS COPYING ChangeLog INSTALL NEWS \
-	config.guess config.sub depcomp install-sh ltmain.sh missing
+	$(top_srcdir)/api/bugzc/Doxyfile.in \
+	$(top_srcdir)/api/bugzc/Makefile.in \
+	$(top_srcdir)/api/bugzcxx/Doxyfile.in \
+	$(top_srcdir)/api/bugzcxx/Makefile.in $(top_srcdir)/configure \
+	AUTHORS COPYING ChangeLog INSTALL NEWS config.guess config.sub \
+	depcomp install-sh ltmain.sh missing
 subdir = .
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
@@ -58,7 +62,8 @@ am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
  configure.lineno configure.status.lineno
 mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = config.h
-CONFIG_CLEAN_FILES =
+CONFIG_CLEAN_FILES = api/bugzc/Makefile api/bugzc/Doxyfile \
+	api/bugzcxx/Makefile api/bugzcxx/Doxyfile
 SOURCES =
 DIST_SOURCES =
 RECURSIVE_TARGETS = all-recursive check-recursive dvi-recursive \
@@ -258,6 +263,14 @@ $(srcdir)/config.h.in:  $(am__configure_deps)
 
 distclean-hdr:
 	-rm -f config.h stamp-h1
+api/bugzc/Makefile: $(top_builddir)/config.status $(top_srcdir)/api/bugzc/Makefile.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+api/bugzc/Doxyfile: $(top_builddir)/config.status $(top_srcdir)/api/bugzc/Doxyfile.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+api/bugzcxx/Makefile: $(top_builddir)/config.status $(top_srcdir)/api/bugzcxx/Makefile.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+api/bugzcxx/Doxyfile: $(top_builddir)/config.status $(top_srcdir)/api/bugzcxx/Doxyfile.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
 
 mostlyclean-libtool:
 	-rm -f *.lo
@@ -404,7 +417,7 @@ distclean-tags:
 distdir: $(DISTFILES)
 	$(am__remove_distdir)
 	mkdir $(distdir)
-	$(mkdir_p) $(distdir)/api $(distdir)/bugzc $(distdir)/bugzcxx
+	$(mkdir_p) $(distdir)/api/bugzc $(distdir)/api/bugzcxx $(distdir)/bugzc $(distdir)/bugzcxx
 	@srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`; \
 	topsrcdirstrip=`echo "$(top_srcdir)" | sed 's|.|.|g'`; \
 	list='$(DISTFILES)'; for file in $$list; do \

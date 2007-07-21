@@ -10,6 +10,7 @@
  *  at the top of the source tree.
  */
 
+#include"config.h"
 #include<bugzc/bugzc.h>
 #include<string.h>
 
@@ -45,7 +46,6 @@ int bugzc_init(bugzc_conn *bc, const char *url, size_t surl){
 			BUGZCXX_CLIENT_NAME, BUGZCXX_VERSION_STRING, 
 			&global_xparms, 
 			sizeof(global_xparms), &bc->xcli);
-	bc->xsrv = xmlrpc_server_info_new(&bc->xenv, bc->url);
 	return 0;
 }
 
