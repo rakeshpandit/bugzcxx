@@ -13,3 +13,5 @@ all:
 
 clean:
 	rm -rf html man xml
+
+install:

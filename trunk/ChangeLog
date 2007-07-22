@@ -1,13 +1,17 @@
+mindstorm2600 | 2007-07-22 6:00:00 -0500 (Sat, 21 Jul 2007)
+* Added the legal_values method from WebService::User Bugzilla namespace.
+* Added some more error codes and related strings
+* Added a new example program to query legal values from a filed in a remote
+bugzilla server
+
 ------------------------------------------------------------------------
-mindstorm2600 | 2007-07-21 
+r7 | mindstorm2600 | 2007-07-21 16:28:29 -0500 (Sat, 21 Jul 2007) | 5 lines
 
 * Adding authentication functions
 * Adding an example program for authetication-related documentation
 * Added weak program argument validation for examples
 * Added more error codes and messages, this time, all related to
 authentication
-
-
 ------------------------------------------------------------------------
 r6 | mindstorm2600 | 2007-07-21 11:58:40 -0500 (Sat, 21 Jul 2007) | 6 lines
 

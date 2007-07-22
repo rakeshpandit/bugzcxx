@@ -13,7 +13,13 @@
 #ifndef __BUGZC_USER_H__
 #define __BUGZC_USER_H__
 #include<bugzc/bugzc.h>
-/** @file */
+/** @file 
+ *  Implements all methods defined in the Bugzilla's
+ *  WebService::User namespace.
+ *  \todo int bugzc_user_offer_account_by_email(bugzc_conn *conn, 
+ *  						const char *email);
+ *  \todo int bugzc_user_create(bugz_conn *conn, const char *email, 
+ * 			const char *full_name, const char *pw); */
 
 /** @brief Logs a user into a bugzilla server.
  *  @param conn A properly initialized bugz_conn object describing the
@@ -31,5 +37,6 @@ int bugzc_user_login(bugzc_conn *conn, const char *login, const char *pw,
 /** @brief Logs out a previously logged in user.
  *  @return zero on success, non-zero on error. */
 int bugzc_user_logout(bugzc_conn *conn);
+
 #endif
 

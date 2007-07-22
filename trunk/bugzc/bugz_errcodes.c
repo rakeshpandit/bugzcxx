@@ -11,7 +11,7 @@
  */
 
 const char *_bugz_errmsg[] = {
-	"",
+	"Success",
 	"bugzcxx has not been properly initialized",
 	"Given buffer is too small in size",
 	"An XML-RPC failure has been detected look at the"
@@ -20,6 +20,16 @@ const char *_bugz_errmsg[] = {
 	"Required operation requires user authentication, "
 	"please login first",
 	"Given username or password is not valid",
-	"Account is currently disabled"
+	"Account is currently disabled",
+	"Specified bug alias is invalid",
+	"Given bug ID is not valid",
+	"Access Denied, verify your account privileges",
+	"Given product name or ID are not valid or doesn't exists at all",
+	"Given Bugzilla product field is not valid",
+	"Given array to store legal values is too small, returning minimum"
+		" required array size as a negative number",
+	"Per item size is too small for at least one element on the list,"
+		" returning minimum required amount of characters for the"
+		" biggest entry as a negative number"
 };
 
