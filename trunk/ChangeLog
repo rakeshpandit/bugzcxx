@@ -1,10 +1,14 @@
 mindstorm2600 | 2007-07-25
 
+* Adding documentation to the bugzc_bug_submit function.
+* Uploading some missing example programs to the svn repository.
+* Issuing first release yay!!!!
+------------------------------------------------------------------------
+r9 | mindstorm2600 | 2007-07-25 23:21:27 -0500 (Wed, 25 Jul 2007) | 3 lines
+
 * Adding a method to submit bugs to a remote bugzilla installation, no related
 documentation has been written yet.
 * More error codes added, need to find a better way to handle them.
-* Getting ready to create a function for retrieving bugs lists.
-
 ------------------------------------------------------------------------
 r8 | mindstorm2600 | 2007-07-22 05:58:51 -0500 (Sun, 22 Jul 2007) | 4 lines
 

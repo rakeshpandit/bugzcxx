@@ -79,6 +79,33 @@ int bugzc_bug_legal_values(bugzc_conn *conn, const char *field,
 				char *list, size_t nitems,
 				size_t max_vsize);
 
+/** @brief Use this function to submit new bug information to a bugzilla
+ *  server installation.
+ *  @param conn A properly initialized bugz_conn object describing the
+ *  	url of the Bugzilla server.
+ *  @param product A null terminated string representing the name of 
+ *  	the product with problems as defined in the Bugzilla server
+ *  	installation.
+ *  @param component A null terminated string specifying the product 
+ *  	component with problems.
+ *  @param summary A null terminated string with a short description of
+ *  	the software bug.
+ *  @param version A null terminated string specifying the product/component
+ *  	software version that is presenting the problem.
+ *  @param description A null terminated string with a full and detailed 
+ *  	description of the software problem.
+ *  @param op_sys A null terminated string representing the operating 
+ *  	system where the problem has been observed.
+ *  @param platform A null terminated string containing the platform where
+ *  	the bug was first detected.
+ *  @param priority A null terminated string containing the bug resolution
+ *  	priority.
+ *  @param severity A null terminated string containing the bug's severity
+ *  	level.
+ *  @return An integer with the bug number as assigned by the remote Bugzilla
+ *  	installation. If an error ocurred during bug submission this function
+ *  	will return a value smaller than 0, to check the reason verify the
+ *  	err_code and err_msg members of the connection object. */
 int bugzc_bug_submit(bugzc_conn *conn, const char *product, 
 			const char *component, const char *summary, 
 			const char *version, const char *description, 
