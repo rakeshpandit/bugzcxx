@@ -6,6 +6,6 @@ includedir=@includedir@
 Name: bugzc
 Description: Bugzilla C/C++ XML-RPC Proxy
 Version: @VERSION@
-Libs: -L${libdir} -lbugzc `@XMLRPC_C_CONFIG@ client --libs`
-Cflags: -Wall -I${includedir}/bugzc -I${libdir}/bugzc/include `@XMLRPC_C_CONFIG@ client --cflags`
+Libs: -L${libdir} -lbugzc 
+Cflags: -Wall -I${includedir}/bugzc -I${libdir}/bugzc/include 
 
