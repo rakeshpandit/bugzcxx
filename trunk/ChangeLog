@@ -1,4 +1,9 @@
-mindstorm2600 | 2007-07-25
+mindstorm2600 | 2007-07-26
+
+* Adding missing Makefile.am 
+
+------------------------------------------------------------------------
+r10 | mindstorm2600 | 2007-07-26 10:59:18 -0500 (Thu, 26 Jul 2007) | 3 lines
 
 * Adding documentation to the bugzc_bug_submit function.
 * Uploading some missing example programs to the svn repository.
