@@ -1,9 +1,17 @@
-mindstorm2600 | 2007-07-22 6:00:00 -0500 (Sat, 21 Jul 2007)
+mindstorm2600 | 2007-07-25
+
+* Adding a method to submit bugs to a remote bugzilla installation, no related
+documentation has been written yet.
+* More error codes added, need to find a better way to handle them.
+* Getting ready to create a function for retrieving bugs lists.
+
+------------------------------------------------------------------------
+r8 | mindstorm2600 | 2007-07-22 05:58:51 -0500 (Sun, 22 Jul 2007) | 4 lines
+
 * Added the legal_values method from WebService::User Bugzilla namespace.
 * Added some more error codes and related strings
 * Added a new example program to query legal values from a filed in a remote
 bugzilla server
-
 ------------------------------------------------------------------------
 r7 | mindstorm2600 | 2007-07-21 16:28:29 -0500 (Sat, 21 Jul 2007) | 5 lines
 

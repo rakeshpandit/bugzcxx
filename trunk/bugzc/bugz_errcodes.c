@@ -24,12 +24,19 @@ const char *_bugz_errmsg[] = {
 	"Specified bug alias is invalid",
 	"Given bug ID is not valid",
 	"Access Denied, verify your account privileges",
-	"Given product name or ID are not valid or doesn't exists at all",
+	"Given product name or ID are not valid or doesn't exists at all,"
+		" while submitting bugs for special product also verify"
+		" that you are allowed to actually submit bugs to it.",
 	"Given Bugzilla product field is not valid",
 	"Given array to store legal values is too small, returning minimum"
 		" required array size as a negative number",
 	"Per item size is too small for at least one element on the list,"
 		" returning minimum required amount of characters for the"
-		" biggest entry as a negative number"
+		" biggest entry as a negative number",
+	"Unable to allocate a bugzc_bug object, not enough memory",
+	"A field value is not correct, verify with get_legal_values",
+	"Given component is invalid or does not exists",
+	"Specified summary is not correct, is it empty?",
+	"Either the QA Contact, Assignee, or CC lists have some invalid user in them"
 };
 

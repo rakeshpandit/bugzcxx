@@ -21,7 +21,8 @@ int bugzc_user_login(bugzc_conn *bconn, const char *login, const char *pw,
 	int id = -1;
 	xmlrpc_value *result;
 	if(bconn->url == 0){
-		bconn->err_msg = _bugz_errmsg[BUGZCXX_NO_INITIALIZED];
+		bconn->err_msg = (char*)
+			_bugz_errmsg[BUGZCXX_NO_INITIALIZED];
 		bconn->err_code = BUGZCXX_NO_INITIALIZED;
 		return -1;
 	}
@@ -34,19 +35,19 @@ int bugzc_user_login(bugzc_conn *bconn, const char *login, const char *pw,
 	if(bconn->xenv.fault_occurred){
 		switch(bconn->xenv.fault_code){
 			case BUGZ_WS_INVALID_CREDENTIALS:
-				bconn->err_msg = 
+				bconn->err_msg = (char *)
 					_bugz_errmsg[BUGZCXX_XMLRPC_INVALID_CREDENTIALS];
 				bconn->err_code = 
 					BUGZCXX_XMLRPC_INVALID_CREDENTIALS;
 				break;
 			case BUGZ_WS_ACCOUNT_DISABLED:
-				bconn->err_msg = 
+				bconn->err_msg = (char *)
 					_bugz_errmsg[BUGZCXX_XMLRPC_ACCOUNT_DISABLED];
 				bconn->err_code = 
 					BUGZCXX_XMLRPC_ACCOUNT_DISABLED;
 				break;
 			default:
-				bconn->err_msg = 
+				bconn->err_msg = (char *)
 					_bugz_errmsg[BUGZCXX_XMLRPC_FAULT_OCURRED];
 				bconn->err_code = 
 					BUGZCXX_XMLRPC_FAULT_OCURRED;
