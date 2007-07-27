@@ -1,0 +1,10 @@
+Same as always
+
+Tune build environment
+./configure --help
+Configure build
+./configure [whatever flags you want to put from the --help]
+Build initial source code
+make
+Install library
+make install
