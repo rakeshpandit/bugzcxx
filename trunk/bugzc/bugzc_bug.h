@@ -19,12 +19,22 @@
 
 /** Represents a Bugzilla bug object. */
 typedef struct bugzc_bug_s {
+	/** The bug numeric id */
 	int id;
+	/** Bug alias description if the remote Bugzilla installation is
+	 *  configured for bug alias handling */
 	char *alias;
+	/** Short description as entered by the reporter */
 	char *summary;
+	/** Bug creation time in ISO 8601 format as a null terminated
+	 *  string */
 	char *creation_time;
+	/** Last date when the bug information was changed. It is a 
+	 *  null-terminated string in ISO 8601 format. */
 	char *last_change_time;
+	/** Bug creation date/time as a unix timestamp */
 	time_t creation_tstamp;
+	/** Bug last modification date/time as a unix timestamp */
 	time_t last_change_tstamp;
 } bugzc_bug;
 
@@ -57,7 +67,16 @@ bugzc_bug *bugzc_bug_create_obj(bugzc_conn *conn, int id, const char *alias,
  *  must be released from memory by calling this function since it will
  *  properly release memory for the whole object and its members.
  *  @param bug_obj The bugzc_obj to be released from memory. */
-void bugzc_bug_destroy(bugzc_bug *bug_obj);
+void bugzc_bug_destroy_obj(bugzc_bug **bug_obj);
+
+/** @brief Releases a dynamically allocated array of bugz_bug objects from
+ *  memory.
+ *  Most commonly you'll be using this function to release memory from an
+ *  array alocated from functions like bugzc_bug_get_bugs.
+ *  @param bug_obj A reference to a preivouls allocated dynamic array of
+ *  	bug_obj elements.
+ *  @param nelems The amount of elements contained in the array. */
+void bigzc_bug_destroy_list(bugzc_bug **bug_obj, size_t nelems);
 
 /** @brief Returns a list of valid values related to the given Bugzilla
  *  field for a specified product.
@@ -111,5 +130,18 @@ int bugzc_bug_submit(bugzc_conn *conn, const char *product,
 			const char *version, const char *description, 
 			const char *op_sys, const char *platform, 
 			const char *priority, const char *severity);
+
+/** @brief Gives detailed information about a bugid or an array of bug ids.
+ *  @param bug_ids An array of numeric bug ids to query from the Bugzilla
+ *  	remote installation server.
+ *  @param The amount of elements contained in the bug_ids array.
+ *  @param rbugid Will return the amount of successfully retrieved elements
+ *  	from the get_bugs query
+ *  @return A dynamically allocated array of bugzc_bug elements which after
+ *  	use most be released from memory with an appropiate call to 
+ *  	bugzc_bug_destry_list. 
+ *  @todo Perform dat/time conversions to unix timestamps. */
+bugzc_bug *bugzc_bug_get_bugs(bugzc_conn *conn, unsigned int *bug_ids,
+				size_t nbugid, size_t *rbugid);
 #endif
 

@@ -183,13 +183,16 @@ bugzc_bug *bugzc_bug_create_obj(bugzc_conn *conn, int id, const char *alias,
 	return bobj;
 }
 
-void bugzc_bug_destroy(bugzc_bug *bug_obj){
+void bugzc_bug_destroy_obj(bugzc_bug **bug_objx){
+	bugzc_bug *bug_obj;
+	bug_obj = *bug_objx;
 	if(bug_obj != NULL){
 		if(bug_obj->alias != NULL) free(bug_obj->alias);
 		if(bug_obj->summary != NULL) free(bug_obj->summary);
 		if(bug_obj->creation_time != NULL) free(bug_obj->creation_time);
 		if(bug_obj->last_change_time != NULL) free(bug_obj->last_change_time);
 		free(bug_obj);
+		*bug_objx = NULL;
 	}
 }
 
@@ -287,5 +290,133 @@ int bugzc_bug_submit(bugzc_conn *bconn, const char *product,
 		xmlrpc_DECREF(result);
 	}
 	return ret;
+}
+
+void bigzc_bug_destroy_list(bugzc_bug **bug_objx, size_t nelems){
+	bugzc_bug *bug_obj;
+	size_t i;
+	bug_obj = *bug_objx;
+	for(i = 0; i < nelems; i++){
+		if(bug_obj[i].alias != NULL) free(bug_obj[i].alias);
+		if(bug_obj[i].summary != NULL) free(bug_obj[i].summary);
+		if(bug_obj[i].creation_time != NULL) free(bug_obj[i].creation_time);
+		if(bug_obj[i].last_change_time != NULL) free(bug_obj[i].last_change_time);
+	}
+	free(bug_obj);
+	*bug_objx = NULL;
+}
+
+
+bugzc_bug *bugzc_bug_get_bugs(bugzc_conn *bconn, unsigned int *bug_ids,
+				size_t nbugid, size_t *rbugid){
+	bugzc_bug *ret = 0;
+	int r_nitems;
+	int i;
+	xmlrpc_value *result;
+	xmlrpc_value *v_list;
+	xmlrpc_value *tmp_val;
+	xmlrpc_value *int_array;
+	xmlrpc_value *int_item;
+	xmlrpc_value *bug_array;
+	xmlrpc_value *bug_item;
+	xmlrpc_value *ctime;
+	xmlrpc_value *lctime;
+	char *b_summary;
+	char *b_alias;
+	char *tmp_str;
+	char *b_ctime;
+	char *b_lctime;
+	if(bconn->url == 0){
+		bconn->err_msg = (char *)_bugz_errmsg[BUGZCXX_NO_INITIALIZED];
+		bconn->err_code = BUGZCXX_NO_INITIALIZED;
+		return 0;
+	}
+	int_array = xmlrpc_array_new(&bconn->xenv);
+	for(i = 0; i < nbugid; i++){
+		int_item = xmlrpc_build_value(&bconn->xenv, "i", bug_ids[i]);
+		xmlrpc_array_append_item(&bconn->xenv, int_array, int_item);
+	}
+	xmlrpc_client_call2f(&bconn->xenv, bconn->xcli, bconn->url,
+					"Bug.get_bugs", &result,
+					"({s:A})", 
+					"ids", int_array
+		);
+	xmlrpc_DECREF(int_array);
+	if(bconn->xenv.fault_occurred){
+		switch(bconn->xenv.fault_code){
+			case BUGZ_WS_ACCESS_DENIED:
+				bconn->err_msg = (char *)
+					_bugz_errmsg[BUGZCXX_XMLRPC_ACCESS_DENIED];
+				bconn->err_code = 
+					BUGZCXX_XMLRPC_ACCESS_DENIED;
+				break;
+			case BUGZ_WS_INVALID_BUG_ID:
+				bconn->err_msg = (char *)
+					_bugz_errmsg[BUGZCXX_XMLRPC_INVALID_BUG_ID];
+				bconn->err_code = 
+					BUGZCXX_XMLRPC_INVALID_BUG_ID;
+				break;
+			case BUGZ_WS_INVALID_BUG_ALIAS:
+				bconn->err_msg = (char *)
+					_bugz_errmsg[BUGZCXX_XMLRPC_INVALID_BUG_ALIAS];
+				bconn->err_code = 
+					BUGZCXX_XMLRPC_INVALID_BUG_ALIAS;
+				break;
+			case BUGZ_WS_INVALID_USER:
+				bconn->err_msg = (char *)
+					_bugz_errmsg[BUGZCXX_XMLRPC_INVALID_USER];
+				bconn->err_code = 
+					BUGZCXX_XMLRPC_INVALID_USER;
+				break;
+			case BUGZ_WS_ACCOUNT_DISABLED:
+				bconn->err_msg = (char *)
+					_bugz_errmsg[BUGZCXX_XMLRPC_ACCOUNT_DISABLED];
+				bconn->err_code = 
+					BUGZCXX_XMLRPC_ACCOUNT_DISABLED;
+				break;
+			default:
+				bconn->err_msg = (char *)
+					_bugz_errmsg[BUGZCXX_XMLRPC_FAULT_OCURRED];
+				bconn->err_code = 
+					BUGZCXX_XMLRPC_FAULT_OCURRED;
+		}
+		return 0;
+	}
+	else{
+		xmlrpc_decompose_value(&bconn->xenv, result, 
+					"{s:A,*}", "bugs", &bug_array);
+		*rbugid = xmlrpc_array_size(&bconn->xenv, bug_array);
+		ret = malloc(sizeof(bugzc_bug) * *rbugid);
+		for(i = 0; i < *rbugid; i++){
+			xmlrpc_array_read_item(&bconn->xenv, bug_array, i, &bug_item);
+#ifdef USE_BUGZILLA_UNSTABLE
+#error Not implemented yet
+#else
+			xmlrpc_decompose_value(&bconn->xenv, bug_item, 
+						"{s:s,s:i,s:s,s:8,s:8,*}",
+						"summary", &b_summary,
+						"id", &ret[i].id,
+						"alias", &b_alias,
+						"creation_time", 
+						&b_ctime,
+						"last_change_time", 
+						&b_lctime
+					);
+			ret[i].creation_time = strdup(b_ctime);
+			ret[i].last_change_time = strdup(b_lctime);
+#endif
+			ret[i].summary = strdup(b_summary);
+			if(b_alias == 0){
+				ret[i].alias = malloc(1 * sizeof(char));
+				ret[i].alias[0] = 0;
+			}
+			else{
+				ret[i].alias = strdup(b_alias);
+			}
+		}
+		xmlrpc_DECREF(result);
+	}
+	return ret;
+
 }
 

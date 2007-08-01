@@ -1,3 +1,13 @@
+2007-07-26 mindstorm2600 aka Juan V. Guerrero
+
+* Added a method for retrieving bugs lists.
+* Added a couple of methods for bugzc_bug object creation and destruction.
+* Added a method for deleting bugz_bug dynamic arrays from memory
+
+------------------------------------------------------------------------
+r14 | mindstorm2600 | 2007-07-26 17:59:55 -0500 (Thu, 26 Jul 2007) | 1 line
+
+Fixing build environment
 ------------------------------------------------------------------------
 r11 | mindstorm2600 | 2007-07-26 11:08:10 -0500 (Thu, 26 Jul 2007) | 1 line
 
