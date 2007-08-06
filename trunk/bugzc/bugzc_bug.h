@@ -15,7 +15,8 @@
 #include<bugzc/bugzc.h>
 /** @file 
  *  Implements all methods defined in the Bugzilla's
- *  WebService::Bug namespace. */
+ *  Bugzilla::WebService::Bug namespace as defined in:
+ *  http://www.bugzilla.org/docs/tip/html/api/Bugzilla/WebService/Bug.html */
 
 /** Represents a Bugzilla bug object. */
 typedef struct bugzc_bug_s {
@@ -43,6 +44,8 @@ typedef struct bugzc_bug_s {
  *  remember that each succesfull call to this function creates an in-memory
  *  object that HAS TO BE RELEASED FROM MEMORY AFTER USED for this you 
  *  must call the bugzc_bug_destroy function, DON'T FORGET IT!!!.
+ *  @param conn A properly initialized bugz_conn object describing the
+ *  	url of the Bugzilla server.
  *  @param id The bug's numeric id as assigned by the Bugzilla server.
  *  @param alias A null-terminated string representing alias for the bug,
  *  		aliases are assigned to bugs so normally you don't refer to
@@ -83,7 +86,8 @@ void bigzc_bug_destroy_list(bugzc_bug **bug_obj, size_t nelems);
  *  @param conn A properly initialized bugz_conn object describing the
  *  	url of the Bugzilla server.
  *  @param field The field's name.
- *  @param product_id Numeric id for the product to be researched.
+ *  @param product_name null-terminated string representing the product to
+ * 		be researched.
  *  @param list An empty array of strings (double dimensiones char[][])
  *  	to be field with the required data, if the array permits it, after
  *  	the last element of subsequent items will be empty strings.
@@ -92,7 +96,8 @@ void bigzc_bug_destroy_list(bugzc_bug **bug_obj, size_t nelems);
  *  @param max_vsize Maximum amount of permitted characters for a field
  *  	value.
  *  @return The amount of values in the list or a negative value on
- *  failure. */
+ *  failure. 
+ *  @todo Fix ugly list data structure, that thing is really hard to use. */
 int bugzc_bug_legal_values(bugzc_conn *conn, const char *field,
 				const char *product_name, 
 				char *list, size_t nitems,
@@ -132,9 +137,11 @@ int bugzc_bug_submit(bugzc_conn *conn, const char *product,
 			const char *priority, const char *severity);
 
 /** @brief Gives detailed information about a bugid or an array of bug ids.
+ *  @param conn A properly initialized bugz_conn object describing the
+ *  	url of the Bugzilla server.
  *  @param bug_ids An array of numeric bug ids to query from the Bugzilla
  *  	remote installation server.
- *  @param The amount of elements contained in the bug_ids array.
+ *  @param nbugid The amount of elements contained in the bug_ids array.
  *  @param rbugid Will return the amount of successfully retrieved elements
  *  	from the get_bugs query
  *  @return A dynamically allocated array of bugzc_bug elements which after

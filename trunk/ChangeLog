@@ -1,8 +1,16 @@
-Juan V. Guerrero       2007-08-05
+Juan V. Guerrero     2007-08-06 Past 00:00
+
+* Some test programs made to test user creation and account offering via
+e-mail, nice code, seems to work fine.
+* All namespaces are feature complete now with stable and experimental
+functions only, no unstable functions coded yet which means that the 
+Bugzilla::WebService::Product has been left behind in this release.
+
+------------------------------------------------------------------------
+r17 | mindstorm2600 | 2007-08-05 22:50:23 -0500 (Sun, 05 Aug 2007) | 2 lines
 
 * Code for Bugzilla::Webservice::User is almost feature complete, needs
 testing though.
-
 ------------------------------------------------------------------------
 r16 | mindstorm2600 | 2007-08-01 17:34:33 -0500 (Wed, 01 Aug 2007) | 3 lines
 

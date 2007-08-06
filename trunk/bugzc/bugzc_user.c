@@ -100,7 +100,8 @@ int bugzc_user_offer_account_by_email(bugzc_conn *bconn, const char *email){
 	return ret;
 }
 
-int bugzc_user_create(bugzc_conn *bconn, const char *email, const char *fullname,
+int bugzc_user_create(bugzc_conn *bconn, const char *email, 
+						const char *fullname,
 						const char *password){
 	int id = -1;
 	xmlrpc_value *result;
@@ -111,7 +112,7 @@ int bugzc_user_create(bugzc_conn *bconn, const char *email, const char *fullname
 		return -1;
 	}
 	xmlrpc_client_call2f(&bconn->xenv, bconn->xcli, bconn->url,
-			"User.create", &result, "({s:s,s:s,s:b})", 
+			"User.create", &result, "({s:s,s:s,s:s})", 
 			"email", email, 
 			"password", password, 
 			"full_name", fullname);

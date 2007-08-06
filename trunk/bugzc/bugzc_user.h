@@ -15,11 +15,8 @@
 #include<bugzc/bugzc.h>
 /** @file 
  *  Implements all methods defined in the Bugzilla's
- *  WebService::User namespace.
- *  \todo int bugzc_user_offer_account_by_email(bugzc_conn *conn, 
- *  						const char *email);
- *  \todo int bugzc_user_create(bugz_conn *conn, const char *email, 
- * 			const char *full_name, const char *pw); */
+ *  Bugzilla::WebService::User namespace as defined in:
+ *  http://www.bugzilla.org/docs/tip/html/api/Bugzilla/WebService/User.html */
 
 /** @brief Logs a user into a bugzilla server.
  *  @param conn A properly initialized bugz_conn object describing the

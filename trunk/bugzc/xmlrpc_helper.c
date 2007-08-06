@@ -116,7 +116,7 @@ int rpc_s_call_void(bugzc_conn *bconn, const char *mname,
 		return -1;
 	}
 	xmlrpc_client_call2f(&bconn->xenv, bconn->xcli, bconn->url,
-				mname, &result, "({s:s,*})",
+				mname, &result, "({s:s})",
 				param, s
 				);
 	if(bconn->xenv.fault_occurred){

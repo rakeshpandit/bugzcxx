@@ -13,7 +13,11 @@
 #ifndef __BUGZC_BUGZILLA_H__
 #define __BUGZC_BUGZILLA_H__
 #include<bugzc/bugzc.h>
-/** \file */
+/** @file 
+ *  Implements all methods defined in the 
+ *  Bugzilla::WebService::Bugzilla namespace as defined in:
+ *  http://www.bugzilla.org/docs/tip/html/api/Bugzilla/WebService/Bugzilla.html
+ */
 
 /** @brief Returns the server's installed bugzilla version.
  *  @param bconn A properly initialized bugz_conn object describing the
