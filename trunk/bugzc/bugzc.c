@@ -13,6 +13,7 @@
 #include"config.h"
 #include<bugzc/bugzc.h>
 #include<string.h>
+#include<stdlib.h>
 
 #ifndef BUGZCXX_CLIENT_NAME
 #define BUGZCXX_CLIENT_NAME "bugzcxx"
@@ -23,6 +24,7 @@ extern const char *_bugz_errmsg[];
 /***************************************************************************/
 static int validate_url(const char *url, size_t surl){
 	/* TODO: Write a function that can validate urls */
+	/* regex: http[s]?:\/\/[a-zA-Z0-9]*{\.[a-zA-Z0-9].....*/
 	return 1;
 }
 

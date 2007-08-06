@@ -9,6 +9,7 @@
  *  the GNU General Public License Version 2. See the LICENSE file
  *  at the top of the source tree.
  */
+#include"bugz_errcodes.h"
 
 const char *_bugz_errmsg[] = {
 	"Success",
@@ -37,6 +38,10 @@ const char *_bugz_errmsg[] = {
 	"A field value is not correct, verify with get_legal_values",
 	"Given component is invalid or does not exists",
 	"Specified summary is not correct, is it empty?",
-	"Either the QA Contact, Assignee, or CC lists have some invalid user in them"
+	"Either the QA Contact, Assignee, or CC lists have some invalid user in them",
+	"Given e-mail address format is not allowed or is wrong.",
+	"Unable to create account, username already exists",
+	"Given password is too short.",
+	"Given password is too long."
 };
 

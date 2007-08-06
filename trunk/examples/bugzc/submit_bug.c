@@ -18,7 +18,7 @@
 char *fgets_s(char *str, size_t siz, FILE *fptr){
 	char  *n;
 	n = fgets(str, siz, fptr);
-	if(n > 2){
+	if(strlen(n) > 2){
 		while(str[strlen(str) - 1] == '\n'){
 			str[strlen(str) - 1] = 0;
 		}

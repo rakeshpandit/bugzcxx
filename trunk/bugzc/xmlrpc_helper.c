@@ -77,7 +77,8 @@ int rpc_void_call_ret_s(bugzc_conn *bconn, const char *mname,
 int rpc_void_call_void(bugzc_conn *bconn, const char *mname){
 	xmlrpc_value *result;
 	if(bconn->url == 0){
-		bconn->err_msg = _bugz_errmsg[BUGZCXX_NO_INITIALIZED];
+		bconn->err_msg = (char *)
+						_bugz_errmsg[BUGZCXX_NO_INITIALIZED];
 		bconn->err_code = BUGZCXX_NO_INITIALIZED;
 		return -1;
 	}
@@ -101,4 +102,45 @@ int rpc_void_call_void(bugzc_conn *bconn, const char *mname){
 	}
 	xmlrpc_DECREF(result);
 	return 0;
+}
+
+int rpc_s_call_void(bugzc_conn *bconn, const char *mname,
+		const char *param,
+		const char *s){
+	int ret = 0;	
+	char *tmp_ret;
+	xmlrpc_value *result = 0;
+	if(bconn->url == 0){		
+		bconn->err_msg = (char *)_bugz_errmsg[BUGZCXX_NO_INITIALIZED];
+		bconn->err_code = BUGZCXX_NO_INITIALIZED;
+		return -1;
+	}
+	xmlrpc_client_call2f(&bconn->xenv, bconn->xcli, bconn->url,
+				mname, &result, "({s:s,*})",
+				param, s
+				);
+	if(bconn->xenv.fault_occurred){
+		switch(bconn->xenv.fault_code){
+			case BUGZ_WS_AUTH_REQUIRED:
+				bconn->err_msg = (char *)
+					_bugz_errmsg[BUGZCXX_XMLRPC_LOGIN_REQUIRED];
+				bconn->err_code = 
+					BUGZCXX_XMLRPC_LOGIN_REQUIRED;
+				break;
+			default:
+				bconn->err_msg = (char *)
+					_bugz_errmsg[BUGZCXX_XMLRPC_FAULT_OCURRED];
+				bconn->err_code = 
+					BUGZCXX_XMLRPC_FAULT_OCURRED;
+		}	
+		return bconn->xenv.fault_code;
+	}
+	if(result == 0){
+		ret = -1;
+	}
+	else{
+		xmlrpc_DECREF(result);
+		
+	}
+	return ret;
 }

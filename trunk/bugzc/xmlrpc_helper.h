@@ -34,5 +34,11 @@ int rpc_void_call_ret_s(bugzc_conn *bconn, const char *mname,
  * @return Returns non-zero if the operation failed
  */
 int rpc_void_call_void(bugzc_conn *bconn, const char *mname);
-#endif
 
+/** @internal
+ * 
+ */
+int rpc_s_call_void(bugzc_conn *bconn, const char *mname,
+		const char *param,
+		const char *s);
+#endif

@@ -38,5 +38,24 @@ int bugzc_user_login(bugzc_conn *conn, const char *login, const char *pw,
  *  @return zero on success, non-zero on error. */
 int bugzc_user_logout(bugzc_conn *conn);
 
-#endif
+/** @brief Sends an e-mail with an account creation offering.
+ *  According to the Bugzilla API documentation this is the preferred way
+ *  to create an user account. It will send an e-mail with a clickable
+ *  URL where the user will input its full user name and password.
+ *  @param conn A properly initialized bugz_conn object describing the
+ *  	url of the Bugzilla server.
+ *  @param email A null terminated string containing an e-mail where we are
+ *		sending the account creation offer.
+ *  @return 0 un success, non-zero otherwise */
+int bugzc_user_offer_account_by_email(bugzc_conn *conn, const char *email);
 
+/** @brief Creates an effective user account at the Bugzilla server.
+ *  @param conn A properly initialized bugz_conn object describing the
+ *  	url of the Bugzilla server.
+ *  @param email null-terminated string with the user's e-mail address.
+ *  @param fullname null-terminated string holding the user's full name.
+ *  @param password null-terminated string with the user's password.
+ *  @return 0 un success, non-zero otherwise */
+int bugzc_user_create(bugzc_conn *conn, const char *email, const char *fullname,
+						const char *password);
+#endif

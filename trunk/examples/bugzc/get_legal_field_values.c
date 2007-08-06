@@ -107,7 +107,7 @@ int main(int argc, char *argv[]){
 		product_name[59] = 0;
 		fgets(product_name, 58, stdin);
 	}
-	if((nlist = bugzc_bug_legal_values(&conn, field_name, product_name, list, nlist, max_vsize)) < 0){
+	if((nlist = bugzc_bug_legal_values(&conn, field_name, product_name, (char *)list, nlist, max_vsize)) < 0){
 		if(conn.err_code != 0){
 			fprintf(stderr, "\n");
 			if(conn.xenv.fault_occurred){

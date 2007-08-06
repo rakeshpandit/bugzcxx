@@ -66,3 +66,105 @@ int bugzc_user_logout(bugzc_conn *conn){
 	return rpc_void_call_void(conn, "User.logout");
 }
 
+int bugzc_user_offer_account_by_email(bugzc_conn *bconn, const char *email){
+	int ret;
+	ret = rpc_s_call_void(bconn, "User.offer_account_by_email",
+							"email", email);
+	if(bconn->xenv.fault_occurred){
+		switch(bconn->xenv.fault_code){
+			case BUGZ_WS_ILLEGAL_EMAIL:
+				bconn->err_msg = (char *)
+					_bugz_errmsg[BUGZCXX_XMLRPC_ACCT_ILLEGAL_EMAIL];
+				bconn->err_code = 
+					BUGZCXX_XMLRPC_ACCT_ILLEGAL_EMAIL;
+				break;
+			case BUGZ_WS_ACCT_ALREADY_EXISTS:
+				bconn->err_msg = (char *)
+					_bugz_errmsg[BUGZCXX_XMLRPC_ACCT_ALREADY_EXISTS];
+				bconn->err_code = 
+					BUGZCXX_XMLRPC_ACCT_ALREADY_EXISTS;
+				break;
+			case BUGZ_WS_ACCOUNT_DISABLED:
+				bconn->err_msg = (char *)
+					_bugz_errmsg[BUGZCXX_XMLRPC_ACCOUNT_DISABLED];
+				bconn->err_code = 
+					BUGZCXX_XMLRPC_ACCOUNT_DISABLED;
+				break;
+			default:
+				bconn->err_msg = (char *)
+					_bugz_errmsg[BUGZCXX_XMLRPC_FAULT_OCURRED];
+				bconn->err_code = 
+					BUGZCXX_XMLRPC_FAULT_OCURRED;
+		}
+	}
+	return ret;
+}
+
+int bugzc_user_create(bugzc_conn *bconn, const char *email, const char *fullname,
+						const char *password){
+	int id = -1;
+	xmlrpc_value *result;
+	if(bconn->url == 0){
+		bconn->err_msg = (char*)
+			_bugz_errmsg[BUGZCXX_NO_INITIALIZED];
+		bconn->err_code = BUGZCXX_NO_INITIALIZED;
+		return -1;
+	}
+	xmlrpc_client_call2f(&bconn->xenv, bconn->xcli, bconn->url,
+			"User.create", &result, "({s:s,s:s,s:b})", 
+			"email", email, 
+			"password", password, 
+			"full_name", fullname);
+	if(bconn->xenv.fault_occurred){
+		switch(bconn->xenv.fault_code){
+			case BUGZ_WS_PW_TOO_SHORT:
+				bconn->err_msg = (char *)
+					_bugz_errmsg[BUGZCXX_XMLRPC_ACCT_PW_TOO_SHORT];
+				bconn->err_code = 
+					BUGZCXX_XMLRPC_ACCT_PW_TOO_SHORT;
+				break;
+			case BUGZ_WS_PW_TOO_LONG:
+				bconn->err_msg = (char *)
+					_bugz_errmsg[BUGZCXX_XMLRPC_ACCT_PW_TOO_LONG];
+				bconn->err_code = 
+					BUGZCXX_XMLRPC_ACCT_PW_TOO_LONG;
+				break;
+			case BUGZ_WS_ILLEGAL_EMAIL:
+				bconn->err_msg = (char *)
+					_bugz_errmsg[BUGZCXX_XMLRPC_ACCT_ILLEGAL_EMAIL];
+				bconn->err_code = 
+					BUGZCXX_XMLRPC_ACCT_ILLEGAL_EMAIL;
+				break;
+			case BUGZ_WS_ACCT_ALREADY_EXISTS:
+				bconn->err_msg = (char *)
+					_bugz_errmsg[BUGZCXX_XMLRPC_ACCT_ALREADY_EXISTS];
+				bconn->err_code = 
+					BUGZCXX_XMLRPC_ACCT_ALREADY_EXISTS;
+				break;
+			case BUGZ_WS_INVALID_CREDENTIALS:
+				bconn->err_msg = (char *)
+					_bugz_errmsg[BUGZCXX_XMLRPC_INVALID_CREDENTIALS];
+				bconn->err_code = 
+					BUGZCXX_XMLRPC_INVALID_CREDENTIALS;
+				break;
+			case BUGZ_WS_ACCOUNT_DISABLED:
+				bconn->err_msg = (char *)
+					_bugz_errmsg[BUGZCXX_XMLRPC_ACCOUNT_DISABLED];
+				bconn->err_code = 
+					BUGZCXX_XMLRPC_ACCOUNT_DISABLED;
+				break;
+			default:
+				bconn->err_msg = (char *)
+					_bugz_errmsg[BUGZCXX_XMLRPC_FAULT_OCURRED];
+				bconn->err_code = 
+					BUGZCXX_XMLRPC_FAULT_OCURRED;
+		}
+		return -1;
+	}
+	else{
+		xmlrpc_decompose_value(&bconn->xenv, result, 
+					"{s:i,*}", "id", &id);
+		xmlrpc_DECREF(result);
+	}
+	return id;
+}
