@@ -15,6 +15,9 @@
 #include<bugzc/bugzc.h>
 /** @file */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 enum BUGZCXX_INTERNAL_ERRCODES {
 	BUGZCXX_NO_INITIALIZED = 1,
 	BUGZCXX_BUFFER_TOO_SMALL,
@@ -60,6 +63,8 @@ enum BUGZILLA_WEBSERVICE_ERRCODES {
 	BUGZ_WS_INVALID_USER = 504
 };
 
-
+#ifdef __cplusplus
+}
+#endif
 #endif
 

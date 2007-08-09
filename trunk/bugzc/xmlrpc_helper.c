@@ -144,3 +144,40 @@ int rpc_s_call_void(bugzc_conn *bconn, const char *mname,
 	}
 	return ret;
 }
+
+int rpc_void_call_ret_list_int(bugzc_conn *bconn, const char *mname,
+		const char *vname, bugzc_list *list){
+	int ret = -1;
+	xmlrpc_value *result = 0;
+	xmlrpc_value *arr;
+	xmlrpc_value *tmp_val;
+	int val, i;
+	int *val_s;
+
+	result = rpc_void_call(bconn, mname);
+	if(result == 0){
+		return -1;
+	}
+	else{
+		xmlrpc_decompose_value(&bconn->xenv, result, 
+				"{s:A,*}", vname, &arr);
+		ret = xmlrpc_array_size(&bconn->xenv, arr);
+		for(i = 0; i < ret; i++){
+				xmlrpc_array_read_item(&bconn->xenv, arr,
+							i, &tmp_val);
+				xmlrpc_decompose_value(&bconn->xenv, tmp_val, 
+							"i", &val);
+				val_s = malloc(sizeof(int));
+				if(val_s){
+					val_s[0] = val;
+					bugzc_list_append_data(list, (void *)val_s, sizeof(int));
+				}
+				else{
+					ret *= -1;
+					break;
+				}
+		}
+		xmlrpc_DECREF(result);
+	}
+	return ret;	
+}

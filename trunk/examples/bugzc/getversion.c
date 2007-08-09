@@ -26,7 +26,7 @@ int main(int argc, char *argv[]){
 	bugzc_conn conn;
 	url = argv[1];
 
-	bugzc_init(&conn, url, strlen(url));
+	bugzc_init2(&conn, url);
 	printf("Bugzilla version at: %s ", conn.url);
 	fflush(stdout);
 	if(conn.xenv.fault_occurred){

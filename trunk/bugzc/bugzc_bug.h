@@ -13,10 +13,15 @@
 #ifndef __BUGZC_BUGS_H__
 #define __BUGZC_BUGS_H__
 #include<bugzc/bugzc.h>
+#include<bugzc/bugzc_list.h>
 /** @file 
  *  Implements all methods defined in the Bugzilla's
  *  Bugzilla::WebService::Bug namespace as defined in:
  *  http://www.bugzilla.org/docs/tip/html/api/Bugzilla/WebService/Bug.html */
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /** Represents a Bugzilla bug object. */
 typedef struct bugzc_bug_s {
@@ -97,11 +102,25 @@ void bigzc_bug_destroy_list(bugzc_bug **bug_obj, size_t nelems);
  *  	value.
  *  @return The amount of values in the list or a negative value on
  *  failure. 
- *  @todo Fix ugly list data structure, that thing is really hard to use. */
+ *  @deprecated This function will be no more when we reach 0.1.0, use
+ *  bugzc_bug_legal_values_list instead.
+ *  @todo Fix ugly array data structure, that thing is really hard to use. */
 int bugzc_bug_legal_values(bugzc_conn *conn, const char *field,
 				const char *product_name, 
 				char *list, size_t nitems,
 				size_t max_vsize);
+/** @brief Returns a list of valid values related to the given Bugzilla
+ *  field for a specified product.
+ *  @param conn A properly initialized bugz_conn object describing the
+ *  	url of the Bugzilla server.
+ *  @param field The field's name.
+ *  @param product_name null-terminated string representing the product to
+ * 		be researched.
+ *  @param list An empty bugzc_list linked list that will store the data values
+ *  @return The amount of values in the list or a negative value on
+ *  failure. */
+int bugzc_bug_legal_values_list(bugzc_conn *conn, const char *field,
+				const char *product_name, bugzc_list *list);
 
 /** @brief Use this function to submit new bug information to a bugzilla
  *  server installation.
@@ -150,5 +169,9 @@ int bugzc_bug_submit(bugzc_conn *conn, const char *product,
  *  @todo Perform dat/time conversions to unix timestamps. */
 bugzc_bug *bugzc_bug_get_bugs(bugzc_conn *conn, unsigned int *bug_ids,
 				size_t nbugid, size_t *rbugid);
+
+#ifdef __cplusplus
+}
+#endif
 #endif
 

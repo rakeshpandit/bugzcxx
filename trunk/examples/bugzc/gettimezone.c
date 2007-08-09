@@ -26,7 +26,7 @@ int main(int argc, char *argv[]){
 		return 0;
 	}
 
-	bugzc_init(&conn, url, strlen(url));
+	bugzc_init2(&conn, url);
 	printf("Bugzilla timezone at: %s ", conn.url);
 	fflush(stdout);
 	if(conn.xenv.fault_occurred){

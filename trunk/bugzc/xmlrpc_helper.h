@@ -15,10 +15,14 @@
 #include<bugzc/bugzc.h>
 #include<xmlrpc-c/base.h>
 #include<xmlrpc-c/client.h>
+#include<bugzc_list.h>
 /** @file */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 /** @internal 
- *
+ *  @todo Document internal use functions.
  */
 xmlrpc_value *rpc_void_call(bugzc_conn *bconn, const char *mname);
 
@@ -41,4 +45,14 @@ int rpc_void_call_void(bugzc_conn *bconn, const char *mname);
 int rpc_s_call_void(bugzc_conn *bconn, const char *mname,
 		const char *param,
 		const char *s);
+/** @internal
+ * 
+ */
+int rpc_void_call_ret_list_int(bugzc_conn *bconn, const char *mname,
+		const char *vname, bugzc_list *list);
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif

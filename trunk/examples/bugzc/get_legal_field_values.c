@@ -15,6 +15,16 @@
 #include<stdlib.h>
 #include<bugzc/bugzc.h>
 
+char *fgets_s(char *str, size_t siz, FILE *fptr){
+	char  *n;
+	n = fgets(str, siz, fptr);
+	if(strlen(n) > 2){
+		while(str[strlen(str) - 1] == '\n'){
+			str[strlen(str) - 1] = 0;
+		}
+	}
+	return n;
+}
 
 int main(int argc, char *argv[]){
 	char *url;
@@ -23,11 +33,10 @@ int main(int argc, char *argv[]){
 	char *product_name;
 	char pw[24];
 	char version[12];
-	char list[100][100];
-	int nlist;
-	size_t max_vsize;
+	bugzc_list list;
 	int i;
 	bugzc_conn conn;
+	bugzc_node *node;
 	if(argc <= 1){
 		fprintf(stderr, "At least you must provide bugzilla's server url\n");
 		return 0;
@@ -37,10 +46,8 @@ int main(int argc, char *argv[]){
 		return 0;
 	}
 	url = argv[1];
-	nlist = 100;
-	max_vsize = 100;
 
-	bugzc_init(&conn, url, strlen(url));
+	bugzc_init2(&conn, url);
 	printf("Bugzilla version at: %s ", conn.url);
 	fflush(stdout);
 	if(bugzc_bugzilla_version(&conn, version, 12) < 0){
@@ -96,7 +103,7 @@ int main(int argc, char *argv[]){
 		field_name = malloc(60);
 		printf("\nField name: ");
 		field_name[59] = 0;
-		fgets(field_name, 58, stdin);
+		fgets_s(field_name, 58, stdin);
 	}
 	if(argc > 4){
 		product_name = argv[4];
@@ -105,9 +112,10 @@ int main(int argc, char *argv[]){
 		product_name = malloc(60);
 		printf("\nProduct name: ");
 		product_name[59] = 0;
-		fgets(product_name, 58, stdin);
+		fgets_s(product_name, 58, stdin);
 	}
-	if((nlist = bugzc_bug_legal_values(&conn, field_name, product_name, (char *)list, nlist, max_vsize)) < 0){
+	bugzc_list_create(&list);
+	if(bugzc_bug_legal_values_list(&conn, field_name, product_name, &list) < 0){
 		if(conn.err_code != 0){
 			fprintf(stderr, "\n");
 			if(conn.xenv.fault_occurred){
@@ -120,13 +128,14 @@ int main(int argc, char *argv[]){
 		return 1;
 	}
 	printf("Legal %s values are: ", field_name);
-	for(i = 0; i < nlist; i++){
-		if(i > 0) printf(", ");
-		printf("%s", list[i]);
+	node = list.first;
+	while(node != 0){
+		if(node != list.first) printf(", ");
+		printf("%s", (char *)node->d_ptr);
+		node = node->next;
 	}
 	printf("\n");
+	bugzc_list_free_with_data(&list);
 	bugzc_user_logout(&conn);
 	return 0;
 }
-
-

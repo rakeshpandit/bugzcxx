@@ -48,5 +48,8 @@
 /* Define to 1 if you have the ANSI C header files. */
 #undef STDC_HEADERS
 
+/* Activate support for bugzilla unstable interfaces */
+#undef USE_BUGZILLA_UNSTABLE
+
 /* Activates debug mode */
 #undef USE_DEBUG

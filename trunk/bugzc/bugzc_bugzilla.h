@@ -19,6 +19,9 @@
  *  http://www.bugzilla.org/docs/tip/html/api/Bugzilla/WebService/Bugzilla.html
  */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 /** @brief Returns the server's installed bugzilla version.
  *  @param bconn A properly initialized bugz_conn object describing the
  *  	url of the Bugzilla server.
@@ -44,5 +47,8 @@ int bugzc_bugzilla_version(bugzc_conn *bconn, char *vbuf, size_t vsize);
  *  bconn object for more details. */
 int bugzc_bugzilla_timezone(bugzc_conn *bconn, char *tbuf, size_t tsize);
 
+#ifdef __cplusplus
+}
+#endif
 #endif
 

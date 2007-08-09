@@ -26,7 +26,7 @@ BUGZCXX_LIBRARY_NAME=bugzcxx
 #release versioning
 GENERIC_MAJOR_VERSION=0
 GENERIC_MINOR_VERSION=0
-GENERIC_MICRO_VERSION=3
+GENERIC_MICRO_VERSION=4
 GENERIC_PATCH_LEVEL=0
 AC_SUBST(GENERIC_MAJOR_VERSION)
 AC_SUBST(GENERIC_MINOR_VERSION)
@@ -106,9 +106,27 @@ AC_ARG_ENABLE(examples, AC_HELP_STRING([--disable-examples      Don't compile ex
 	]
 )
 
+dnl
+dnl Configure support for unstable interfaces
+dnl
+bugzc_unstable_h=""
+bugzc_unstable_c=""
+AC_ARG_ENABLE(unstable, AC_HELP_STRING([--enable-unstable      Include support for bugzilla's unstable interfaces]), [
+		AC_DEFINE(USE_BUGZILLA_UNSTABLE, 1, [Activate support for bugzilla unstable interfaces])
+		support_unstable=on
+		BUGZ_SUPPORT_UNSTABLE=1
+		AC_MSG_RESULT([ *** Support for unstable interfaces has been enabled, if your program does not work or breaks after a Bugzilla upgrade is your fault ***])
+	], [
+		support_unstable=off
+		BUGZ_SUPPORT_UNSTABLE=0
+	]
+)
+
 AC_SUBST(BUILD_CXX_DIR)
 AC_SUBST(CXX_EXAMPLES_DIR)
 AC_SUBST(EXAMPLES_DIR)
+AC_SUBST(BUGZ_SUPPORT_UNSTABLE)
+
 
 dnl
 dnl xmlrpc-c stuff
@@ -176,6 +194,7 @@ AC_OUTPUT(Makefile \
           bugzc/Makefile \
           bugzc/bugzc.pc \
           bugzc/bugzc_version.h \
+          bugzc/bugz_features.h \
           bugzcxx/Makefile \
           bugzcxx/bugzcxx.pc \
 	  api/Makefile \
@@ -192,9 +211,10 @@ echo
 echo "######################################"
 echo "# Bugzilla C/C++ XML-RPC Proxy $GENERIC_VERSION"
 echo "#"
-echo "#  Platform:              $host"
-echo "#  Debug mode:            $debug_mode_activated"
-echo "#  Generate docs:         $doxygen_docs"
-echo "#  Build C++ support:     $cxx_support"
-echo "#  xmlrpc-c version:      $XMLRPC_C_VERSION"
-echo "#  Build examples:        $build_examples"
+echo "#  Platform:                      $host"
+echo "#  Debug mode:                    $debug_mode_activated"
+echo "#  Support for UNSTABLE methods:  $support_unstable"
+echo "#  Generate docs:                 $doxygen_docs"
+echo "#  Build C++ support:             $cxx_support"
+echo "#  xmlrpc-c version:              $XMLRPC_C_VERSION"
+echo "#  Build examples:                $build_examples"

@@ -880,6 +880,7 @@ LIBTOOL
 BUILD_CXX_DIR
 CXX_EXAMPLES_DIR
 EXAMPLES_DIR
+BUGZ_SUPPORT_UNSTABLE
 XMLRPC_C_CONFIG
 XMLRPCC_CFLAGS
 XMLRPCC_LIBS
@@ -1496,6 +1497,8 @@ Optional Features:
 
   --disable-examples      Don't compile example programs
 
+  --enable-unstable      Include support for bugzilla's unstable interfaces
+
   --enable-docs           Build library documentation
 
 
@@ -1954,7 +1957,7 @@ BUGZCXX_LIBRARY_NAME=bugzcxx
 #release versioning
 GENERIC_MAJOR_VERSION=0
 GENERIC_MINOR_VERSION=0
-GENERIC_MICRO_VERSION=3
+GENERIC_MICRO_VERSION=4
 GENERIC_PATCH_LEVEL=0
 
 
@@ -4797,7 +4800,7 @@ ia64-*-hpux*)
   ;;
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 4800 "configure"' > conftest.$ac_ext
+  echo '#line 4803 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -7051,11 +7054,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:7054: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:7057: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:7058: \$? = $ac_status" >&5
+   echo "$as_me:7061: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -7319,11 +7322,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:7322: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:7325: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:7326: \$? = $ac_status" >&5
+   echo "$as_me:7329: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -7423,11 +7426,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:7426: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:7429: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:7430: \$? = $ac_status" >&5
+   echo "$as_me:7433: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -9720,7 +9723,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 9723 "configure"
+#line 9726 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -9820,7 +9823,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 9823 "configure"
+#line 9826 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -12156,11 +12159,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:12159: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:12162: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:12163: \$? = $ac_status" >&5
+   echo "$as_me:12166: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -12260,11 +12263,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:12263: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:12266: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:12267: \$? = $ac_status" >&5
+   echo "$as_me:12270: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -13821,11 +13824,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:13824: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:13827: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:13828: \$? = $ac_status" >&5
+   echo "$as_me:13831: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -13925,11 +13928,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:13928: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:13931: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:13932: \$? = $ac_status" >&5
+   echo "$as_me:13935: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -16112,11 +16115,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:16115: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:16118: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:16119: \$? = $ac_status" >&5
+   echo "$as_me:16122: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -16380,11 +16383,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:16383: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:16386: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:16387: \$? = $ac_status" >&5
+   echo "$as_me:16390: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -16484,11 +16487,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:16487: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:16490: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:16491: \$? = $ac_status" >&5
+   echo "$as_me:16494: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -19295,6 +19298,32 @@ else
 fi
 
 
+bugzc_unstable_h=""
+bugzc_unstable_c=""
+# Check whether --enable-unstable was given.
+if test "${enable_unstable+set}" = set; then
+  enableval=$enable_unstable;
+
+cat >>confdefs.h <<\_ACEOF
+#define USE_BUGZILLA_UNSTABLE 1
+_ACEOF
+
+		support_unstable=on
+		BUGZ_SUPPORT_UNSTABLE=1
+		{ echo "$as_me:$LINENO: result:  *** Support for unstable interfaces has been enabled, if your program does not work or breaks after a Bugzilla upgrade is your fault ***" >&5
+echo "${ECHO_T} *** Support for unstable interfaces has been enabled, if your program does not work or breaks after a Bugzilla upgrade is your fault ***" >&6; }
+
+else
+
+		support_unstable=off
+		BUGZ_SUPPORT_UNSTABLE=0
+
+
+fi
+
+
+
+
 
 
 
@@ -19438,7 +19467,7 @@ fi
 
 
 
-ac_config_files="$ac_config_files Makefile bugzc/Makefile bugzc/bugzc.pc bugzc/bugzc_version.h bugzcxx/Makefile bugzcxx/bugzcxx.pc api/Makefile api/bugzc/Makefile api/bugzc/Doxyfile api/bugzcxx/Makefile api/bugzcxx/Doxyfile examples/Makefile examples/bugzc/Makefile examples/bugzcxx/Makefile"
+ac_config_files="$ac_config_files Makefile bugzc/Makefile bugzc/bugzc.pc bugzc/bugzc_version.h bugzc/bugz_features.h bugzcxx/Makefile bugzcxx/bugzcxx.pc api/Makefile api/bugzc/Makefile api/bugzc/Doxyfile api/bugzcxx/Makefile api/bugzcxx/Doxyfile examples/Makefile examples/bugzc/Makefile examples/bugzcxx/Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -20029,6 +20058,7 @@ do
     "bugzc/Makefile") CONFIG_FILES="$CONFIG_FILES bugzc/Makefile" ;;
     "bugzc/bugzc.pc") CONFIG_FILES="$CONFIG_FILES bugzc/bugzc.pc" ;;
     "bugzc/bugzc_version.h") CONFIG_FILES="$CONFIG_FILES bugzc/bugzc_version.h" ;;
+    "bugzc/bugz_features.h") CONFIG_FILES="$CONFIG_FILES bugzc/bugz_features.h" ;;
     "bugzcxx/Makefile") CONFIG_FILES="$CONFIG_FILES bugzcxx/Makefile" ;;
     "bugzcxx/bugzcxx.pc") CONFIG_FILES="$CONFIG_FILES bugzcxx/bugzcxx.pc" ;;
     "api/Makefile") CONFIG_FILES="$CONFIG_FILES api/Makefile" ;;
@@ -20255,6 +20285,7 @@ LIBTOOL!$LIBTOOL$ac_delim
 BUILD_CXX_DIR!$BUILD_CXX_DIR$ac_delim
 CXX_EXAMPLES_DIR!$CXX_EXAMPLES_DIR$ac_delim
 EXAMPLES_DIR!$EXAMPLES_DIR$ac_delim
+BUGZ_SUPPORT_UNSTABLE!$BUGZ_SUPPORT_UNSTABLE$ac_delim
 XMLRPC_C_CONFIG!$XMLRPC_C_CONFIG$ac_delim
 XMLRPCC_CFLAGS!$XMLRPCC_CFLAGS$ac_delim
 XMLRPCC_LIBS!$XMLRPCC_LIBS$ac_delim
@@ -20267,7 +20298,7 @@ LIBOBJS!$LIBOBJS$ac_delim
 LTLIBOBJS!$LTLIBOBJS$ac_delim
 _ACEOF
 
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 26; then
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 27; then
     break
   elif $ac_last_try; then
     { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5
@@ -20863,9 +20894,10 @@ echo
 echo "######################################"
 echo "# Bugzilla C/C++ XML-RPC Proxy $GENERIC_VERSION"
 echo "#"
-echo "#  Platform:              $host"
-echo "#  Debug mode:            $debug_mode_activated"
-echo "#  Generate docs:         $doxygen_docs"
-echo "#  Build C++ support:     $cxx_support"
-echo "#  xmlrpc-c version:      $XMLRPC_C_VERSION"
-echo "#  Build examples:        $build_examples"
+echo "#  Platform:                      $host"
+echo "#  Debug mode:                    $debug_mode_activated"
+echo "#  Support for UNSTABLE methods:  $support_unstable"
+echo "#  Generate docs:                 $doxygen_docs"
+echo "#  Build C++ support:             $cxx_support"
+echo "#  xmlrpc-c version:              $XMLRPC_C_VERSION"
+echo "#  Build examples:                $build_examples"

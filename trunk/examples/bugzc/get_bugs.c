@@ -46,7 +46,7 @@ int main(int argc, char *argv[]){
 	url = argv[1];
 	login = argv[2];
 
-	bugzc_init(&conn, url, strlen(url));
+	bugzc_init2(&conn, url);
 	printf("Bugzilla version at: %s ", conn.url);
 	fflush(stdout);
 	if(bugzc_bugzilla_version(&conn, version, 12) < 0){

@@ -12,10 +12,12 @@ pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = bugzc.pc
 
 h_sources = bugzc.h bugzc_version.h bugzc_bugzilla.h bugz_errcodes.h \
-	    bugzc_user.h bugzc_bug.h
+	    bugzc_user.h bugzc_bug.h bugzc_product.h bugz_features.h \
+	    bugzc_list.h
 
 c_sources = bugzc.c bugzc_bugzilla.c bugz_errcodes.c xmlrpc_helper.c \
-	    bugzc_user.c bugzc_bug.c
+	    bugzc_user.c bugzc_bug.c bugzc_product.c \
+	    bugzc_list.c
 
 library_includedir=$(includedir)/bugzc
 

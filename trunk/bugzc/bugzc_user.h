@@ -18,6 +18,9 @@
  *  Bugzilla::WebService::User namespace as defined in:
  *  http://www.bugzilla.org/docs/tip/html/api/Bugzilla/WebService/User.html */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 /** @brief Logs a user into a bugzilla server.
  *  @param conn A properly initialized bugz_conn object describing the
  *  	url of the Bugzilla server.
@@ -55,4 +58,8 @@ int bugzc_user_offer_account_by_email(bugzc_conn *conn, const char *email);
  *  @return 0 un success, non-zero otherwise */
 int bugzc_user_create(bugzc_conn *conn, const char *email, const char *fullname,
 						const char *password);
+
+#ifdef __cplusplus
+}
+#endif
 #endif
