@@ -1,3 +1,21 @@
+Release 0.0.4
+In this release we've added support for UNSTABLE methods in special those found
+at Bugzilla::WebService::Product.
+Some really weird usage of dynamic arrays has been deprecated in favor of
+linked-lists, use the bugzc_list and related data-types and functions to 
+operate collections of objects.
+Deprecated functions:
+     Deprecated                Alternative
+bugzc_bug_get_bugs      bugzc_bug_get_bugs_list
+bugzc_bug_legal_values  bugzc_bug_legal_values_list
+bugzc_bug_destroy_obj   bugzc_bug_destroy_obj2
+bugzc_bug_destroy_list  bugzc_bug_destroy_list2
+
+Notes:
+In order to enable support for UNSTABLE interfaces you must run configure with
+the --enable-unstable option.
+
+
 Release 0.0.3
 
 Bugzc is feature complete, which means that all Bugzilla::Webservice 

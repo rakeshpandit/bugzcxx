@@ -15,6 +15,8 @@
 #include"bugz_errcodes.h"
 #include<string.h>
 #include<stdlib.h>
+#define _XOPEN_SOURCE
+#include<time.h>
 
 extern const char *_bugz_errmsg[];
 
@@ -195,6 +197,7 @@ bugzc_bug *bugzc_bug_create_obj(bugzc_conn *conn, int id, const char *alias,
 				const char *creation_time, 
 				const char *last_change_time){
 	bugzc_bug *bobj = 0;
+	struct tm tmp_tm;
 	conn->err_code = 0;
 	conn->err_msg = 0;
 	bobj = malloc(sizeof(bugzc_bug));
@@ -231,6 +234,8 @@ bugzc_bug *bugzc_bug_create_obj(bugzc_conn *conn, int id, const char *alias,
 		}
 		else{
 			bobj->creation_time = strdup(creation_time);
+			strptime(bobj->creation_time, "%Y%m%dT%H:%M:%S", &tmp_tm);
+			bobj->creation_tstamp = mktime(&tmp_tm);
 		}
 		if(bobj->creation_time == NULL){
 			free(bobj);
@@ -244,6 +249,8 @@ bugzc_bug *bugzc_bug_create_obj(bugzc_conn *conn, int id, const char *alias,
 		}
 		else{
 			bobj->last_change_time = strdup(last_change_time);
+			strptime(bobj->last_change_time, "%Y%m%dT%H:%M:%S", &tmp_tm);
+			bobj->last_change_tstamp = mktime(&tmp_tm);
 		}
 		if(bobj->last_change_time == NULL){
 			free(bobj);
@@ -251,9 +258,6 @@ bugzc_bug *bugzc_bug_create_obj(bugzc_conn *conn, int id, const char *alias,
 			conn->err_msg = (char *)
 				_bugz_errmsg[BUGZCXX_BUGOBJ_ALLOCATION_ERROR];
 			bobj = 0;
-		}
-		if(bobj != 0){
-			/* Compute timestamps */
 		}
 	}
 	else{
@@ -277,6 +281,15 @@ void bugzc_bug_destroy_obj(bugzc_bug **bug_objx){
 	}
 }
 
+void bugzc_bug_destroy_obj2(bugzc_bug *bug_obj){
+	if(bug_obj != NULL){
+		if(bug_obj->alias != NULL) free(bug_obj->alias);
+		if(bug_obj->summary != NULL) free(bug_obj->summary);
+		if(bug_obj->creation_time != NULL) free(bug_obj->creation_time);
+		if(bug_obj->last_change_time != NULL) free(bug_obj->last_change_time);
+		free(bug_obj);
+	}
+}
 
 static const char *bp[] = {
 	"product",
@@ -373,7 +386,7 @@ int bugzc_bug_submit(bugzc_conn *bconn, const char *product,
 	return ret;
 }
 
-void bigzc_bug_destroy_list(bugzc_bug **bug_objx, size_t nelems){
+void bugzc_bug_destroy_list(bugzc_bug **bug_objx, size_t nelems){
 	bugzc_bug *bug_obj;
 	size_t i;
 	bug_obj = *bug_objx;
@@ -385,6 +398,10 @@ void bigzc_bug_destroy_list(bugzc_bug **bug_objx, size_t nelems){
 	}
 	free(bug_obj);
 	*bug_objx = NULL;
+}
+
+void bugzc_bug_destroy_list2(bugzc_list *list){
+	bugzc_list_free_with_data_destructor(list, (void *(*)(void *))bugzc_bug_destroy_obj2);
 }
 
 
@@ -407,6 +424,7 @@ bugzc_bug *bugzc_bug_get_bugs(bugzc_conn *bconn, unsigned int *bug_ids,
 	char *tmp_str;
 	char *b_ctime;
 	char *b_lctime;
+	struct tm tmp_tm;
 	if(bconn->url == 0){
 		bconn->err_msg = (char *)_bugz_errmsg[BUGZCXX_NO_INITIALIZED];
 		bconn->err_code = BUGZCXX_NO_INITIALIZED;
@@ -470,9 +488,6 @@ bugzc_bug *bugzc_bug_get_bugs(bugzc_conn *bconn, unsigned int *bug_ids,
 		ret = malloc(sizeof(bugzc_bug) * *rbugid);
 		for(i = 0; i < *rbugid; i++){
 			xmlrpc_array_read_item(&bconn->xenv, bug_array, i, &bug_item);
-#ifdef USE_BUGZILLA_UNSTABLE
-
-#else
 			xmlrpc_decompose_value(&bconn->xenv, bug_item, 
 						"{s:s,s:i,s:s,s:8,s:8,*}",
 						"summary", &b_summary,
@@ -484,8 +499,11 @@ bugzc_bug *bugzc_bug_get_bugs(bugzc_conn *bconn, unsigned int *bug_ids,
 						&b_lctime
 					);
 			ret[i].creation_time = strdup(b_ctime);
+			strptime(ret[i].creation_time, "%Y%m%dT%H:%M:%S", &tmp_tm);
+			ret[i].creation_tstamp = mktime(&tmp_tm);
 			ret[i].last_change_time = strdup(b_lctime);
-#endif
+			strptime(ret[i].last_change_time, "%Y%m%dT%H:%M:%S", &tmp_tm);
+			ret[i].last_change_tstamp = mktime(&tmp_tm);
 			ret[i].summary = strdup(b_summary);
 			if(b_alias == 0){
 				ret[i].alias = malloc(1 * sizeof(char));
@@ -498,6 +516,105 @@ bugzc_bug *bugzc_bug_get_bugs(bugzc_conn *bconn, unsigned int *bug_ids,
 		xmlrpc_DECREF(result);
 	}
 	return ret;
-
 }
 
+int bugzc_bug_get_bugs_list(bugzc_conn *bconn, unsigned int *bug_ids,
+				size_t nbugid, bugzc_list *olist){
+	int ret = -1;
+	int r_nitems;
+	int i, tmp_id;
+	xmlrpc_value *result;
+	xmlrpc_value *v_list;
+	xmlrpc_value *tmp_val;
+	xmlrpc_value *int_array;
+	xmlrpc_value *int_item;
+	xmlrpc_value *bug_array;
+	xmlrpc_value *bug_item;
+	xmlrpc_value *ctime;
+	xmlrpc_value *lctime;
+	char *b_summary;
+	char *b_alias;
+	char *tmp_str;
+	char *b_ctime;
+	char *b_lctime;
+	bugzc_bug *bug_obj;
+	if(bconn->url == 0){
+		bconn->err_msg = (char *)_bugz_errmsg[BUGZCXX_NO_INITIALIZED];
+		bconn->err_code = BUGZCXX_NO_INITIALIZED;
+		return 0;
+	}
+	bugzc_list_create(olist);
+	int_array = xmlrpc_array_new(&bconn->xenv);
+	for(i = 0; i < nbugid; i++){
+		int_item = xmlrpc_build_value(&bconn->xenv, "i", bug_ids[i]);
+		xmlrpc_array_append_item(&bconn->xenv, int_array, int_item);
+	}
+	xmlrpc_client_call2f(&bconn->xenv, bconn->xcli, bconn->url,
+					"Bug.get_bugs", &result,
+					"({s:A})", 
+					"ids", int_array
+		);
+	xmlrpc_DECREF(int_array);
+	if(bconn->xenv.fault_occurred){
+		switch(bconn->xenv.fault_code){
+			case BUGZ_WS_ACCESS_DENIED:
+				bconn->err_msg = (char *)
+					_bugz_errmsg[BUGZCXX_XMLRPC_ACCESS_DENIED];
+				bconn->err_code = 
+					BUGZCXX_XMLRPC_ACCESS_DENIED;
+				break;
+			case BUGZ_WS_INVALID_BUG_ID:
+				bconn->err_msg = (char *)
+					_bugz_errmsg[BUGZCXX_XMLRPC_INVALID_BUG_ID];
+				bconn->err_code = 
+					BUGZCXX_XMLRPC_INVALID_BUG_ID;
+				break;
+			case BUGZ_WS_INVALID_BUG_ALIAS:
+				bconn->err_msg = (char *)
+					_bugz_errmsg[BUGZCXX_XMLRPC_INVALID_BUG_ALIAS];
+				bconn->err_code = 
+					BUGZCXX_XMLRPC_INVALID_BUG_ALIAS;
+				break;
+			case BUGZ_WS_INVALID_USER:
+				bconn->err_msg = (char *)
+					_bugz_errmsg[BUGZCXX_XMLRPC_INVALID_USER];
+				bconn->err_code = 
+					BUGZCXX_XMLRPC_INVALID_USER;
+				break;
+			case BUGZ_WS_ACCOUNT_DISABLED:
+				bconn->err_msg = (char *)
+					_bugz_errmsg[BUGZCXX_XMLRPC_ACCOUNT_DISABLED];
+				bconn->err_code = 
+					BUGZCXX_XMLRPC_ACCOUNT_DISABLED;
+				break;
+			default:
+				bconn->err_msg = (char *)
+					_bugz_errmsg[BUGZCXX_XMLRPC_FAULT_OCURRED];
+				bconn->err_code = 
+					BUGZCXX_XMLRPC_FAULT_OCURRED;
+		}
+		return -1;
+	}
+	else{
+		xmlrpc_decompose_value(&bconn->xenv, result, 
+					"{s:A,*}", "bugs", &bug_array);
+		ret = xmlrpc_array_size(&bconn->xenv, bug_array);
+		for(i = 0; i < ret; i++){
+			xmlrpc_array_read_item(&bconn->xenv, bug_array, i, &bug_item);
+			xmlrpc_decompose_value(&bconn->xenv, bug_item, 
+						"{s:s,s:i,s:s,s:8,s:8,*}",
+						"summary", &b_summary,
+						"id", &tmp_id,
+						"alias", &b_alias,
+						"creation_time", 
+						&b_ctime,
+						"last_change_time", 
+						&b_lctime
+					);
+			bug_obj = bugzc_bug_create_obj(bconn, tmp_id, b_alias, b_summary, b_ctime, b_lctime);
+			bugzc_list_append_data(olist, bug_obj, sizeof(bugzc_bug));
+		}
+		xmlrpc_DECREF(result);
+	}
+	return ret;
+}

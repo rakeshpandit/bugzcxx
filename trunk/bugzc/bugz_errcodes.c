@@ -42,6 +42,7 @@ const char *_bugz_errmsg[] = {
 	"Given e-mail address format is not allowed or is wrong.",
 	"Unable to create account, username already exists",
 	"Given password is too short.",
-	"Given password is too long."
+	"Given password is too long.",
+	"Unable to allocate an instance of bugzc_product"
 };
 

@@ -71,14 +71,14 @@ void bugzc_node_free(bugzc_node **node);
 void bugzc_node_free_with_data(bugzc_node **node);
 
 /** @brief Creates an properly initialzes a bugdzc_list doubly-linked list
- *  @param A pointer to the list to be created
+ *  @param list A pointer to the list to be created
  *  @return A pointer to the list or 0x0 on failure. */
 bugzc_list *bugzc_list_create(bugzc_list *list);
 
 /** @brief Destroys a bugzc_list linked list nodes associations only. 
  *  Will delete all nodes in the list one by one without releasing their
  *  datastores, after doing so it will reset the first and last members to 0x0.
- *  @param A pointer to the list to be freed. */
+ *  @param list A pointer to the list to be freed. */
 void bugzc_list_free(bugzc_list *list);
 
 /** @brief Destroys a bugzc_list linked list completely, including all data
@@ -93,7 +93,7 @@ void bugzc_list_free_with_data(bugzc_list *list);
  *  By interatively calling the destructor function before deleting each node
  *  this function can successfully achieve its goals.
  *  @param list A pointer to the list to be destroyed.
- *  @destructor A pointer to a function that really "knows" how the perform an
+ *  @param destructor A pointer to a function that really "knows" how the perform an
  *  effective free of the data stored at the nodes, by default it is assumed
  *  that the data is homogenous, which means that all data pointed from the 
  *  d_ptr member pointer is of the exact same data type, if that is not the 

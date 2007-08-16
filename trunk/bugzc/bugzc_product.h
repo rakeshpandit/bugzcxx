@@ -35,7 +35,21 @@ typedef struct bugzc_product_s {
 	/** Product description. */
 	char *description;
 } bugzc_product;
+
+/** @brief Releases all memory allocated for a bugzc_product (its internal
+ *  members and stuff).
+ *  @warning This function ALSO releases the bugzc_product itself, not only
+ *  its internal vars.
+ *  @param p The bugzc_product to be freed from memory. */
+void bugzc_product_destroy_product_obj(bugzc_product *p);
 	
+/** @brief Destroys a bugzc_list linked list and its data if it stores
+ *  bugzc_product objects.
+ *  Will iteratively deletes all nodes and its related data from the list, at
+ *  the end it will also reset the lists internal vars and pointers.
+ *  @param list The list to be erased */ 
+void bugzc_product_destroy_product_list(bugzc_list *list);
+
 /** @brief Returns a list of product ids which the user is allowed to perform
  *  searches on.
  *  @param conn A properly initialized bugz_conn object describing the

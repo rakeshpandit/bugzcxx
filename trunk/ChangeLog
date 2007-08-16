@@ -1,4 +1,13 @@
-Juan V. Guerrero   2007-08-09
+Juan V. Guerrero <ryoma.nagare@gmail.com>
+
+* Code has been written to support the UNSTABLE Bugzilla::WebService::Product
+namespace with all its methods as seen in Bugzilla 3.0 online API docs.
+* A few test programs have been changed so they now use non-deprecated functions
+only (mostly methods that were using ugly dynamic arrays).
+* Some pending date/time conversions have been finally implemented
+
+------------------------------------------------------------------------
+r20 | mindstorm2600 | 2007-08-09 08:36:00 -0500 (Thu, 09 Aug 2007) | 13 lines
 
 * Added some general-purpose linked list functions and data structures,
 hopefully some ugly string collection implementations will get cleaned as they
@@ -13,11 +22,10 @@ bugzc_bug_legal_values_list respectively.
 * Some work has been started in order to support the unstable interface
 Bugzilla::WebService::Product namespace, some test programs are still required
 though.
-
 ------------------------------------------------------------------------
 r18 | mindstorm2600 | 2007-08-06 01:06:33 -0500 (Mon, 06 Aug 2007) | 5 lines
 
-* Some test programs made to test user creation and account offering via
+* Some test programs were made to test user creation and account offering via
 e-mail, nice code, seems to work fine.
 * All namespaces are feature complete now with stable and experimental
 functions only, no unstable functions coded yet which means that the 

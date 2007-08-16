@@ -15,6 +15,23 @@
 #include<stdlib.h>
 #include<bugzc/bugzc.h>
 
+void print_bug_obj(bugzc_bug *l){
+	printf("Bug id:\t\t%d\nSummary:\t%s\n", l->id, l->summary);
+	printf("Created On:\t%s (%lu)\n", l->creation_time,
+			l->creation_tstamp);
+	printf("Last Change On:\t%s (%lu)\n\n", l->last_change_time,
+			l->last_change_tstamp);
+}
+
+void print_bug_list(bugzc_list *list){
+	bugzc_node *q;
+	q = list->first;
+	while(q != 0){
+		print_bug_obj((bugzc_bug *)q->d_ptr);
+		q = q->next;
+	}
+}
+
 int main(int argc, char *argv[]){
 	char *url;
 	char *login;
@@ -33,10 +50,11 @@ int main(int argc, char *argv[]){
 	char severity[65];
 	char tmp[128];
 	int bug_id;
-	int qi;
+	int *qi;
 	size_t n;
 	bugzc_conn conn;
 	bugzc_bug *l = 0;
+	bugzc_list list;
 
 	description[0] = 0;
 	if(argc < 4 || strcmp(argv[1], "--help") == 0 || strcmp(argv[1], "-h") == 0){
@@ -83,28 +101,29 @@ int main(int argc, char *argv[]){
 		}
 		return 1;
 	}
+	
+	qi = (int *)malloc((argc - 3) * sizeof(int));
+	
 	/* Build bug array list */
 	for(i = 3; i < argc; i++){
-		sscanf(argv[i], "%d", &qi);
-		printf("Querying info for #%d...\n", qi);
-		l = bugzc_bug_get_bugs(&conn, &qi, 1, &n);
-		if(l != 0){
-			printf("Bug id:\t\t%d\nSummary:\t%s\n", l[0].id, l[0].summary);
-			printf("Created On:\t%s (%lu)\n", l[0].creation_time,
-					l[0].creation_tstamp);
-			printf("Last Change On:\t%s (%lu)\n\n", l[0].last_change_time,
-					l[0].last_change_tstamp);
+		sscanf(argv[i], "%d", &qi[i - 3]);
+		printf("Querying info for #%d...\n", qi[i - 3]);
+		
+		
+	}
+	if(bugzc_bug_get_bugs_list(&conn, qi, argc - 3, &list) >= 0){
+		print_bug_list(&list);
+		bugzc_bug_destroy_list2(&list);
+	}
+	else{
+		fprintf(stderr, "\n");
+		if(conn.xenv.fault_occurred){
+			fprintf(stderr, "%s\n", conn.xenv.fault_string);
 		}
-		else{
-			fprintf(stderr, "\n");
-			if(conn.xenv.fault_occurred){
-				fprintf(stderr, "%s\n", conn.xenv.fault_string);
-			}
-			if(conn.err_msg != 0){
-				fprintf(stderr, "%s\n", conn.err_msg);
-			}
-			return 1;
+		if(conn.err_msg != 0){
+			fprintf(stderr, "%s\n", conn.err_msg);
 		}
+		return 1;
 	}
 	bugzc_user_logout(&conn);
 	return 0;

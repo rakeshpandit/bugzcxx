@@ -9,7 +9,7 @@ Tune build environment
 Configure build
 ./configure --disable-cxx [whatever flags you want to put from the --help]
 (If you want to build the doxygen documentation then add --enable-docs to
- configure)
+ configure, to enable support for UNSTABLE methods use --enable-unstable)
 
 Build initial source code
 make

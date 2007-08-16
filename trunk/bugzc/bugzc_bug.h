@@ -64,8 +64,7 @@ typedef struct bugzc_bug_s {
  *  @return The newly created bugzc_bug object (remember to release it
  *  bugzc_bug_destroy after use) if an error occurred while creation 0 while
  *  be returned and an error code and message will be reported trough the
- *  bugzc_conn object.
- *  @todo Compute timestamps. */
+ *  bugzc_conn object. */
 bugzc_bug *bugzc_bug_create_obj(bugzc_conn *conn, int id, const char *alias,
 				const char *summary,
 				const char *creation_time, 
@@ -74,8 +73,20 @@ bugzc_bug *bugzc_bug_create_obj(bugzc_conn *conn, int id, const char *alias,
  *  After a succesfull call to bugzc_bug_create_obj a bugzc_bug object
  *  must be released from memory by calling this function since it will
  *  properly release memory for the whole object and its members.
- *  @param bug_obj The bugzc_obj to be released from memory. */
+ *  @param bug_obj The bugzc_obj to be released from memory. 
+ *  @deprecated Please use bugzc_bug_destroy_obj2, as of BugzCXX 0.1.0 this
+ *  function will be eliminated.*/
 void bugzc_bug_destroy_obj(bugzc_bug **bug_obj);
+
+/** @brief Call this method to release a bugzc_bug object from memory.
+ *  After a succesfull call to bugzc_bug_create_obj a bugzc_bug object
+ *  must be released from memory by calling this function since it will
+ *  properly release memory for the whole object and its members.
+ *  The main difference with this function and bugzc_bug_destroy_obj is that 
+ *  the latter requires a double pointer and at the end will change the pointer
+ *  address to 0x0, this function does not perform that last step. 
+ *  @param bug_obj The bugzc_obj to be released from memory.  */
+void bugzc_bug_destroy_obj2(bugzc_bug *bug_obj);
 
 /** @brief Releases a dynamically allocated array of bugz_bug objects from
  *  memory.
@@ -84,7 +95,11 @@ void bugzc_bug_destroy_obj(bugzc_bug **bug_obj);
  *  @param bug_obj A reference to a preivouls allocated dynamic array of
  *  	bug_obj elements.
  *  @param nelems The amount of elements contained in the array. */
-void bigzc_bug_destroy_list(bugzc_bug **bug_obj, size_t nelems);
+void bugzc_bug_destroy_list(bugzc_bug **bug_obj, size_t nelems);
+
+/** @brief Releases memory used in a bugzc_list which containg bugzc_bug objects
+ *  @param list The bugzc_list which is about to the freed. */
+void bugzc_bug_destroy_list2(bugzc_list *list);
 
 /** @brief Returns a list of valid values related to the given Bugzilla
  *  field for a specified product.
@@ -103,8 +118,7 @@ void bigzc_bug_destroy_list(bugzc_bug **bug_obj, size_t nelems);
  *  @return The amount of values in the list or a negative value on
  *  failure. 
  *  @deprecated This function will be no more when we reach 0.1.0, use
- *  bugzc_bug_legal_values_list instead.
- *  @todo Fix ugly array data structure, that thing is really hard to use. */
+ *  bugzc_bug_legal_values_list instead. */
 int bugzc_bug_legal_values(bugzc_conn *conn, const char *field,
 				const char *product_name, 
 				char *list, size_t nitems,
@@ -156,6 +170,8 @@ int bugzc_bug_submit(bugzc_conn *conn, const char *product,
 			const char *priority, const char *severity);
 
 /** @brief Gives detailed information about a bugid or an array of bug ids.
+ *  @deprecated Instead use bugzc_bug_get_bugs_list as of BugzCXX 0.1.0 the
+ *  function bugzc_bug_get_bugs will be eliminated.
  *  @param conn A properly initialized bugz_conn object describing the
  *  	url of the Bugzilla server.
  *  @param bug_ids An array of numeric bug ids to query from the Bugzilla
@@ -165,10 +181,23 @@ int bugzc_bug_submit(bugzc_conn *conn, const char *product,
  *  	from the get_bugs query
  *  @return A dynamically allocated array of bugzc_bug elements which after
  *  	use most be released from memory with an appropiate call to 
- *  	bugzc_bug_destry_list. 
- *  @todo Perform dat/time conversions to unix timestamps. */
+ *  	bugzc_bug_destry_list. */
 bugzc_bug *bugzc_bug_get_bugs(bugzc_conn *conn, unsigned int *bug_ids,
 				size_t nbugid, size_t *rbugid);
+
+/** @brief Gives detailed information about a bugid or an array of bug ids.
+ *  @deprecated Instead use bugzc_bug_get_bugs_list as of BugzCXX 0.1.0 the
+ *  function bugzc_bug_get_bugs will be eliminated.
+ *  @param conn A properly initialized bugz_conn object describing the
+ *  	url of the Bugzilla server.
+ *  @param bug_ids An array of numeric bug ids to query from the Bugzilla
+ *  	remote installation server.
+ *  @param nbugid The amount of elements contained in the bug_ids array.
+ *  @param olist An empty bugzc_list where the data will be stored, after use
+ * 		this list most freed from memory by calling bigzc_bug_destroy_list2.
+ *  @return The amoount of elements on the list or a negative value on error. */
+int bugzc_bug_get_bugs_list(bugzc_conn *conn, unsigned int *bug_ids,
+				size_t nbugid, bugzc_list *olist);
 
 #ifdef __cplusplus
 }
