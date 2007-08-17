@@ -1,0 +1,26 @@
+This software makes use of the GNU build tools, autoconf, automake, 
+libtool, etc. So you should be familiar with the configure, make,
+make install process, if its the case fell free to follow your way,
+however if you are new to this, look below.
+
+Tune build environment
+./configure --help
+
+Configure build
+./configure --disable-cxx [whatever flags you want to put from the --help]
+(If you want to build the doxygen documentation then add --enable-docs to
+ configure, to enable support for UNSTABLE methods use --enable-unstable)
+
+Build initial source code
+make
+
+Before installing and if you compiled the example programs (default) then
+you're set to running most of them (if not all), just go to the examples
+subdirectory, from there select which api you want to test bugzc or bugzcxx
+inside you'll lots of suitable example programs.
+
+Install library
+make install
+
+Last step
+Have fun!!!

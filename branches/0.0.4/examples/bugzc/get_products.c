@@ -1,0 +1,227 @@
+/*
+ *  Bugzilla C/C++ XML-RPC proxy
+ * 
+ *  Copyright (C) Juan V. Guerrero 2007
+ * 
+ *  Juan V. Guerrero <mindstorm2600@users.sourceforge.net>
+ * 
+ *  This program is free software, distributed under the terms of
+ *  the GNU General Public License Version 2. See the LICENSE file
+ *  at the top of the source tree.
+ */
+
+#include<stdio.h>
+#include<string.h>
+#include<stdlib.h>
+#include<bugzc/bugzc.h>
+
+
+#ifdef USE_BUGZILLA_UNSTABLE
+	
+char *fgets_s(char *str, size_t siz, FILE *fptr){
+	char  *n;
+	n = fgets(str, siz, fptr);
+	if(strlen(n) > 2){
+		while(str[strlen(str) - 1] == '\n'){
+			str[strlen(str) - 1] = 0;
+		}
+	}
+	return n;
+}
+
+void print_product(bugzc_product *p){
+	puts("------------------------------");
+	printf("ID:           %d\n", p->id);
+	printf("Name:         %s\n", p->name);
+	printf("Description:  %s\n", p->description);
+}
+
+void print_product_list(bugzc_list *list){
+	bugzc_node *q = 0;
+	q = list->first;
+	while(q != 0){
+		print_product(q->d_ptr);
+		q = q->next;
+	}
+}
+
+void print_product_list_ids(bugzc_list *list){
+	int *id;
+	bugzc_node *q = 0;
+	q = list->first;
+	while(q != 0){
+		id = q->d_ptr;
+		if(q != list->first){
+			printf(", %d", *id);
+		}
+		else{
+			printf("%d", *id);
+		}
+		q = q->next;
+	}
+	if(list->count > 0){
+		puts("");
+	}
+}
+
+int main(int argc, char *argv[]){
+	char *url;
+	char *login;
+	char *field_name;
+	char *product_name;
+	char pw[24];
+	char version[12];
+	int *p_ids;
+	int i;
+	int *i_tmp;
+	bugzc_list list;
+	bugzc_list p_list;
+	bugzc_conn conn;
+	bugzc_node *node;
+	if(argc <= 1){
+		fprintf(stderr, "At least you must provide bugzilla's server url\n");
+		return 0;
+	}
+	if(strcmp(argv[1], "--help") == 0 || strcmp(argv[1], "-h") == 0){
+		printf("%s --help\n%s <url> [username]\n\n");
+		return 0;
+	}
+	url = argv[1];
+
+	bugzc_init2(&conn, url);
+	printf("Bugzilla version at: %s ", conn.url);
+	fflush(stdout);
+	if(bugzc_bugzilla_version(&conn, version, 12) < 0){
+		if(conn.err_code != 0){
+			fprintf(stderr, "\n");
+			if(conn.xenv.fault_occurred){
+				fprintf(stderr, "%s\n", conn.xenv.fault_string);
+			}
+			if(conn.err_msg != 0){
+				fprintf(stderr, "%s\n", conn.err_msg);
+			}
+			return 1;
+		}
+		return 1;
+	}
+	printf("is %s\n", version);
+	if(conn.xenv.fault_occurred){
+		fprintf(stderr, "%s\n", conn.xenv.fault_string);
+		return 1;
+	}
+	if(argc > 2){
+		login = argv[2];
+		printf("\nLogin ");
+	}
+	else{
+		login = malloc(100);
+		printf("\nLogin (or e-mail): ");
+		login[99] = 0;
+		fgets(login, 98, stdin);
+	}
+	printf("Password: ");
+	fgets(pw, 23, stdin);
+	/* Perform login */
+	if(bugzc_user_login(&conn, login, pw, 0) < 0){
+		if(conn.err_code != 0){
+			fprintf(stderr, "\n");
+			if(conn.xenv.fault_occurred){
+				fprintf(stderr, "%s\n", conn.xenv.fault_string);
+			}
+			if(conn.err_msg != 0){
+				fprintf(stderr, "%s\n", conn.err_msg);
+			}
+			return 1;
+		}
+		return 1;
+	}
+	pw[0] = 0;
+	bugzc_list_create(&list);
+	printf("Selectable product ids: ");
+	if(bugzc_product_get_selectable_products(&conn, &list) < 0){
+		if(conn.err_code != 0){
+			fprintf(stderr, "\n");
+			if(conn.xenv.fault_occurred){
+				fprintf(stderr, "%s\n", conn.xenv.fault_string);
+			}
+			if(conn.err_msg != 0){
+				fprintf(stderr, "%s\n", conn.err_msg);
+			}
+			return 1;
+		}
+	}
+	else{
+		print_product_list_ids(&list);
+		bugzc_list_free_with_data(&list);
+	}
+	printf("Enterable product ids: ");
+	if(bugzc_product_get_enterable_products(&conn, &list) < 0){
+		if(conn.err_code != 0){
+			fprintf(stderr, "\n");
+			if(conn.xenv.fault_occurred){
+				fprintf(stderr, "%s\n", conn.xenv.fault_string);
+			}
+			if(conn.err_msg != 0){
+				fprintf(stderr, "%s\n", conn.err_msg);
+			}
+			return 1;
+		}
+	}
+	else{
+		print_product_list_ids(&list);
+		bugzc_list_free_with_data(&list);
+	}
+	printf("Accessible product ids: ");
+	if(bugzc_product_get_accessible_products(&conn, &list) < 0){
+		if(conn.err_code != 0){
+			fprintf(stderr, "\n");
+			if(conn.xenv.fault_occurred){
+				fprintf(stderr, "%s\n", conn.xenv.fault_string);
+			}
+			if(conn.err_msg != 0){
+				fprintf(stderr, "%s\n", conn.err_msg);
+			}
+			return 1;
+		}
+	}
+	else{
+		print_product_list_ids(&list);
+		p_ids = (int *)malloc(list.count * sizeof(int));
+		node = list.first;
+		i = 0;
+		while(node != 0){
+			i_tmp = node->d_ptr;
+			p_ids[i++] = *i_tmp;
+			node = node->next;
+		}
+		if(bugzc_product_get_products(&conn, p_ids, list.count, &p_list) < 0){
+			if(conn.err_code != 0){
+				fprintf(stderr, "\n");
+				if(conn.xenv.fault_occurred){
+					fprintf(stderr, "%s\n", conn.xenv.fault_string);
+				}
+				if(conn.err_msg != 0){
+					fprintf(stderr, "%s\n", conn.err_msg);
+				}
+				return 1;
+			}	
+		}
+		else{
+			puts("Details:");
+			print_product_list(&p_list);
+			bugzc_product_destroy_product_list(&p_list);
+		}
+		bugzc_list_free_with_data(&list);
+	}
+	bugzc_user_logout(&conn);
+	return 0;
+}
+#else
+
+int main(){
+	puts("BugzCXX must be compiled with support for UNSTABLE interfaces"
+			" before running this program");
+	return 1;
+}
+
+#endif

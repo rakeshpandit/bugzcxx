@@ -1,0 +1,34 @@
+/*
+ *  Bugzilla C/C++ XML-RPC proxy
+ * 
+ *  Copyright (C) Juan V. Guerrero 2007
+ * 
+ *  Juan V. Guerrero <mindstorm2600@users.sourceforge.net>
+ * 
+ *  This program is free software, distributed under the terms of
+ *  the GNU General Public License Version 2. See the LICENSE file
+ *  at the top of the source tree.
+ */
+
+#ifndef __BUGZC_FEATURES_H__
+#define __BUGZC_FEATURES_H__
+#include<bugzc/bugzc.h>
+/** @file 
+ *  Stores compiled in feature test macros.
+ */
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#if @BUGZ_SUPPORT_UNSTABLE@ == 1
+#ifdef USE_BUGZILLA_UNSTABLE
+#undef USE_BUGZILLA_UNSTABLE
+#endif
+#define USE_BUGZILLA_UNSTABLE 1
+#endif
+
+#ifdef __cplusplus
+}
+#endif
+#endif

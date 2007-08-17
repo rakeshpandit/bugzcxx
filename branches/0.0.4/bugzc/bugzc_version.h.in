@@ -1,0 +1,24 @@
+/*
+ *  Bugzilla C/C++ XML-RPC proxy
+ * 
+ *  Copyright (C) Juan V. Guerrero 2007
+ * 
+ *  Juan V. Guerrero <mindstorm2600@users.sourceforge.net>
+ * 
+ *  This program is free software, distributed under the terms of
+ *  the GNU General Public License Version 2. See the LICENSE file
+ *  at the top of the source tree.
+ */
+
+#ifndef __BUGZC_VERSION_H__
+#define __BUGZC_VERSION_H__
+/** \file bugzc/bugzc_version.h */
+
+#define BUGZCXX_VERSION @GENERIC_VERSION@
+#define BUGZCXX_VERSION_STRING "@GENERIC_VERSION@"
+#define BUGZCXX_VERSION_MAJOR @GENERIC_MAJOR_VERSION@
+#define BUGZCXX_VERSION_MINOR @GENERIC_MINOR_VERSION@
+#define BUGZCXX_VERSION_MICRO @GENERIC_MICRO_VERSION@
+#define BUGZCXX_VERSION_PATCHLEVEL @GENERIC_PATCH_LEVEL@
+
+#endif
