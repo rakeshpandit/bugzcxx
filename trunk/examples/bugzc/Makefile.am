@@ -8,7 +8,7 @@
 #  the GNU General Public License Version 2. See the LICENSE file
 #  at the top of the source tree.
 
-bin_PROGRAMS = getversion gettimezone testlogin get_legal_field_values \
+doc_PROGRAMS = getversion gettimezone testlogin get_legal_field_values \
 				submit_bug get_bugs offer_account_by_email bugz_create_user \
 				get_products
 
