@@ -13,7 +13,7 @@ pkgconfig_DATA = bugzcxx.pc
 
 h_sources = bugzcxx.h Exception.h
 
-cc_sources = bugzcxx.cpp Exception.cpp
+cc_sources = bugzcxx.cpp
 
 library_includedir=$(includedir)/bugzcxx
 
@@ -26,4 +26,3 @@ libbugzcxx_la_SOURCES=$(h_sources) $(cc_sources)
 libbugzcxx_la_LDFLAGS= -version-info $(GENERIC_LIBRARY_VERSION) -release $(GENERIC_RELEASE)
 
 rebuild: clean all
- 

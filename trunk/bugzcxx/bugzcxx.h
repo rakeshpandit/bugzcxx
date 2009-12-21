@@ -16,6 +16,7 @@
 #include<bugzc/bugz_features.h>
 #include<bugzcxx/Exception.h>
 #include<string>
+#include<memory>
 
 /** Holds the Bugzilla C/C++ XML-RPC proxy C++ implementation. */
 namespace bugzcxx {

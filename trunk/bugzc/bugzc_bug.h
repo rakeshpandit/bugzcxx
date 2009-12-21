@@ -76,8 +76,8 @@ bugzc_bug *bugzc_bug_create_obj(bugzc_conn *conn, int id, const char *alias,
  *  @param bug_obj The bugzc_obj to be released from memory. 
  *  @deprecated Please use bugzc_bug_destroy_obj2, as of BugzCXX 0.1.0 this
  *  function will be eliminated.*/
-void bugzc_bug_destroy_obj(bugzc_bug **bug_obj);
-
+void bugzc_bug_destroy_obj(bugzc_bug **bug_obj)
+				__attribute__ ((__deprecated__));
 /** @brief Call this method to release a bugzc_bug object from memory.
  *  After a succesfull call to bugzc_bug_create_obj a bugzc_bug object
  *  must be released from memory by calling this function since it will
@@ -122,7 +122,8 @@ void bugzc_bug_destroy_list2(bugzc_list *list);
 int bugzc_bug_legal_values(bugzc_conn *conn, const char *field,
 				const char *product_name, 
 				char *list, size_t nitems,
-				size_t max_vsize);
+				size_t max_vsize)
+				__attribute__ ((__deprecated__));
 /** @brief Returns a list of valid values related to the given Bugzilla
  *  field for a specified product.
  *  @param conn A properly initialized bugz_conn object describing the
@@ -183,11 +184,10 @@ int bugzc_bug_submit(bugzc_conn *conn, const char *product,
  *  	use most be released from memory with an appropiate call to 
  *  	bugzc_bug_destry_list. */
 bugzc_bug *bugzc_bug_get_bugs(bugzc_conn *conn, unsigned int *bug_ids,
-				size_t nbugid, size_t *rbugid);
+				size_t nbugid, size_t *rbugid)
+				__attribute__ ((__deprecated__));
 
 /** @brief Gives detailed information about a bugid or an array of bug ids.
- *  @deprecated Instead use bugzc_bug_get_bugs_list as of BugzCXX 0.1.0 the
- *  function bugzc_bug_get_bugs will be eliminated.
  *  @param conn A properly initialized bugz_conn object describing the
  *  	url of the Bugzilla server.
  *  @param bug_ids An array of numeric bug ids to query from the Bugzilla

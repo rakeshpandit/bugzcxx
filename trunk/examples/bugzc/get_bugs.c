@@ -13,6 +13,7 @@
 #include<stdio.h>
 #include<string.h>
 #include<stdlib.h>
+#include<unistd.h>
 #include<bugzc/bugzc.h>
 
 void print_bug_obj(bugzc_bug *l){
@@ -35,25 +36,13 @@ void print_bug_list(bugzc_list *list){
 int main(int argc, char *argv[]){
 	char *url;
 	char *login;
-	char pw[24];
+	char *pass;
 	char version[12];
 	int i;
 
-	char product[65];
-	char component[65];
-	char summary[256];
-	char bversion[65];
 	char description[2048];
-	char op_sys[65];
-	char platform[65];
-	char priority[65];
-	char severity[65];
-	char tmp[128];
-	int bug_id;
-	int *qi;
-	size_t n;
+	unsigned int *qi;
 	bugzc_conn conn;
-	bugzc_bug *l = 0;
 	bugzc_list list;
 
 	description[0] = 0;
@@ -85,10 +74,9 @@ int main(int argc, char *argv[]){
 		fprintf(stderr, "%s\n", conn.xenv.fault_string);
 		return 1;
 	}
-	printf("Password: ");
-	fgets(pw, 23, stdin);
+	pass = getpass("Enter bugzilla password: ");
 	/* Perform login */
-	if(bugzc_user_login(&conn, login, pw, 0) < 0){
+	if(bugzc_user_login(&conn, login, pass, 0) < 0){
 		if(conn.err_code != 0){
 			fprintf(stderr, "\n");
 			if(conn.xenv.fault_occurred){
@@ -101,15 +89,13 @@ int main(int argc, char *argv[]){
 		}
 		return 1;
 	}
-	
-	qi = (int *)malloc((argc - 3) * sizeof(int));
-	
+
+	qi = (unsigned int *)malloc((argc - 3) * sizeof(int));
+
 	/* Build bug array list */
 	for(i = 3; i < argc; i++){
 		sscanf(argv[i], "%d", &qi[i - 3]);
 		printf("Querying info for #%d...\n", qi[i - 3]);
-		
-		
 	}
 	if(bugzc_bug_get_bugs_list(&conn, qi, argc - 3, &list) >= 0){
 		print_bug_list(&list);
