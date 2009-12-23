@@ -13,7 +13,7 @@ pkgconfig_DATA = bugzcxx.pc
 
 h_sources = bugzcxx.h Exception.h
 
-cc_sources = bugzcxx.cpp
+cc_sources = bugzcxx.cpp Exception.cpp
 
 library_includedir=$(includedir)/bugzcxx
 
