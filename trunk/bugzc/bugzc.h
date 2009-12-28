@@ -52,6 +52,12 @@ int bugzc_init(bugzc_conn *bc, const char *url, size_t surl);
  *  @return 0 on success, any other value on failure.
  ***************************************************************************/
 int bugzc_init2(bugzc_conn *bc, const char *url);
+
+/** @brief Destroys all data related to a bugzilla session, it must be called
+ *  after you've completed all your work so all related data is released from
+ *  memory.
+ *  @param bc The bugz_conn connection element to be disposed of. */
+void bugzc_finish(bugzc_conn *bc);
 #ifdef __cplusplus
 }
 #endif

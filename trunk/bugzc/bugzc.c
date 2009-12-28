@@ -25,7 +25,7 @@ static const char *__curl_transport = "curl";
 
 /***************************************************************************/
 static int validate_url(const char *url, size_t surl){
-	/* TODO: Write a function that can validate urls */
+	/** @todo: Write a function that can validate urls */
 	/* regex: http[s]?:\/\/[a-zA-Z0-9]*{\.[a-zA-Z0-9].....*/
 	return 1;
 }
@@ -74,4 +74,9 @@ int bugzc_init2(bugzc_conn *bc, const char *url){
 			&global_xparms, 
 			sizeof(global_xparms), &bc->xcli);
 	return 0;
+}
+
+void bugzc_finish(bugzc_conn *bc){
+	xmlrpc_client_destroy(bc->xcli);
+	free(bc->url);
 }

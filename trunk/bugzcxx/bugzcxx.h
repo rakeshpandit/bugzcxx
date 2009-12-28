@@ -35,8 +35,11 @@ namespace bugzcxx {
 	 *  to do almost anything. */
 	class Connection {
 		private:
+			/** @brief Holds the user's current session id */
+			int sess_id;
 			/** @brief Opaque data type for low-level connection info. */
 			class Info;
+			//Info *cInfo;
 			std::auto_ptr<Info> cInfo;
 		protected:
 		public:

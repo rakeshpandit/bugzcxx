@@ -13,6 +13,14 @@
 #include<bugzc/bugzc.h>
 #include<string>
 
+#ifndef DEFAULT_MINIMUM_VERSION_STRING_LENGTH
+#define DEFAULT_MINIMUM_VERSION_STRING_LENGTH 16
+#endif
+
+#ifndef DEFAULT_MINIMUM_TZ_STRING_LENGTH
+#define DEFAULT_MINIMUM_TZ_STRING_LENGTH 96
+#endif
+
 namespace bugzcxx {
 
 	static const char *__curl_transport = "curl";
@@ -48,14 +56,26 @@ namespace bugzcxx {
 			}
 	};
 
-	Connection::Connection(){
-		
+	Connection::Connection() : cInfo(new Connection::Info){
+		sess_id = -1;
 	}
 	
-	Connection::Connection(const Connection &cx){
+	Connection::Connection(const std::string &url,
+			const std::string &username,
+			const std::string &password
+			) : cInfo(new Connection::Info){
+		sess_id = login(url, username,password);
+	}
+
+	Connection::Connection(const Connection &cx) :
+			cInfo(new Connection::Info){
 		cInfo->copy(cx.cInfo);
 	}
 	
+	Connection::~Connection(){
+		bugzc_finish(&cInfo->c);
+	}
+
 	int Connection::login(const std::string &url, 
 							const std::string &username,
 							const std::string &password,
@@ -74,5 +94,45 @@ namespace bugzcxx {
 			}
 		}
 		return id;
+	}
+
+	std::string Connection::version(){
+		char buf[DEFAULT_MINIMUM_VERSION_STRING_LENGTH];
+		if(bugzc_bugzilla_version(&cInfo->c, buf, DEFAULT_MINIMUM_VERSION_STRING_LENGTH) == -1){
+			if(cInfo->c.xenv.fault_occurred){
+				throw XmlRPCException(cInfo->c.xenv.fault_code,
+						cInfo->c.xenv.fault_string);
+			}
+			else{
+				throw Exception(cInfo->c.err_code, cInfo->c.err_msg);
+			}
+		}
+		return std::string(buf);
+	}
+
+	void Connection::logout(){
+		if(bugzc_user_logout(&cInfo->c) != 0){
+			if(cInfo->c.xenv.fault_occurred){
+				throw XmlRPCException(cInfo->c.xenv.fault_code,
+						cInfo->c.xenv.fault_string);
+			}
+			else{
+				throw Exception(cInfo->c.err_code, cInfo->c.err_msg);
+			}
+		}
+	}
+
+	std::string Connection::timezone(){
+		char buf[DEFAULT_MINIMUM_TZ_STRING_LENGTH];
+		if(bugzc_bugzilla_timezone(&cInfo->c, buf, DEFAULT_MINIMUM_TZ_STRING_LENGTH) == -1){
+			if(cInfo->c.xenv.fault_occurred){
+				throw XmlRPCException(cInfo->c.xenv.fault_code,
+						cInfo->c.xenv.fault_string);
+			}
+			else{
+				throw Exception(cInfo->c.err_code, cInfo->c.err_msg);
+			}
+		}
+		return std::string(buf);
 	}
 };

@@ -82,9 +82,9 @@ AC_ARG_ENABLE(debug, AC_HELP_STRING([--enable-debug          Build library in de
 )
 
 BUILD_CXX_DIR=bugzcxx
+cxx_support=on
 
-AC_ARG_ENABLE(cxx, AC_HELP_STRING([--disable-cxx           Don't compile C++ support library]), [
-		AC_DEFINE(USE_DEBUG, 1, [Activates debug mode])
+AC_ARG_ENABLE(cxx, AC_HELP_STRING(["--disable-cxx           Don't compile C++ support library"]), [
 		cxx_support=off
 		BUILD_CXX_DIR=""
 		AC_MSG_RESULT([ *** This library will not include C++ support libraries *** ])
@@ -95,7 +95,7 @@ AC_ARG_ENABLE(cxx, AC_HELP_STRING([--disable-cxx           Don't compile C++ sup
 
 CXX_EXAMPLES_DIR=bugzcxx
 EXAMPLES_DIR=examples
-AC_ARG_ENABLE(examples, AC_HELP_STRING([--disable-examples      Don't compile example programs]), [
+AC_ARG_ENABLE(examples, AC_HELP_STRING(["--disable-examples      Don't compile example programs"]), [
 		AC_DEFINE(USE_DEBUG, 1, [Activates debug mode])
 		build_examples=off
 		CXX_EXAMPLES_DIR=""
@@ -111,7 +111,7 @@ dnl Configure support for unstable interfaces
 dnl
 bugzc_unstable_h=""
 bugzc_unstable_c=""
-AC_ARG_ENABLE(unstable, AC_HELP_STRING([--enable-unstable      Include support for bugzilla's unstable interfaces]), [
+AC_ARG_ENABLE(unstable, AC_HELP_STRING(["--enable-unstable      Include support for Bugzilla's unstable interfaces"]), [
 		AC_DEFINE(USE_BUGZILLA_UNSTABLE, 1, [Activate support for bugzilla unstable interfaces])
 		support_unstable=on
 		BUGZ_SUPPORT_UNSTABLE=1

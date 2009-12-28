@@ -49,7 +49,7 @@ int rpc_void_call_ret_s(bugzc_conn *bconn, const char *mname,
 				const char *vname, 
 				char *buf, size_t sbuf){
 	int ret = -1;
-	char *tmp_ret;
+	char *tmp_ret = 0;
 	xmlrpc_value *result = 0;
 
 	result = rpc_void_call(bconn, mname);
@@ -70,6 +70,7 @@ int rpc_void_call_ret_s(bugzc_conn *bconn, const char *mname,
 			ret = strlen(tmp_ret);
 		}
 		xmlrpc_DECREF(result);
+		if(tmp_ret != 0) free((void *)tmp_ret);
 	}
 	return ret;
 }
