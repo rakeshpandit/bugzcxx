@@ -81,7 +81,7 @@ AC_ARG_ENABLE(debug, AC_HELP_STRING([--enable-debug          Build library in de
 	]
 )
 
-BUILD_CXX_DIR=bugzcxx
+#BUILD_CXX_DIR=bugzcxx
 
 AC_ARG_ENABLE(cxx, AC_HELP_STRING([--disable-cxx           Don't compile C++ support library]), [
 		AC_DEFINE(USE_DEBUG, 1, [Activates debug mode])
@@ -90,6 +90,7 @@ AC_ARG_ENABLE(cxx, AC_HELP_STRING([--disable-cxx           Don't compile C++ sup
 		AC_MSG_RESULT([ *** This library will not include C++ support libraries *** ])
 	], [
 		cxx_support=on
+		BUILD_CXX_DIR=bugzcxx
 	]
 )
 
@@ -126,6 +127,18 @@ AC_SUBST(BUILD_CXX_DIR)
 AC_SUBST(CXX_EXAMPLES_DIR)
 AC_SUBST(EXAMPLES_DIR)
 AC_SUBST(BUGZ_SUPPORT_UNSTABLE)
+
+
+dnl
+dnl libcurl stuff
+dnl
+AC_MSG_CHECKING([curl-config])
+AC_PATH_PROG([HAVE_CURL_CONFIG], curl-config, [no], [$PATH:/usr/local/bin:/opt:/opt/doxygen:/bin:/opt/bin:/opt/sfw/bin:/usr/ccs/bin])
+
+if test "no$HAVE_CURL_CONFIG" = "nono"
+then
+	AC_MSG_ERROR([No libcurl installation detected])
+fi
 
 
 dnl
