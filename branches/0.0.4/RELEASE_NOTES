@@ -12,8 +12,9 @@ bugzc_bug_destroy_obj   bugzc_bug_destroy_obj2
 bugzc_bug_destroy_list  bugzc_bug_destroy_list2
 
 Notes:
-In order to enable support for UNSTABLE interfaces you must run configure with
-the --enable-unstable option.
+* In order to enable support for UNSTABLE interfaces you must run configure with
+  the --enable-unstable option.
+* C++ support is mostly useless in this release
 
 
 Release 0.0.3

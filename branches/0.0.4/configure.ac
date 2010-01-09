@@ -83,14 +83,14 @@ AC_ARG_ENABLE(debug, AC_HELP_STRING([--enable-debug          Build library in de
 
 #BUILD_CXX_DIR=bugzcxx
 
-AC_ARG_ENABLE(cxx, AC_HELP_STRING([--disable-cxx           Don't compile C++ support library]), [
+AC_ARG_ENABLE(cxx, AC_HELP_STRING([--enable-cxx           Compile C++ support library]), [
 		AC_DEFINE(USE_DEBUG, 1, [Activates debug mode])
+		cxx_support=on
+		BUILD_CXX_DIR="bugzcxx"
+	], [
 		cxx_support=off
 		BUILD_CXX_DIR=""
 		AC_MSG_RESULT([ *** This library will not include C++ support libraries *** ])
-	], [
-		cxx_support=on
-		BUILD_CXX_DIR=bugzcxx
 	]
 )
 
