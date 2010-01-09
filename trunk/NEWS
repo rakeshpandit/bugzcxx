@@ -1,3 +1,11 @@
 2007-07-18	Juan V. Guerrero <ryoma.nagare@gmail.com>
-
 	* Starting to write initial source code
+
+2009-12-28	Juan V. Guerrero <ryoma.nagare@gmail.com>
+	* Implementing the version() and timezone() methods in the Connection class
+	* Adding a C++ example (textlogin.cpp)
+	* Adding a cleanup function (bugzc_finish) so we can release session data appropriately
+	* Closing a memory leak in rpc_void_call_ret_s() memory allocated to tmp_ret was not correctly freed before.
+	
+2010-01-08	Juan V. Guerrero <ryoma.nagare@gmail.com>
+	* Modifying configure.ac so it checks wheter the libcurl is present on the system

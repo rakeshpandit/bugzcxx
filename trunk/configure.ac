@@ -13,8 +13,9 @@ dnl Initialization macros.
 dnl --------------------------------
 
 
-AC_INIT(bugzc/bugzc.h)
+AC_INIT(bugzc/bugzc.h, 0.1.0)
 AM_CONFIG_HEADER(config.h)
+AC_CONFIG_MACRO_DIR(m4)
 
 dnl -----------------------------------------------
 dnl Package name and version number (user defined)
@@ -71,7 +72,7 @@ dnl -----------------------------------------------
 
 LIBS="$LIBS -ldl"
 
-AC_ARG_ENABLE(debug, AC_HELP_STRING([--enable-debug          Build library in debug mode]), [
+AC_ARG_ENABLE(debug, AS_HELP_STRING([--enable-debug], [Build library in debug mode]), [
 		AC_DEFINE(USE_DEBUG, 1, [Activates debug mode])
 		debug_mode_activated=on
 		AC_MSG_RESULT([ *** This library will be compiled with debug support activated *** ])
@@ -84,7 +85,7 @@ AC_ARG_ENABLE(debug, AC_HELP_STRING([--enable-debug          Build library in de
 BUILD_CXX_DIR=bugzcxx
 cxx_support=on
 
-AC_ARG_ENABLE(cxx, AC_HELP_STRING(["--disable-cxx           Don't compile C++ support library"]), [
+AC_ARG_ENABLE(cxx, AS_HELP_STRING([--disable-cxx], [Don't compile C++ support library]), [
 		cxx_support=off
 		BUILD_CXX_DIR=""
 		AC_MSG_RESULT([ *** This library will not include C++ support libraries *** ])
@@ -95,7 +96,7 @@ AC_ARG_ENABLE(cxx, AC_HELP_STRING(["--disable-cxx           Don't compile C++ su
 
 CXX_EXAMPLES_DIR=bugzcxx
 EXAMPLES_DIR=examples
-AC_ARG_ENABLE(examples, AC_HELP_STRING(["--disable-examples      Don't compile example programs"]), [
+AC_ARG_ENABLE(examples, AS_HELP_STRING([--disable-examples], [Don't compile example programs]), [
 		AC_DEFINE(USE_DEBUG, 1, [Activates debug mode])
 		build_examples=off
 		CXX_EXAMPLES_DIR=""
@@ -111,7 +112,7 @@ dnl Configure support for unstable interfaces
 dnl
 bugzc_unstable_h=""
 bugzc_unstable_c=""
-AC_ARG_ENABLE(unstable, AC_HELP_STRING(["--enable-unstable      Include support for Bugzilla's unstable interfaces"]), [
+AC_ARG_ENABLE(unstable, AS_HELP_STRING([--enable-unstable], [Include support for Bugzilla's unstable interfaces]), [
 		AC_DEFINE(USE_BUGZILLA_UNSTABLE, 1, [Activate support for bugzilla unstable interfaces])
 		support_unstable=on
 		BUGZ_SUPPORT_UNSTABLE=1
@@ -122,31 +123,48 @@ AC_ARG_ENABLE(unstable, AC_HELP_STRING(["--enable-unstable      Include support 
 	]
 )
 
+AC_ARG_ENABLE(rtd, AS_HELP_STRING([--enable-rtd], [Enable instrumentation for xml-rpc response time measurements]), [
+		AC_DEFINE(RESPONSE_TIME_DEBUGGING, 1, [Enables code instrumentation for xml-rpc response time measurements])
+	]
+)
+
 AC_SUBST(BUILD_CXX_DIR)
 AC_SUBST(CXX_EXAMPLES_DIR)
 AC_SUBST(EXAMPLES_DIR)
 AC_SUBST(BUGZ_SUPPORT_UNSTABLE)
 
+dnl
+dnl libcurl stuff
+dnl
+AC_MSG_CHECKING([curl-config])
+AC_PATH_PROG([HAVE_CURL_CONFIG], curl-config, [no], [$PATH:/usr/local/bin:/opt:/opt/doxygen:/bin:/opt/bin:/opt/sfw/bin:/usr/ccs/bin])
+
+if test "no$HAVE_CURL_CONFIG" = "nono"
+then
+	AC_MSG_ERROR([No libcurl installation detected])
+fi
+
+
+
 
 dnl
 dnl xmlrpc-c stuff
 dnl
-AC_PATH_PROG([XMLRPC_C_CONFIG], [xmlrpc-c-config], no_xmlrpc, [$PATH:/usr/local/bin:/opt:/opt/doxygen:/bin:/opt/bin:/opt/sfw/bin:/usr/ccs/bin]
-	     )
+AC_PATH_PROG([XMLRPC_C_CONFIG], [xmlrpc-c-config], no_xmlrpc, [$PATH:/usr/local/bin:/opt:/opt/doxygen:/bin:/opt/bin:/opt/sfw/bin:/usr/ccs/bin])
 
 XMLRPC_C_VERSION=""
 XMLRPC_C_VERSION_NUM=""
 if test "no$XMLRPC_C_CONFIG" = "nono_xmlrpc" 
 then
-	echo "xmlrpc-c-config not found, install xmlrpc-c first. http://xmlrpc-c.sourceforge.net"
-	exit 1
+	AC_MSG_ERROR([xmlrpc-c-config not found, install xmlrpc-c first. http://xmlrpc-c.sourceforge.net])
 else
-	echo "Verifying that xmlrpc-c has been compiled with the curl transport..."
+	AC_MSG_CHECKING([that xmlrpc-c has been compiled with the curl transport])
 	$XMLRPC_C_CONFIG --features | grep "curl-client" > /dev/null 2>&1
 	if test $? -ne 0
 	then
-		echo "xmlrpc-c was not compiled with cUrl transport, it is imperative to have it since Bugzilla's web services requires cookie handling"
-		exit 1
+		AC_MSG_ERROR([xmlrpc-c was not compiled with cUrl transport, it is imperative to have it since Bugzilla's web services requires cookie handling])
+	else
+		AC_MSG_RESULT([passed])		
 	fi
 	XMLRPC_C_VERSION=`$XMLRPC_C_CONFIG --version`
 fi
@@ -173,7 +191,7 @@ AC_SUBST(DOXYGEN)
 
 
 API_DOCS_DIR=api
-AC_ARG_ENABLE(docs, AC_HELP_STRING([--enable-docs           Build library documentation]), [
+AC_ARG_ENABLE(docs, AS_HELP_STRING([--enable-docs], [Build library documentation]), [
 		DOXYGEN_INPUT_DIR="api"
 		doxygen_docs=yes
 		API_DOCS_DIR=api
@@ -187,10 +205,10 @@ AC_SUBST(API_DOCS_DIR)
 
 
 dnl -----------------------------------------------
-dnl Generates Makefile's, configuration files and scripts
+dnl Generates Makefile, configuration files and scripts
 dnl -----------------------------------------------
 
-AC_OUTPUT(Makefile \
+AC_CONFIG_FILES(Makefile \
           bugzc/Makefile \
           bugzc/bugzc.pc \
           bugzc/bugzc_version.h \
@@ -206,6 +224,8 @@ AC_OUTPUT(Makefile \
 	  examples/bugzc/Makefile \
 	  examples/bugzcxx/Makefile
 )
+
+AC_OUTPUT
 
 echo
 echo "######################################"
