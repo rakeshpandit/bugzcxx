@@ -13,6 +13,7 @@
 #include<stdio.h>
 #include<string.h>
 #include<stdlib.h>
+#include<unistd.h>
 #include<bugzc/bugzc.h>
 
 char *fgets_s(char *str, size_t siz, FILE *fptr){
@@ -31,22 +32,22 @@ int main(int argc, char *argv[]){
 	char *login;
 	char *field_name;
 	char *product_name;
-	char pw[24];
+	char *pass;
 	char version[12];
 	bugzc_list list;
-	int i;
 	bugzc_conn conn;
 	bugzc_node *node;
-	if(argc <= 1){
-		fprintf(stderr, "At least you must provide bugzilla's server url\n");
+	if(argc <= 2){
+		fprintf(stderr, "At least you must provide bugzilla's server url and login\n");
+		fprintf(stderr, "%s http://bugzilla.example.com johnsmith@example.com\n", argv[0]);
 		return 0;
 	}
 	if(strcmp(argv[1], "--help") == 0 || strcmp(argv[1], "-h") == 0){
-		printf("%s --help\n%s <url> [username] [field_name] [product_name]\n\n");
+		printf("%s --help\n%s <url> [username] [field_name] [product_name]\n\n", argv[0], argv[0]);
 		return 0;
 	}
 	url = argv[1];
-
+	login = argv[2];
 	bugzc_init2(&conn, url);
 	printf("Bugzilla version at: %s ", conn.url);
 	fflush(stdout);
@@ -68,20 +69,9 @@ int main(int argc, char *argv[]){
 		fprintf(stderr, "%s\n", conn.xenv.fault_string);
 		return 1;
 	}
-	if(argc > 2){
-		login = argv[2];
-		printf("\nLogin ");
-	}
-	else{
-		login = malloc(100);
-		printf("\nLogin (or e-mail): ");
-		login[99] = 0;
-		fgets(login, 98, stdin);
-	}
-	printf("Password: ");
-	fgets(pw, 23, stdin);
+	pass = getpass("Enter bugzilla password: ");
 	/* Perform login */
-	if(bugzc_user_login(&conn, login, pw, 0) < 0){
+	if(bugzc_user_login(&conn, login, pass, 0) < 0){
 		if(conn.err_code != 0){
 			fprintf(stderr, "\n");
 			if(conn.xenv.fault_occurred){
@@ -94,7 +84,6 @@ int main(int argc, char *argv[]){
 		}
 		return 1;
 	}
-	pw[0] = 0;
 	if(argc > 3){
 		field_name = argv[3];
 		if(argc > 4) printf("\n");

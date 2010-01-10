@@ -60,6 +60,12 @@ namespace bugzcxx {
 		sess_id = -1;
 	}
 	
+	Connection::Connection(const std::string &url) :
+			cInfo(new Connection::Info){
+		sess_id = -1;
+		cInfo->init(url);
+	}
+
 	Connection::Connection(const std::string &url,
 			const std::string &username,
 			const std::string &password
@@ -134,5 +140,32 @@ namespace bugzcxx {
 			}
 		}
 		return std::string(buf);
+	}
+
+	void Connection::accountOfferTo(const std::string &email_address){
+		bugzc_user_offer_account_by_email(&cInfo->c, email_address.c_str());
+		if(cInfo->c.xenv.fault_occurred){
+			throw XmlRPCException(cInfo->c.xenv.fault_code,
+					cInfo->c.xenv.fault_string);
+		}
+		else if(cInfo->c.err_code != 0){
+			throw Exception(cInfo->c.err_code, cInfo->c.err_msg);
+		}
+	}
+
+	int Connection::accountCreate(const std::string &email, const std::string &fullname,
+			const std::string &password){
+		int user_id = -1;
+		if((user_id = bugzc_user_create(&cInfo->c, email.c_str(), fullname.c_str(),
+				password.c_str())) != 0){
+			if(cInfo->c.xenv.fault_occurred){
+				throw XmlRPCException(cInfo->c.xenv.fault_code,
+						cInfo->c.xenv.fault_string);
+			}
+			else{
+				throw Exception(cInfo->c.err_code, cInfo->c.err_msg);
+			}
+		}
+		return user_id;
 	}
 };

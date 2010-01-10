@@ -46,7 +46,7 @@ typedef struct bugzc_bug_s {
 
 /** @brief Use this function to instantiate a new bugzc_bug object.
  *  Normally you wouldn't need to call this regularly in your code also
- *  remember that each succesfull call to this function creates an in-memory
+ *  remember that each successful call to this function creates an in-memory
  *  object that HAS TO BE RELEASED FROM MEMORY AFTER USED for this you 
  *  must call the bugzc_bug_destroy function, DON'T FORGET IT!!!.
  *  @param conn A properly initialized bugz_conn object describing the

@@ -24,6 +24,7 @@ int main(int argc, char *argv[]){
 	if(argc <= 1){
 		fprintf(stderr, "At least you must provide bugzilla's server url" \
 						" and an e-mail address.\n");
+		fprintf(stderr, "%s http://bugzilla.example.com johnsmith@example.com\n", argv[0]);
 		return 0;
 	}
 	url = argv[1];

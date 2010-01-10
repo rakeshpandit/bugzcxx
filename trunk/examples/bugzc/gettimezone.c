@@ -23,6 +23,7 @@ int main(int argc, char *argv[]){
 	url = argv[1];
 	if(argc <= 1){
 		fprintf(stderr, "At least you must provide bugzilla's server url\n");
+		fprintf(stderr, "%s http://bugzilla.example.com\n", argv[0]);
 		return 0;
 	}
 

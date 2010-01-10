@@ -8,9 +8,11 @@
 #  the GNU General Public License Version 2. See the LICENSE file
 #  at the top of the source tree.
 
-doc_PROGRAMS = testlogin
+doc_PROGRAMS = testlogin accountoffer
 
 testlogin_SOURCES = testlogin.cpp
+
+accountoffer_SOURCES =  accountoffer.cpp
 
 LDADD = ../../bugzcxx/libbugzcxx.la ../../bugzc/libbugzc.la $(XMLRPCC_LIBS)
 AM_CFLAGS = $(XMLRPCC_CFLAGS)

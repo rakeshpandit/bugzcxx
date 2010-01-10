@@ -22,43 +22,15 @@ void safe_getpass(std::string &pass){
 }
 
 int main(int argc, char *argv[]){
-	std::string url;
-	std::string login;
-	std::string pass;
-	if(argc <= 1){
+	if(argc <= 2){
 		std::cerr << "You must provide bugzilla's server url (something like: https://landfill.bugzilla.org/bugzilla-3.2-branch/xmlrpc.cgi)" << std::endl;
+		std::cerr << "Don't forget to provide the user email as well, call this program like this: " << std::endl;
+		std::cerr << " " << argv[0] << " <bugzilla-url> <user-email>" << std::endl;
 		return 1;
 	}
 	try{
-		for(int i = 1; i < argc; i++){
-			std::string arg = argv[i];
-			if(arg.compare("--login") == 0&& (++i < argc)){
-				login = argv[i];
-			}
-			else if(arg.compare("--password") == 0 && (++i < argc)){
-				pass = argv[i];
-			}
-			else if(arg.compare("--url") == 0 && (++i < argc)){
-				url = argv[i];
-			}
-		}
-		if(url.size() == 0){
-			std::cerr << "You must provide bugzilla's server url (use --url parameter)." << std::endl;
-			return 1;
-		}
-		if(login.size() == 0){
-			std::cout << "Login: ";
-			std::cin >> login;
-		}
-		if(pass.size() == 0){
-			std::cout << "Password: ";
-			safe_getpass(pass);
-		}
-		bugzcxx::Connection conn(url, login, pass);
-		std::cout << "Connected to " << url << std::endl;
-		std::cout << " Version:  " << conn.version() << std::endl;
-		std::cout << " Timezone: " << conn.timezone() << std::endl;
-		conn.logout();
+		bugzcxx::Connection conn(argv[1]);
+		conn.accountOfferTo(argv[2]);
 	}
 	catch (bugzcxx::XmlRPCException &e) {
 		std::cerr << "An XML-RPC exception was caught (" << e.code() << "): " << e.message() << std::endl;

@@ -1,3 +1,7 @@
+Release 0.1.0
+This release adds proper C++ Support
+
+
 Release 0.0.4
 In this release we've added support for UNSTABLE methods in special those found
 at Bugzilla::WebService::Product.

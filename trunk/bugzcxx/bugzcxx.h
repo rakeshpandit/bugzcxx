@@ -48,12 +48,22 @@ namespace bugzcxx {
 			 *  @note This method won't attempt to make a real connection, you 
 			 *  must login for that first. */
 			Connection();
-			/** @brief Instantiates a connection object a logs a user into the 
+			/** @brief Instantiates a connection object and logs a user into the
+			 *  specified Bugzilla server.
+			 *  No connection attempt will be made, however all possible
+			 *  initialization code will be executed.
+			 *  @warning While attempting to login this method might throw an
+			 *  exception, it is recommended to take all needed measures to
+			 *  trap it safely.
+			 *  @param url Corresponds to the internet location where the
+			 *  server's xmlrpc cgi script is. */
+			Connection(const std::string &url);
+			/** @brief Instantiates a connection object and logs a user into the
 			 *  specified Bugzilla server.
 			 *  @warning While attempting to login this method might throw an
 			 *  exception, it is recommended to take all needed measures to
 			 *  trap it safely.
-			 *  @param url Corresponds to the internet location where to
+			 *  @param url Corresponds to the internet location where the
 			 *  server's xmlrpc cgi script is.
 			 *  @param username A valid Bugzilla username, most commonly a
 			 *  e-mail address.
@@ -92,6 +102,17 @@ namespace bugzcxx {
 			/** @brief Retrieves the timezone at server's location.
 			 *  @return A std::string containing the timezone. */ 
 			std::string timezone();
+			/** @brief Sends an e-mail to a user offering to create an account.
+			 *  @param email_address The e-mail address to send the offer to. */
+			void accountOfferTo(const std::string &email_address);
+			/** @brief Creates a user account in Bugzilla.
+			 * @param email User's e-mail address
+			 * @param fullname User's full name (name + lastname)
+			 * @param password User's password.
+			 * @return The numeric id of the successfully created user account. */
+			int accountCreate(const std::string &email,
+							  const std::string &fullname = "",
+							  const std::string &password = "");
 	};
 };
 

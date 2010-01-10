@@ -13,6 +13,10 @@
 #include"config.h"
 #include"bugzc_user.h"
 #include"bugz_errcodes.h"
+#ifdef RESPONSE_TIME_DEBUGGING
+#include<sys/time.h>
+#include<stdio.h>
+#endif
 
 extern const char *_bugz_errmsg[];
 
@@ -20,6 +24,10 @@ int bugzc_user_login(bugzc_conn *bconn, const char *login, const char *pw,
 		int remember){
 	int id = -1;
 	xmlrpc_value *result;
+#ifdef RESPONSE_TIME_DEBUGGING
+	struct timeval t1, t2, tr;
+	gettimeofday(&t1, 0);
+#endif
 	if(bconn->url == 0){
 		bconn->err_msg = (char*)
 			_bugz_errmsg[BUGZCXX_NO_INITIALIZED];
@@ -32,6 +40,11 @@ int bugzc_user_login(bugzc_conn *bconn, const char *login, const char *pw,
 			"login", login, 
 			"password", pw, 
 			"remember", remember);
+#ifdef RESPONSE_TIME_DEBUGGING
+	gettimeofday(&t2, 0);
+	timersub(&t2, &t1, &tr);
+	fprintf(stderr, "Call to method User.login took: %d ms\n", (int)(tr.tv_usec / 1000));
+#endif
 	if(bconn->xenv.fault_occurred){
 		switch(bconn->xenv.fault_code){
 			case BUGZ_WS_INVALID_CREDENTIALS:
@@ -105,6 +118,10 @@ int bugzc_user_create(bugzc_conn *bconn, const char *email,
 						const char *password){
 	int id = -1;
 	xmlrpc_value *result;
+#ifdef RESPONSE_TIME_DEBUGGING
+	struct timeval t1, t2, tr;
+	gettimeofday(&t1, 0);
+#endif
 	if(bconn->url == 0){
 		bconn->err_msg = (char*)
 			_bugz_errmsg[BUGZCXX_NO_INITIALIZED];
@@ -116,6 +133,11 @@ int bugzc_user_create(bugzc_conn *bconn, const char *email,
 			"email", email, 
 			"password", password, 
 			"full_name", fullname);
+#ifdef RESPONSE_TIME_DEBUGGING
+	gettimeofday(&t2, 0);
+	timersub(&t2, &t1, &tr);
+	fprintf(stderr, "Call to method User.create took: %d ms\n", (int)(tr.tv_usec / 1000));
+#endif
 	if(bconn->xenv.fault_occurred){
 		switch(bconn->xenv.fault_code){
 			case BUGZ_WS_PW_TOO_SHORT:

@@ -13,6 +13,7 @@
 #include<stdio.h>
 #include<string.h>
 #include<stdlib.h>
+#include<unistd.h>
 #include<bugzc/bugzc.h>
 
 char *fgets_s(char *str, size_t siz, FILE *fptr){
@@ -29,15 +30,16 @@ char *fgets_s(char *str, size_t siz, FILE *fptr){
 int main(int argc, char *argv[]){
 	char *url;
 	char *login;
-	char pw[24];
+	char *pass;
 	char email[80];
 	char fullname[80];
 	char password[80];
 	char version[12];
 	bugzc_conn conn;
-	if(argc <= 1){
+	if(argc <= 2){
 		fprintf(stderr, "At least you must provide bugzilla's server url" \
 						" and your user login after that.\n");
+		fprintf(stderr, "%s http://bugzilla.example.com johnsmith@example.com\n", argv[0]);
 		return 0;
 	}
 	url = argv[1];
@@ -45,7 +47,6 @@ int main(int argc, char *argv[]){
 
 	bugzc_init2(&conn, url);
 	printf("Bugzilla version at: %s ", conn.url);
-	fflush(stdout);
 	if(bugzc_bugzilla_version(&conn, version, 12) < 0){
 		if(conn.err_code != 0){
 			fprintf(stderr, "\n");
@@ -59,9 +60,9 @@ int main(int argc, char *argv[]){
 		return 1;
 	}
 	printf("is %s\n", version);
-	printf("Enter password for %s: ", login);
-	fgets(pw, 23, stdin);
-	if(bugzc_user_login(&conn, login, pw, 0) < 0){
+	fflush(stdout);
+	pass = getpass("Enter bugzilla password: ");
+	if(bugzc_user_login(&conn, login, pass, 0) < 0){
 		if(conn.err_code != 0){
 			fprintf(stderr, "\n");
 			if(conn.xenv.fault_occurred){
@@ -73,7 +74,6 @@ int main(int argc, char *argv[]){
 		}
 		return 1;
 	}
-	pw[0] = 0;
 	printf("Ready to create new user account...\n");
 	printf("e-mail: ");
 	fgets_s(email, 79, stdin);

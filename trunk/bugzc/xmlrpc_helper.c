@@ -14,11 +14,20 @@
 #include"xmlrpc_helper.h"
 #include"bugz_errcodes.h"
 #include<string.h>
+#include<stdlib.h>
+#ifdef RESPONSE_TIME_DEBUGGING
+#include<sys/time.h>
+#include<stdio.h>
+#endif
 
 extern const char *_bugz_errmsg[];
 
 xmlrpc_value *rpc_void_call(bugzc_conn *bconn, const char *mname){
 	xmlrpc_value *result;
+#ifdef RESPONSE_TIME_DEBUGGING
+	struct timeval t1, t2, tr;
+	gettimeofday(&t1, 0);
+#endif
 	if(bconn->url == 0){
 		bconn->err_msg = (char *)_bugz_errmsg[BUGZCXX_NO_INITIALIZED];
 		bconn->err_code = BUGZCXX_NO_INITIALIZED;
@@ -26,6 +35,11 @@ xmlrpc_value *rpc_void_call(bugzc_conn *bconn, const char *mname){
 	}
 	xmlrpc_client_call2f(&bconn->xenv, bconn->xcli, bconn->url,
 			mname, &result, "()");
+#ifdef RESPONSE_TIME_DEBUGGING
+	gettimeofday(&t2, 0);
+	timersub(&t2, &t1, &tr);
+	fprintf(stderr, "Call to method %s took: %d ms\n", mname, (int)(tr.tv_usec / 1000));
+#endif
 	if(bconn->xenv.fault_occurred){
 		switch(bconn->xenv.fault_code){
 			case BUGZ_WS_AUTH_REQUIRED:
@@ -77,6 +91,10 @@ int rpc_void_call_ret_s(bugzc_conn *bconn, const char *mname,
 
 int rpc_void_call_void(bugzc_conn *bconn, const char *mname){
 	xmlrpc_value *result;
+#ifdef RESPONSE_TIME_DEBUGGING
+	struct timeval t1, t2, tr;
+	gettimeofday(&t1, 0);
+#endif
 	if(bconn->url == 0){
 		bconn->err_msg = (char *)
 						_bugz_errmsg[BUGZCXX_NO_INITIALIZED];
@@ -85,6 +103,11 @@ int rpc_void_call_void(bugzc_conn *bconn, const char *mname){
 	}
 	xmlrpc_client_call2f(&bconn->xenv, bconn->xcli, bconn->url,
 			mname, &result, "()");
+#ifdef RESPONSE_TIME_DEBUGGING
+	gettimeofday(&t2, 0);
+	timersub(&t2, &t1, &tr);
+	fprintf(stderr, "Call to method %s took: %d ms\n", mname, (int)(tr.tv_usec / 1000));
+#endif
 	if(bconn->xenv.fault_occurred){
 		switch(bconn->xenv.fault_code){
 			case BUGZ_WS_AUTH_REQUIRED:
@@ -111,6 +134,10 @@ int rpc_s_call_void(bugzc_conn *bconn, const char *mname,
 	int ret = 0;	
 	char *tmp_ret;
 	xmlrpc_value *result = 0;
+#ifdef RESPONSE_TIME_DEBUGGING
+	struct timeval t1, t2, tr;
+	gettimeofday(&t1, 0);
+#endif
 	if(bconn->url == 0){		
 		bconn->err_msg = (char *)_bugz_errmsg[BUGZCXX_NO_INITIALIZED];
 		bconn->err_code = BUGZCXX_NO_INITIALIZED;
@@ -120,6 +147,11 @@ int rpc_s_call_void(bugzc_conn *bconn, const char *mname,
 				mname, &result, "({s:s})",
 				param, s
 				);
+#ifdef RESPONSE_TIME_DEBUGGING
+	gettimeofday(&t2, 0);
+	timersub(&t2, &t1, &tr);
+	fprintf(stderr, "Call to method %s took: %d ms\n", mname, (int)(tr.tv_usec / 1000));
+#endif
 	if(bconn->xenv.fault_occurred){
 		switch(bconn->xenv.fault_code){
 			case BUGZ_WS_AUTH_REQUIRED:
