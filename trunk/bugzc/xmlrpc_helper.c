@@ -132,7 +132,6 @@ int rpc_s_call_void(bugzc_conn *bconn, const char *mname,
 		const char *param,
 		const char *s){
 	int ret = 0;	
-	char *tmp_ret;
 	xmlrpc_value *result = 0;
 #ifdef RESPONSE_TIME_DEBUGGING
 	struct timeval t1, t2, tr;

@@ -23,22 +23,18 @@ extern const char *_bugz_errmsg[];
 
 static const char *__curl_transport = "curl";
 
-/***************************************************************************/
-static int validate_url(const char *url, size_t surl){
-	/** @todo: Write a function that can validate urls */
-	/* regex: http[s]?:\/\/[a-zA-Z0-9]*{\.[a-zA-Z0-9].....*/
-	return 1;
-}
+/* @todo: Write a function that can validate urls */
+/* static int validate_url(const char *url, size_t surl){ */
+/* 	/\* regex: http[s]?:\/\/[a-zA-Z0-9]*{\.[a-zA-Z0-9].....*\/ */
+/* 	return 1; */
+/* } */
 
 static struct xmlrpc_clientparms global_xparms;
 
 int bugzc_init(bugzc_conn *bc, const char *url, size_t surl){
 	bc->err_code = 0;
 	bc->err_msg = 0;
-	if(!validate_url(url, surl)){
-		bc->url = 0;
-		return -1;
-	}
+	/* Validate url using validate_url when it is written */
 	bc->url = malloc(surl + 1);
 	strncpy(bc->url, url, surl);
 	bc->url[surl] = '\0';
@@ -58,10 +54,7 @@ int bugzc_init2(bugzc_conn *bc, const char *url){
 	bc->err_code = 0;
 	bc->err_msg = 0;
 	surl = strlen(url);
-	if(!validate_url(url, surl)){
-		bc->url = 0;
-		return -1;
-	}
+	/* Validate url using validate_url when it is written */
 	bc->url = malloc(surl + 1);
 	strncpy(bc->url, url, surl);
 	bc->url[surl] = '\0';

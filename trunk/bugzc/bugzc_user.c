@@ -13,6 +13,7 @@
 #include"config.h"
 #include"bugzc_user.h"
 #include"bugz_errcodes.h"
+#include<bugzc/xmlrpc_helper.h>
 #ifdef RESPONSE_TIME_DEBUGGING
 #include<sys/time.h>
 #include<stdio.h>

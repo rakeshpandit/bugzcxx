@@ -15,7 +15,9 @@
 #include"bugz_errcodes.h"
 #include<string.h>
 #include<stdlib.h>
+#ifndef _XOPEN_SOURCE
 #define _XOPEN_SOURCE
+#endif
 #include<time.h>
 
 extern const char *_bugz_errmsg[];
@@ -26,7 +28,7 @@ int bugzc_bug_legal_values(bugzc_conn *bconn, const char *field,
 				size_t max_vsize)
 {
 	int ret = -1;
-	int r_nitems;
+	size_t r_nitems;
 	int i;
 	xmlrpc_value *result;
 	xmlrpc_value *v_list;
@@ -86,7 +88,7 @@ int bugzc_bug_legal_values(bugzc_conn *bconn, const char *field,
 		}
 		else{
 			ret = r_nitems;
-			for(i = 0; i < r_nitems; i++){
+			for(i = 0; i < (int)r_nitems; i++){
 				xmlrpc_array_read_item(&bconn->xenv, v_list,
 							i, &tmp_val);
 				xmlrpc_decompose_value(&bconn->xenv, tmp_val, 
@@ -308,12 +310,7 @@ int bugzc_bug_submit(bugzc_conn *bconn, const char *product,
 			const char *op_sys, const char *platform, 
 			const char *priority, const char *severity){
 	int ret = -1;
-	int r_nitems;
-	int i;
 	xmlrpc_value *result;
-	xmlrpc_value *v_list;
-	xmlrpc_value *tmp_val;
-	char *tmp_item_value;
 	if(bconn->url == 0){
 		bconn->err_msg = (char *)_bugz_errmsg[BUGZCXX_NO_INITIALIZED];
 		bconn->err_code = BUGZCXX_NO_INITIALIZED;
@@ -408,20 +405,14 @@ void bugzc_bug_destroy_list2(bugzc_list *list){
 bugzc_bug *bugzc_bug_get_bugs(bugzc_conn *bconn, unsigned int *bug_ids,
 				size_t nbugid, size_t *rbugid){
 	bugzc_bug *ret = 0;
-	int r_nitems;
 	int i;
 	xmlrpc_value *result;
-	xmlrpc_value *v_list;
-	xmlrpc_value *tmp_val;
 	xmlrpc_value *int_array;
 	xmlrpc_value *int_item;
 	xmlrpc_value *bug_array;
 	xmlrpc_value *bug_item;
-	xmlrpc_value *ctime;
-	xmlrpc_value *lctime;
 	char *b_summary;
 	char *b_alias;
-	char *tmp_str;
 	char *b_ctime;
 	char *b_lctime;
 	struct tm tmp_tm;
@@ -431,7 +422,7 @@ bugzc_bug *bugzc_bug_get_bugs(bugzc_conn *bconn, unsigned int *bug_ids,
 		return 0;
 	}
 	int_array = xmlrpc_array_new(&bconn->xenv);
-	for(i = 0; i < nbugid; i++){
+	for(i = 0; i < (int)nbugid; i++){
 		int_item = xmlrpc_build_value(&bconn->xenv, "i", bug_ids[i]);
 		xmlrpc_array_append_item(&bconn->xenv, int_array, int_item);
 	}
@@ -486,7 +477,7 @@ bugzc_bug *bugzc_bug_get_bugs(bugzc_conn *bconn, unsigned int *bug_ids,
 					"{s:A,*}", "bugs", &bug_array);
 		*rbugid = xmlrpc_array_size(&bconn->xenv, bug_array);
 		ret = malloc(sizeof(bugzc_bug) * *rbugid);
-		for(i = 0; i < *rbugid; i++){
+		for(i = 0; i < (int)*rbugid; i++){
 			xmlrpc_array_read_item(&bconn->xenv, bug_array, i, &bug_item);
 			xmlrpc_decompose_value(&bconn->xenv, bug_item, 
 						"{s:s,s:i,s:s,s:8,s:8,*}",
@@ -521,20 +512,14 @@ bugzc_bug *bugzc_bug_get_bugs(bugzc_conn *bconn, unsigned int *bug_ids,
 int bugzc_bug_get_bugs_list(bugzc_conn *bconn, unsigned int *bug_ids,
 				size_t nbugid, bugzc_list *olist){
 	int ret = -1;
-	int r_nitems;
 	int i, tmp_id;
 	xmlrpc_value *result;
-	xmlrpc_value *v_list;
-	xmlrpc_value *tmp_val;
 	xmlrpc_value *int_array;
 	xmlrpc_value *int_item;
 	xmlrpc_value *bug_array;
 	xmlrpc_value *bug_item;
-	xmlrpc_value *ctime;
-	xmlrpc_value *lctime;
 	char *b_summary;
 	char *b_alias;
-	char *tmp_str;
 	char *b_ctime;
 	char *b_lctime;
 	bugzc_bug *bug_obj;
@@ -545,7 +530,7 @@ int bugzc_bug_get_bugs_list(bugzc_conn *bconn, unsigned int *bug_ids,
 	}
 	bugzc_list_create(olist);
 	int_array = xmlrpc_array_new(&bconn->xenv);
-	for(i = 0; i < nbugid; i++){
+	for(i = 0; i < (int)nbugid; i++){
 		int_item = xmlrpc_build_value(&bconn->xenv, "i", bug_ids[i]);
 		xmlrpc_array_append_item(&bconn->xenv, int_array, int_item);
 	}

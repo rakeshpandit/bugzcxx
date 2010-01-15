@@ -59,7 +59,7 @@ int bugzc_product_get_accessible_products(bugzc_conn *conn, bugzc_list *olist){
 								"ids", olist);
 }
 
-const static char *pp[] = { 
+static const char *pp[] = { 
 		"id",
 		"name",
 		"description"
@@ -75,7 +75,6 @@ int bugzc_product_get_products(bugzc_conn *bconn, int pids[], int npids,
 	xmlrpc_value *int_array;
 	xmlrpc_value *int_item;
 	int  i, _id;
-	int *val_s;
 	char *_name, *_description;
 	bugzc_product *tmp_product;
 	bugzc_list_create(olist);

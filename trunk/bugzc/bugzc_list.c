@@ -52,6 +52,7 @@ bugzc_list *bugzc_list_create(bugzc_list *list){
 	list->first = 0;
 	list->last = 0;
 	list->count = 0;
+	return list;
 }
 
 void bugzc_list_free(bugzc_list *list){

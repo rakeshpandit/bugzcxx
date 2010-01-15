@@ -64,7 +64,9 @@ AC_PROG_LIBTOOL
 AC_PROG_INSTALL
 AC_LANG_CPLUSPLUS
 
-CXXFLAGS="$CXXFLAGS -Wall "
+COMPILER_FLAGS="-D_GNU_SOURCE -Wall -Wshadow -Wunused -Wextra -Werror -Wformat=2"
+CXXFLAGS="$CXXFLAGS $COMPILER_FLAGS "
+CFLAGS="$CFLAGS $COMPILER_FLAGS "
 
 dnl -----------------------------------------------
 dnl Verify manual features

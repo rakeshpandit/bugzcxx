@@ -17,7 +17,7 @@
 
 int main(int argc, char *argv[]){
 	char *url;
-	char timezone[36];
+	char time_zone[36];
 
 	bugzc_conn conn;
 	url = argv[1];
@@ -34,7 +34,7 @@ int main(int argc, char *argv[]){
 		fprintf(stderr, "%s\n", conn.xenv.fault_string);
 		return 1;
 	}
-	if(bugzc_bugzilla_timezone(&conn, timezone, 36) < 0){
+	if(bugzc_bugzilla_timezone(&conn, time_zone, 36) < 0){
 		if(conn.err_code != 0){
 			fprintf(stderr, "\n");
 			if(conn.xenv.fault_occurred){
@@ -47,7 +47,7 @@ int main(int argc, char *argv[]){
 		}
 		return 1;
 	}
-	printf("is %s\n", timezone);
+	printf("is %s\n", time_zone);
 
 	return 0;
 }

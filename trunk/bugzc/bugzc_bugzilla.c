@@ -12,6 +12,7 @@
 
 #include"config.h"
 #include<bugzc/bugzc_bugzilla.h>
+#include<bugzc/xmlrpc_helper.h>
 #include<string.h>
 
 extern const char *_bugz_errmsg[];
