@@ -15,7 +15,6 @@
 #include<stdlib.h>
 #include<bugzc/bugzc.h>
 
-
 int main(int argc, char *argv[]){
 	char *url;
 	char *email;

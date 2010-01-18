@@ -15,17 +15,7 @@
 #include<stdlib.h>
 #include<unistd.h>
 #include<bugzc/bugzc.h>
-
-char *fgets_s(char *str, size_t siz, FILE *fptr){
-	char  *n;
-	n = fgets(str, siz, fptr);
-	if(strlen(n) > 2){
-		while(str[strlen(str) - 1] == '\n'){
-			str[strlen(str) - 1] = 0;
-		}
-	}
-	return n;
-}
+#include"utils.h"
 
 int main(int argc, char *argv[]){
 	char *url;
@@ -69,7 +59,7 @@ int main(int argc, char *argv[]){
 		fprintf(stderr, "%s\n", conn.xenv.fault_string);
 		return 1;
 	}
-	pass = getpass("Enter bugzilla password: ");
+	pass = safe_getpass("Enter bugzilla password: ");
 	/* Perform login */
 	if(bugzc_user_login(&conn, login, pass, 0) < 0){
 		if(conn.err_code != 0){
