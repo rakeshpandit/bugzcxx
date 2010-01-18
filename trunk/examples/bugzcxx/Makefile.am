@@ -10,9 +10,9 @@
 
 doc_PROGRAMS = testlogin accountoffer
 
-testlogin_SOURCES = testlogin.cpp
+testlogin_SOURCES = testlogin.cpp utils.cpp
 
-accountoffer_SOURCES =  accountoffer.cpp
+accountoffer_SOURCES =  accountoffer.cpp utils.cpp
 
 LDADD = ../../bugzcxx/libbugzcxx.la ../../bugzc/libbugzc.la $(XMLRPCC_LIBS)
 AM_CFLAGS = $(XMLRPCC_CFLAGS)

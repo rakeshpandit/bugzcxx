@@ -14,12 +14,7 @@
 #include<cstring>
 #include<bugzcxx/bugzcxx.h>
 #include<cstdlib>
-
-void safe_getpass(std::string &pass){
-	system("stty -echo");
-	std::cin >> pass;
-	system("stty echo");
-}
+#include"utils.h"
 
 int main(int argc, char *argv[]){
 	if(argc <= 2){
