@@ -19,17 +19,6 @@
 
 #ifdef USE_BUGZILLA_UNSTABLE
 	
-char *fgets_s(char *str, size_t siz, FILE *fptr){
-	char  *n;
-	n = fgets(str, siz, fptr);
-	if(strlen(n) > 2){
-		while(str[strlen(str) - 1] == '\n'){
-			str[strlen(str) - 1] = 0;
-		}
-	}
-	return n;
-}
-
 void print_product(bugzc_product *p){
 	puts("------------------------------");
 	printf("ID:           %d\n", p->id);
