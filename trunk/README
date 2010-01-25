@@ -1,16 +1,15 @@
-Bugzilla C/C++ XML-RPC Proxy.
+Bugzilla C/C++ XML-RPC Proxy
+============================
 
-This is a library intended as an interface proxy with the popular Bugzilla bug
-tracking system to be used on C/C++ programs, this should allow you create bug
-reports from your programs or even (as the Bugzilla API matures) create your
-own bugzilla client programs.
+This is a library intended as an interface proxy with the popular
+Bugzilla bug tracking system to be used on C/C++ programs, this should
+allow you create bug reports from your programs or even (as the
+Bugzilla API matures) create your own bugzilla client programs.
 
-At the beginning the main purpose for this library was to provide an interface
-for automated bug reports in programs I develop at work, actually all I needed
-was the Bugzilla::WebService::Bug::create method and the login/logout 
-functions, but hey? why not have a little fun and code the rest?
+Please file your bug reports directly to Sourceforge.net bug tracker,
+or report bugs to developers mailing list. Please check already filled
+bugs before reporting one.
 
-Please file your bug reports directly to Sourceforge.net bug tracker, for now
-its quite hard to get a proper Bugzilla hosting so you can report there, I'll
-let you know when I have one ready though.
-
+Mailing list:
+https://lists.sourceforge.net/lists/listinfo/bugzcxx-devel
+email mail : <bugzcxx DASH devel AT lists DOT sourceforge DOT net>
