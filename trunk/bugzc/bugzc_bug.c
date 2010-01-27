@@ -21,6 +21,7 @@
 #include<time.h>
 
 extern const char *_bugz_errmsg[];
+static const char *_bugz_empty_str = "";
 
 int bugzc_bug_legal_values(bugzc_conn *bconn, const char *field,
 				const char *product_name,
@@ -206,7 +207,7 @@ bugzc_bug *bugzc_bug_create_obj(bugzc_conn *conn, int id, const char *alias,
 	if(bobj != NULL){
 		bobj->id = id;
 		if(alias == NULL){
-			bobj->alias = strdup("");
+			bobj->alias = (char *)_bugz_empty_str;
 		}
 		else{
 			bobj->alias = strdup(alias);
@@ -219,7 +220,7 @@ bugzc_bug *bugzc_bug_create_obj(bugzc_conn *conn, int id, const char *alias,
 			bobj = 0;
 		}
 		if(summary == NULL){
-			bobj->summary = strdup("");
+			bobj->summary = (char *)_bugz_empty_str;
 		}
 		else{
 			bobj->summary = strdup(summary);
@@ -232,7 +233,7 @@ bugzc_bug *bugzc_bug_create_obj(bugzc_conn *conn, int id, const char *alias,
 			bobj = 0;
 		}
 		if(creation_time == NULL){
-			bobj->creation_time = strdup("");
+			bobj->creation_time = (char *)_bugz_empty_str;
 		}
 		else{
 			bobj->creation_time = strdup(creation_time);
@@ -247,7 +248,7 @@ bugzc_bug *bugzc_bug_create_obj(bugzc_conn *conn, int id, const char *alias,
 			bobj = 0;
 		}
 		if(last_change_time == NULL){
-			bobj->last_change_time = strdup("");
+			bobj->last_change_time = (char *)_bugz_empty_str;
 		}
 		else{
 			bobj->last_change_time = strdup(last_change_time);
@@ -274,10 +275,10 @@ void bugzc_bug_destroy_obj(bugzc_bug **bug_objx){
 	bugzc_bug *bug_obj;
 	bug_obj = *bug_objx;
 	if(bug_obj != NULL){
-		if(bug_obj->alias != NULL) free(bug_obj->alias);
-		if(bug_obj->summary != NULL) free(bug_obj->summary);
-		if(bug_obj->creation_time != NULL) free(bug_obj->creation_time);
-		if(bug_obj->last_change_time != NULL) free(bug_obj->last_change_time);
+		if(bug_obj->alias != NULL && bug_obj->alias != _bugz_empty_str) free(bug_obj->alias);
+		if(bug_obj->summary != NULL && bug_obj->summary != _bugz_empty_str) free(bug_obj->summary);
+		if(bug_obj->creation_time != NULL && bug_obj->creation_time != _bugz_empty_str) free(bug_obj->creation_time);
+		if(bug_obj->last_change_time != NULL && bug_obj->last_change_time != _bugz_empty_str) free(bug_obj->last_change_time);
 		free(bug_obj);
 		*bug_objx = NULL;
 	}
@@ -285,10 +286,10 @@ void bugzc_bug_destroy_obj(bugzc_bug **bug_objx){
 
 void bugzc_bug_destroy_obj2(bugzc_bug *bug_obj){
 	if(bug_obj != NULL){
-		if(bug_obj->alias != NULL) free(bug_obj->alias);
-		if(bug_obj->summary != NULL) free(bug_obj->summary);
-		if(bug_obj->creation_time != NULL) free(bug_obj->creation_time);
-		if(bug_obj->last_change_time != NULL) free(bug_obj->last_change_time);
+		if(bug_obj->alias != NULL && bug_obj->alias != _bugz_empty_str) free(bug_obj->alias);
+		if(bug_obj->summary != NULL && bug_obj->summary != _bugz_empty_str) free(bug_obj->summary);
+		if(bug_obj->creation_time != NULL && bug_obj->creation_time != _bugz_empty_str) free(bug_obj->creation_time);
+		if(bug_obj->last_change_time != NULL && bug_obj->last_change_time != _bugz_empty_str) free(bug_obj->last_change_time);
 		free(bug_obj);
 	}
 }
@@ -518,10 +519,10 @@ int bugzc_bug_get_bugs_list(bugzc_conn *bconn, unsigned int *bug_ids,
 	xmlrpc_value *int_item;
 	xmlrpc_value *bug_array;
 	xmlrpc_value *bug_item;
-	char *b_summary;
-	char *b_alias;
-	char *b_ctime;
-	char *b_lctime;
+	char *b_summary = 0;
+	char *b_alias = 0;
+	char *b_ctime = 0;
+	char *b_lctime = 0;
 	bugzc_bug *bug_obj;
 	if(bconn->url == 0){
 		bconn->err_msg = (char *)_bugz_errmsg[BUGZCXX_NO_INITIALIZED];
@@ -533,6 +534,7 @@ int bugzc_bug_get_bugs_list(bugzc_conn *bconn, unsigned int *bug_ids,
 	for(i = 0; i < (int)nbugid; i++){
 		int_item = xmlrpc_build_value(&bconn->xenv, "i", bug_ids[i]);
 		xmlrpc_array_append_item(&bconn->xenv, int_array, int_item);
+		xmlrpc_DECREF(int_item);
 	}
 	xmlrpc_client_call2f(&bconn->xenv, bconn->xcli, bconn->url,
 					"Bug.get_bugs", &result,
@@ -598,8 +600,12 @@ int bugzc_bug_get_bugs_list(bugzc_conn *bconn, unsigned int *bug_ids,
 					);
 			bug_obj = bugzc_bug_create_obj(bconn, tmp_id, b_alias, b_summary, b_ctime, b_lctime);
 			bugzc_list_append_data(olist, bug_obj, sizeof(bugzc_bug));
+			xmlrpc_DECREF(bug_item);
+			free(b_summary);
+			free(b_alias);
 		}
-		xmlrpc_DECREF(result);
+		xmlrpc_DECREF(bug_array);
 	}
+	xmlrpc_DECREF(result);
 	return ret;
 }
