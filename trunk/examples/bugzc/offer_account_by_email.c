@@ -60,5 +60,6 @@ int main(int argc, char *argv[]){
 		return 1;
 	}
 	printf(" done\n");
+	bugzc_finish(&conn);
 	return 0;
 }

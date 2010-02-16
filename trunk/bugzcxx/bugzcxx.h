@@ -15,8 +15,10 @@
 #include<bugzc/bugzc_version.h>
 #include<bugzc/bugz_features.h>
 #include<bugzcxx/Exception.h>
+#include<bugzcxx/BugInfo.h>
 #include<string>
 #include<memory>
+#include<vector>
 
 /** Holds the Bugzilla C/C++ XML-RPC proxy C++ implementation. */
 namespace bugzcxx {
@@ -113,6 +115,8 @@ namespace bugzcxx {
 			int accountCreate(const std::string &email,
 							  const std::string &fullname = "",
 							  const std::string &password = "");
+			void bugGet(BugInfo &_return, unsigned int bugId);
+			void bugListGet(std::vector<BugInfo> &_return, const std::vector<unsigned int> &bugIds);
 	};
 };
 

@@ -48,7 +48,7 @@ int main(int argc, char *argv[]){
 		return 1;
 	}
 	printf("is %s\n", version);
-
+	bugzc_finish(&conn);
 	return 0;
 }
 

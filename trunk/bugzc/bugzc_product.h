@@ -29,7 +29,7 @@ extern "C" {
 /** Bugzilla product structure */
 typedef struct bugzc_product_s {
 	/** Numeric product Id */
-	int id;
+	int _id;
 	/** Product name. */
 	char *name;
 	/** Product description. */

@@ -116,5 +116,6 @@ int main(int argc, char *argv[]){
 	printf("\n");
 	bugzc_list_free_with_data(&list);
 	bugzc_user_logout(&conn);
+	bugzc_finish(&conn);
 	return 0;
 }

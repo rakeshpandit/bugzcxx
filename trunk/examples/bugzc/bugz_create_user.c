@@ -85,5 +85,6 @@ int main(int argc, char *argv[]){
 	}
 	printf("Account for: %s created.\n", fullname);
 	bugzc_user_logout(&conn);
+	bugzc_finish(&conn);
 	return 0;
 }

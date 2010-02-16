@@ -12,7 +12,11 @@
 #ifndef __BUGZCXX_EXAMPLES_UTILITY_FUNCS_H__
 #define __BUGZCXX_EXAMPLES_UTILITY_FUNCS_H__
 #include<string>
+#include<iostream>
+#include<bugzcxx/bugzcxx.h>
 
 void safe_getpass(std::string &pass);
+
+std::ostream &operator<<(std::ostream &s, bugzcxx::BugInfo &b);
 
 #endif

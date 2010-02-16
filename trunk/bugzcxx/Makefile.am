@@ -11,9 +11,9 @@
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = bugzcxx.pc
 
-h_sources = bugzcxx.h Exception.h
+h_sources = bugzcxx.h Exception.h BugInfo.h
 
-cc_sources = bugzcxx.cpp Exception.cpp
+cc_sources = bugzcxx.cpp Exception.cpp BugInfo.cpp
 
 library_includedir=$(includedir)/bugzcxx
 

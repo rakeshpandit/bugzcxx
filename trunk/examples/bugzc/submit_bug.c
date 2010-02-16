@@ -130,6 +130,7 @@ int main(int argc, char *argv[]){
 			return 1;
 	}
 	bugzc_user_logout(&conn);
+	bugzc_finish(&conn);
 	return 0;
 }
 

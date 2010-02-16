@@ -168,4 +168,22 @@ namespace bugzcxx {
 		}
 		return user_id;
 	}
+
+	void Connection::bugGet(BugInfo &_return, unsigned int bugId){
+		bugzc_bug *bug;
+		bug = bugzc_bug_get_bug_info(&cInfo->c, bugId);
+		if(bug == 0){
+			if(cInfo->c.xenv.fault_occurred){
+				throw XmlRPCException(cInfo->c.xenv.fault_code,
+						cInfo->c.xenv.fault_string);
+			}
+			else{
+				throw Exception(cInfo->c.err_code, cInfo->c.err_msg);
+			}
+		}
+		else {
+			_return = *bug;
+			bugzc_bug_destroy_obj2(bug);
+		}
+	}
 };

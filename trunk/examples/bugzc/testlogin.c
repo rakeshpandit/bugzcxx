@@ -85,6 +85,7 @@ int main(int argc, char *argv[]){
 	printf("%s\n", tzone);
 
 	bugzc_user_logout(&conn);
+	bugzc_finish(&conn);
 	return 0;
 }
 

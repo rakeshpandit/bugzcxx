@@ -24,3 +24,11 @@ void safe_getpass(std::string &pass){
 	t.c_lflag = t.c_lflag | ECHO; //Re-enable terminal echo
 	tcsetattr(STDOUT_FILENO, TCSANOW, &t);
 }
+
+std::ostream &operator<<(std::ostream &s, bugzcxx::BugInfo &b){
+	s << "= Bug #" << b.id() << ": " << b.summary() << std::endl;
+	if(b.alias().size() > 0) s << b.alias() << std::endl;
+	s << " Created on: " << b.creationTimeS() << std::endl;
+	s << " Last modification: " << b.lastChangeTimeS();
+	return s;
+}

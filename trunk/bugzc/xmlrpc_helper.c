@@ -108,6 +108,7 @@ int rpc_void_call_void(bugzc_conn *bconn, const char *mname){
 	timersub(&t2, &t1, &tr);
 	fprintf(stderr, "Call to method %s took: %d ms\n", mname, (int)(tr.tv_usec / 1000));
 #endif
+
 	if(bconn->xenv.fault_occurred){
 		switch(bconn->xenv.fault_code){
 			case BUGZ_WS_AUTH_REQUIRED:
@@ -122,7 +123,6 @@ int rpc_void_call_void(bugzc_conn *bconn, const char *mname){
 				bconn->err_code = 
 					BUGZCXX_XMLRPC_FAULT_OCURRED;
 		}
-		return bconn->xenv.fault_code;
 	}
 	xmlrpc_DECREF(result);
 	return 0;

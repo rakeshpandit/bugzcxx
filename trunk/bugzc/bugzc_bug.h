@@ -33,15 +33,21 @@ typedef struct bugzc_bug_s {
 	/** Short description as entered by the reporter */
 	char *summary;
 	/** Bug creation time in ISO 8601 format as a null terminated
-	 *  string */
+	 *  string formatted using the preferred locale's notation */
 	char *creation_time;
 	/** Last date when the bug information was changed. It is a 
-	 *  null-terminated string in ISO 8601 format. */
+	 *  null-terminated string formatted using the preferred locale's
+	 *  notation */
 	char *last_change_time;
 	/** Bug creation date/time as a unix timestamp */
 	time_t creation_tstamp;
 	/** Bug last modification date/time as a unix timestamp */
 	time_t last_change_tstamp;
+	/** @internal An opaque pointer which holds more information regarding the
+	 *  bug, it is intended for internal use only. */
+	void *info;
+	/** @internal Holds the size of the info buffer or zero if its holding no data */
+	size_t info_size;
 } bugzc_bug;
 
 /** @brief Use this function to instantiate a new bugzc_bug object.
@@ -68,7 +74,35 @@ typedef struct bugzc_bug_s {
 bugzc_bug *bugzc_bug_create_obj(bugzc_conn *conn, int id, const char *alias,
 				const char *summary,
 				const char *creation_time, 
-				const char *last_change_time);
+				const char *last_change_time)
+				__attribute__ ((__deprecated__));
+
+/** @brief Use this function to instantiate a new bugzc_bug object.
+ *  Normally you wouldn't need to call this regularly in your code also
+ *  remember that each successful call to this function creates an in-memory
+ *  object that HAS TO BE RELEASED FROM MEMORY AFTER USED for this you
+ *  must call the bugzc_bug_destroy function, DON'T FORGET IT!!!.
+ *  @param conn A properly initialized bugz_conn object describing the
+ *  	url of the Bugzilla server.
+ *  @param id The bug's numeric id as assigned by the Bugzilla server.
+ *  @param alias A null-terminated string representing alias for the bug,
+ *  		aliases are assigned to bugs so normally you don't refer to
+ *  		them by their bug id.
+ *  @param summary A null-terminated string holding the bug summary as
+ *  		entered by the reporter.
+ *  @param creation_tstamp A time_t timestamp that represent the point in
+ *  		time when the bug was entered in the system.
+ *  @param last_change_tstamp The last day somebody perfomed a change in the
+ *  		report, it could be a status change or just an issued comment
+ *  @return The newly created bugzc_bug object (remember to release it
+ *  bugzc_bug_destroy after use) if an error occurred while creation 0 while
+ *  be returned and an error code and message will be reported trough the
+ *  bugzc_conn object. */
+bugzc_bug *bugzc_bug_create_obj2(bugzc_conn *conn, int id, const char *alias,
+				const char *summary,
+				time_t creation_tstamp,
+				time_t last_change_tstamp);
+
 /** @brief Call this method to release a bugzc_bug object from memory.
  *  After a succesfull call to bugzc_bug_create_obj a bugzc_bug object
  *  must be released from memory by calling this function since it will
@@ -195,9 +229,18 @@ bugzc_bug *bugzc_bug_get_bugs(bugzc_conn *conn, unsigned int *bug_ids,
  *  @param nbugid The amount of elements contained in the bug_ids array.
  *  @param olist An empty bugzc_list where the data will be stored, after use
  * 		this list most freed from memory by calling bigzc_bug_destroy_list2.
- *  @return The amoount of elements on the list or a negative value on error. */
+ *  @return The amount of elements on the list or a negative value on error. */
 int bugzc_bug_get_bugs_list(bugzc_conn *conn, unsigned int *bug_ids,
 				size_t nbugid, bugzc_list *olist);
+
+/** @brief Gives detailed information about a specific bug given its id.
+ *  @param conn A properly initialized bugz_conn object describing the
+ *  	url of the Bugzilla server.
+ *  @param bug_id A numeric bug id to query from the Bugzilla
+ *  	remote installation server.
+ *  @return A pointer to a bugzc_bug object or NULL if an error occurred.
+ *  @note The returned bug_bug object must be freed with bugzc_bug_destroy_obj2 */
+bugzc_bug *bugzc_bug_get_bug_info(bugzc_conn *conn, unsigned int bug_id);
 
 #ifdef __cplusplus
 }

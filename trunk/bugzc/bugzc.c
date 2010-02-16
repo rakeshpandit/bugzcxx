@@ -12,11 +12,16 @@
 
 #include"config.h"
 #include<bugzc/bugzc.h>
+#include<bugzc/xmlrpc_helper.h>
 #include<string.h>
 #include<stdlib.h>
 
 #ifndef BUGZCXX_CLIENT_NAME
 #define BUGZCXX_CLIENT_NAME "bugzcxx"
+#endif
+
+#ifndef DEFAULT_VERSION_STRING_SIZE
+#define  DEFAULT_VERSION_STRING_SIZE 12
 #endif
 
 extern const char *_bugz_errmsg[];
@@ -50,7 +55,11 @@ int bugzc_init(bugzc_conn *bc, const char *url, size_t surl){
 }
 
 int bugzc_init2(bugzc_conn *bc, const char *url){
-	int surl;
+	int surl, i, j, k;
+	char vbuf[DEFAULT_VERSION_STRING_SIZE];
+	char vmajor[DEFAULT_VERSION_STRING_SIZE] = { 0 };
+	char vminor[DEFAULT_VERSION_STRING_SIZE] = { 0 };
+	char vpatch[DEFAULT_VERSION_STRING_SIZE] = { 0 };
 	bc->err_code = 0;
 	bc->err_msg = 0;
 	surl = strlen(url);
@@ -66,6 +75,22 @@ int bugzc_init2(bugzc_conn *bc, const char *url){
 			BUGZCXX_CLIENT_NAME, BUGZCXX_VERSION_STRING, 
 			&global_xparms, 
 			sizeof(global_xparms), &bc->xcli);
+	rpc_void_call_ret_s(bc, "Bugzilla.version", "version", vbuf, DEFAULT_VERSION_STRING_SIZE - 1);
+	for(i = 0; vbuf[i] != 0 && vbuf[i] != '.' && i < DEFAULT_VERSION_STRING_SIZE; i++){
+		vmajor[i] = vbuf[i];
+		vmajor[i + 1] = 0;
+	}
+	for(++i, j = 0; vbuf[i] != 0 && vbuf[i] != '.' && i < DEFAULT_VERSION_STRING_SIZE; i++, j++){
+		vminor[j] = vbuf[i];
+		vminor[j + 1] = 0;
+	}
+	for(++i, k = 0; vbuf[i] != 0 && vbuf[i] <= '9' && vbuf[i] >= '0' && i < DEFAULT_VERSION_STRING_SIZE; i++, k++){
+		vpatch[k] = vbuf[i];
+		vpatch[k + 1] = 0;
+	}
+	bc->v_major = atoi(vmajor);
+	bc->v_minor = atoi(vminor);
+	bc->v_patch = atoi(vpatch);
 	return 0;
 }
 

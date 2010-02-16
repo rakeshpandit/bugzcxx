@@ -28,7 +28,7 @@ static bugzc_product *__create_product(int _id, const char *_name,
 	bugzc_product *p = 0;
 	p = malloc(sizeof(bugzc_product));
 	if(p != 0x0){
-		p->id = _id;
+		p->_id = _id;
 		p->name = strdup(_name);
 		p->description = strdup(_desc);
 		if(p->name == 0 || p->description == 0){

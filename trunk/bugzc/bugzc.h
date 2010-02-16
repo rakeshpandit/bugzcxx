@@ -28,6 +28,9 @@ typedef struct bugz_conn_s {
 	char *err_msg;
 	xmlrpc_env xenv;
 	xmlrpc_client *xcli;
+	int v_major;
+	int v_minor;
+	int v_patch;
 } bugzc_conn;
 
 /** @brief Initializes bugzilla connection establishing its location url.

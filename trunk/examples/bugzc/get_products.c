@@ -21,7 +21,7 @@
 	
 void print_product(bugzc_product *p){
 	puts("------------------------------");
-	printf("ID:           %d\n", p->id);
+	printf("ID:           %d\n", p->_id);
 	printf("Name:         %s\n", p->name);
 	printf("Description:  %s\n", p->description);
 }
@@ -36,16 +36,16 @@ void print_product_list(bugzc_list *list){
 }
 
 void print_product_list_ids(bugzc_list *list){
-	int *id;
+	int *_id;
 	bugzc_node *q = 0;
 	q = list->first;
 	while(q != 0){
-		id = q->d_ptr;
+		_id = q->d_ptr;
 		if(q != list->first){
-			printf(", %d", *id);
+			printf(", %d", *_id);
 		}
 		else{
-			printf("%d", *id);
+			printf("%d", *_id);
 		}
 		q = q->next;
 	}
@@ -190,6 +190,7 @@ int main(int argc, char *argv[]){
 		bugzc_list_free_with_data(&list);
 	}
 	bugzc_user_logout(&conn);
+	bugzc_finish(&conn);
 	return 0;
 }
 #else
