@@ -44,8 +44,8 @@ typedef struct bugz_conn_s {
  *  @deprecated Please use bugzc_init2, as of bugzcxx 0.1.0 bugzc_init will
  *  be the same as bugzc_init2
  ***************************************************************************/
-int bugzc_init(bugzc_conn *bc, const char *url, size_t surl);
-
+int bugzc_init(bugzc_conn *bc, const char *url, size_t surl)
+				__attribute__ ((__deprecated__));
 /** @brief Initializes bugzilla connection establishing its location url.
  *  A call to this function will not perform any connection related
  *  tests and will only initialize internal variables.

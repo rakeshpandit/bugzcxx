@@ -28,6 +28,10 @@ int main(int argc, char *argv[]){
 	}
 
 	bugzc_init2(&conn, url);
+	if (conn.xenv.fault_string != NULL)
+	  printf("Fault (%d) %s\n",
+		 conn.xenv.fault_code, conn.xenv.fault_string);
+
 	printf("Bugzilla timezone at: %s ", conn.url);
 	fflush(stdout);
 	if(conn.xenv.fault_occurred){

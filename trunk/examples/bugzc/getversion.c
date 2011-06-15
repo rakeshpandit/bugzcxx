@@ -28,6 +28,10 @@ int main(int argc, char *argv[]){
 	url = argv[1];
 
 	bugzc_init2(&conn, url);
+	if (conn.xenv.fault_string != NULL)
+	  printf("Fault (%d) %s\n",
+		 conn.xenv.fault_code, conn.xenv.fault_string);
+
 	printf("Bugzilla version at: %s ", conn.url);
 	fflush(stdout);
 	if(conn.xenv.fault_occurred){

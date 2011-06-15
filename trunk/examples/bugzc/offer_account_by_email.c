@@ -30,6 +30,10 @@ int main(int argc, char *argv[]){
 	email = argv[2];
 
 	bugzc_init2(&conn, url);
+	if (conn.xenv.fault_string != NULL)
+	  printf("Fault (%d) %s\n",
+		 conn.xenv.fault_code, conn.xenv.fault_string);
+
 	printf("Bugzilla version at: %s ", conn.url);
 	fflush(stdout);
 	if(bugzc_bugzilla_version(&conn, version, 12) < 0){

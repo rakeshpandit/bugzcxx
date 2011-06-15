@@ -49,10 +49,15 @@ int main(int argc, char *argv[]){
 		printf("%s --help\n%s <url> <username> <bugid>...\n\n", argv[0], argv[0]);
 		return 0;
 	}
+
 	url = argv[1];
 	login = argv[2];
 
 	bugzc_init2(&conn, url);
+	if (conn.xenv.fault_string != NULL)
+	  printf("Fault (%d) %s\n",
+		 conn.xenv.fault_code, conn.xenv.fault_string);
+
 	printf("Bugzilla version at: %s ", conn.url);
 	fflush(stdout);
 	if(bugzc_bugzilla_version(&conn, version, 12) < 0){
@@ -115,5 +120,3 @@ int main(int argc, char *argv[]){
 	bugzc_finish(&conn);
 	return 0;
 }
-
-
