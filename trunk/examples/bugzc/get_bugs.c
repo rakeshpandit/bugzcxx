@@ -41,12 +41,10 @@ int main(int argc, char *argv[]){
 	char version[12];
 	int i;
 
-	char description[2048];
 	unsigned int *qi;
 	bugzc_conn conn;
 	bugzc_list list;
 
-	description[0] = 0;
 	if(argc < 4 || strcmp(argv[1], "--help") == 0 || strcmp(argv[1], "-h") == 0){
 		printf("%s --help\n%s <url> <username> <bugid>...\n\n", argv[0], argv[0]);
 		return 0;
