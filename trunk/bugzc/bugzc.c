@@ -63,7 +63,10 @@ int bugzc_init2(bugzc_conn *bc, const char *url){
 	char vpatch[DEFAULT_VERSION_STRING_SIZE] = { 0 };
 	struct xmlrpc_curl_xportparms curl_parms;
 	memset(&curl_parms, 0, sizeof(curl_parms));
-	/* Temporary hack to skip CA certificate checks*/
+	/* Temporary hack to skip CA certificate checks. Useful for
+	   devlopment.*/
+	/* curl_parms.no_ssl_verifypeer = 1; */
+	/* curl_parms.no_ssl_verifyhost = 1; */
 	curl_parms.user_agent = BUGZCXX_CLIENT_NAME"/"BUGZCXX_VERSION_STRING;
 
 	bc->err_code = 0;
