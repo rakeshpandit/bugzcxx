@@ -25,7 +25,7 @@
 #define DEFAULT_MAX_DATE_STRING_SIZE 100
 #endif
 
-extern const char *_bugz_errmsg[];
+extern const char *_bugz_errmsg[] __attribute__ ((visibility ("hidden")));
 static const char *_bugz_empty_str = "";
 
 bugzc_bug *bugzc_bug_create_obj2(bugzc_conn *conn, int id, const char *alias,
@@ -106,7 +106,7 @@ bugzc_bug *bugzc_bug_create_obj2(bugzc_conn *conn, int id, const char *alias,
 	return bobj;
 }
 
-bugzc_bug *__xmlrpc2bug(bugzc_conn *bconn, xmlrpc_value *bug_item,
+static bugzc_bug *xmlrpc2bug(bugzc_conn *bconn, xmlrpc_value *bug_item,
 						unsigned int bug_id){
 	xmlrpc_value *xcreation_time = 0, *xlast_change_time = 0;
 	xmlrpc_value *xsummary = 0, *xalias = 0;
@@ -722,7 +722,7 @@ int bugzc_bug_get_bugs_list(bugzc_conn *bconn, unsigned int *bug_ids,
 		ret = xmlrpc_array_size(&bconn->xenv, bug_array);
 		for(i = 0; i < ret; i++){
 			xmlrpc_array_read_item(&bconn->xenv, bug_array, i, &bug_item);
-			bug_obj = __xmlrpc2bug(bconn, bug_item, bug_ids[i]);
+			bug_obj = xmlrpc2bug(bconn, bug_item, bug_ids[i]);
 			bugzc_list_append_data(olist, bug_obj, sizeof(bugzc_bug));
 			xmlrpc_DECREF(bug_item);
 		}
@@ -808,7 +808,7 @@ bugzc_bug *bugzc_bug_get_bug_info(bugzc_conn *bconn, unsigned int bug_id){
 		num_bugs = xmlrpc_array_size(&bconn->xenv, bug_array);
 		if(num_bugs > 0){
 			xmlrpc_array_read_item(&bconn->xenv, bug_array, 0, &bug_item);
-			bug_obj = __xmlrpc2bug(bconn, bug_item, bug_id);
+			bug_obj = xmlrpc2bug(bconn, bug_item, bug_id);
 			xmlrpc_DECREF(bug_item);
 		}
 		else{

@@ -16,10 +16,9 @@
 #include<bugzc/bugzc_list.h>
 #include<bugzc/bugz_features.h>
 /** @file 
- *  Implements all methods defined in the 
+ *  Implements all methods defined in the
  *  Bugzilla::WebService::Product namespace as defined in:
- *  http://www.bugzilla.org/docs/tip/html/api/Bugzilla/WebService/Product.html
- */
+ *  http://www.bugzilla.org/docs/tip/html/api/Bugzilla/WebService/Product.html */
 
 #ifdef __cplusplus
 extern "C" {
