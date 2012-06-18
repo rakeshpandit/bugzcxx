@@ -67,10 +67,9 @@ typedef struct bugzc_bug_s {
  *  		in the system.
  *  @param last_change_time The last day somebody perfomed a change in the
  *  		report, it could be a status change or just an issued comment
- *  @return The newly created bugzc_bug object (remember to release it
- *  bugzc_bug_destroy after use) if an error occurred while creation 0 while
- *  be returned and an error code and message will be reported trough the
- *  bugzc_conn object. */
+ *  @return The newly created bugzc_bug object.  In case of an error 0 will
+ *  be returned and an error code along with a message through bugzc_conn
+ *  object. */
 bugzc_bug *bugzc_bug_create_obj(bugzc_conn *conn, int id, const char *alias,
 				const char *summary,
 				const char *creation_time, 
@@ -94,10 +93,9 @@ bugzc_bug *bugzc_bug_create_obj(bugzc_conn *conn, int id, const char *alias,
  *  		time when the bug was entered in the system.
  *  @param last_change_tstamp The last day somebody perfomed a change in the
  *  		report, it could be a status change or just an issued comment
- *  @return The newly created bugzc_bug object (remember to release it
- *  bugzc_bug_destroy after use) if an error occurred while creation 0 while
- *  be returned and an error code and message will be reported trough the
- *  bugzc_conn object. */
+ *  @return The newly created bugzc_bug object.  In case of an error 0 will
+ *  be returned and an error code along with a message through bugzc_conn
+ *  object. */
 bugzc_bug *bugzc_bug_create_obj2(bugzc_conn *conn, int id, const char *alias,
 				const char *summary,
 				time_t creation_tstamp,

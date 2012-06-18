@@ -44,7 +44,7 @@ typedef struct bugzc_list_t {
 	bugzc_node *first;
 	/** Pointer to the last node on the list */
 	bugzc_node *last;
-	/** The mount of elements on the list */
+	/** Number of elements on the list */
 	int count;
 } bugzc_list;
 
