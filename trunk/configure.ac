@@ -13,7 +13,7 @@ dnl Initialization macros.
 dnl --------------------------------
 
 
-AC_INIT(bugzc/bugzc.h, 0.5.0)
+AC_INIT(bugzc/bugzc.h, 0.6.0)
 AM_CONFIG_HEADER(config.h)
 AC_CONFIG_MACRO_DIR(m4)
 
