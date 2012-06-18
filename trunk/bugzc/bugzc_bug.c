@@ -28,6 +28,17 @@
 extern const char *_bugz_errmsg[] __attribute__ ((visibility ("hidden")));
 static const char *_bugz_empty_str = "";
 
+static void free_bugzc_obj(bugzc_conn *conn, bugzc_bug *bobj) {
+	if(bobj->summary != NULL) free(bobj->summary);
+	if(bobj->alias != NULL) free(bobj->alias);
+	free(bobj->creation_time);
+	free(bobj);
+	conn->err_code = BUGZCXX_BUGOBJ_ALLOCATION_ERROR;
+	conn->err_msg = (char *)
+				_bugz_errmsg[BUGZCXX_BUGOBJ_ALLOCATION_ERROR];
+	bobj = 0;
+}
+
 bugzc_bug *bugzc_bug_create_obj2(bugzc_conn *conn, int id, const char *alias,
 		const char *summary,
 		time_t creation_tstamp,
@@ -41,68 +52,46 @@ bugzc_bug *bugzc_bug_create_obj2(bugzc_conn *conn, int id, const char *alias,
 	bobj->alias = NULL;
 	if(bobj != NULL){
 		bobj->id = id;
-		if(alias == NULL){
+		if(alias == NULL)
 			bobj->alias = (char *)_bugz_empty_str;
-		}
-		else{
+		else
 			bobj->alias = strdup(alias);
-		}
-		if(bobj->alias == NULL){
-			free(bobj);
-			conn->err_code = BUGZCXX_BUGOBJ_ALLOCATION_ERROR;
-			conn->err_msg = (char *)
-						_bugz_errmsg[BUGZCXX_BUGOBJ_ALLOCATION_ERROR];
-			bobj = 0;
-		}
-		if(summary == NULL){
+		if(summary == NULL)
 			bobj->summary = (char *)_bugz_empty_str;
-		}
-		else{
+		else
 			bobj->summary = strdup(summary);
-		}
-		if(bobj->summary == NULL){
+		if(bobj->summary == NULL || bobj->alias == NULL){
 			free(bobj);
 			conn->err_code = BUGZCXX_BUGOBJ_ALLOCATION_ERROR;
 			conn->err_msg = (char *)
 						_bugz_errmsg[BUGZCXX_BUGOBJ_ALLOCATION_ERROR];
 			bobj = 0;
+			goto exit;
 		}
 		bobj->creation_tstamp = creation_tstamp;
 		bobj->creation_time = malloc(DEFAULT_MAX_DATE_STRING_SIZE);
 		localtime_r(&creation_tstamp, &tmp_tm);
 		if(strftime(bobj->creation_time,
-					DEFAULT_MAX_DATE_STRING_SIZE - 1, "%c", &tmp_tm) == 0){
-			if(bobj->summary != NULL) free(bobj->summary);
-			if(bobj->alias != NULL) free(bobj->alias);
-			free(bobj->creation_time);
-			free(bobj);
-			conn->err_code = BUGZCXX_BUGOBJ_ALLOCATION_ERROR;
-			conn->err_msg = (char *)
-						_bugz_errmsg[BUGZCXX_BUGOBJ_ALLOCATION_ERROR];
-			bobj = 0;
+					DEFAULT_MAX_DATE_STRING_SIZE - 1, "%c", &tmp_tm) == 0) {
+			free_bugzc_obj(conn, bobj);
+			goto exit;
 		}
 
 		bobj->last_change_tstamp = last_change_tstamp;
 		bobj->last_change_time = malloc(DEFAULT_MAX_DATE_STRING_SIZE);
 		localtime_r(&last_change_tstamp, &tmp_tm);
 		if(strftime(bobj->last_change_time,
-					DEFAULT_MAX_DATE_STRING_SIZE - 1, "%c", &tmp_tm) == 0){
-			if(bobj->summary != NULL) free(bobj->summary);
-			if(bobj->alias != NULL) free(bobj->alias);
-			free(bobj->creation_time);
-			free(bobj->last_change_time);
-			free(bobj);
-			conn->err_code = BUGZCXX_BUGOBJ_ALLOCATION_ERROR;
-			conn->err_msg = (char *)
-						_bugz_errmsg[BUGZCXX_BUGOBJ_ALLOCATION_ERROR];
-			bobj = 0;
+					DEFAULT_MAX_DATE_STRING_SIZE - 1, "%c", &tmp_tm) == 0) {
+			free_bugzc_obj(conn, bobj);
+			goto exit;
 		}
-	}
-	else{
+	} else {
 		conn->err_code = BUGZCXX_BUGOBJ_ALLOCATION_ERROR;
 		conn->err_msg = (char *)
 					_bugz_errmsg[BUGZCXX_BUGOBJ_ALLOCATION_ERROR];
 	}
+
+exit:
 	return bobj;
 }
 
