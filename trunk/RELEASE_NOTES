@@ -1,5 +1,30 @@
-Release 0.1.0 (under development)
-This release adds proper C++ Support
+Release 0.6.0
+* Fix bugzc_bug.h header file and small correction in bugzc_list.h.
+* Renamed __xmlrpc2bug to xmlrpc2bug and marked it as static. It is an
+  internal function and is not supposed to be used by DSO consumers.
+* Changed rpc_* related internal function visibility as "hidden" so
+  that they are automatically marked as LOCAL in output DSO.
+* Added code bits to disable ssl peer/host verification. These would
+  be useful for development till no_ssl_verifypeer/host are extended
+  to our library.
+* Added curl parameter variable from xmlrpc-c client.h to initialize
+  function. It would be useful for extending no_ssl_verifypeer etc
+  options from xmlrpc library here. Increased response limit to
+  2*512k. Print fault string for all failures which happen when
+  example initialization fails. Useful for debugging.
+* Remove unused description array from get_bugs.c (example).
+* Chased and fixed a few memory leaks (mostly during bug information
+  retrieval)
+* Added initial support for runtime server versioning support
+  (Identify and enable/disable methods available in newer versions of
+  bugzilla or even disable deprecated ones based on server's
+  installation vers
+* Implemented a method for retrieval of just one bug definition from
+  server (instead of multiple bug reports) on C and C++ libraries.
+* Added one more example program for C++, it demonstrates how to query
+  information for just one bug.
+* Added and opaque member to the bugzc_bug_s structure so we can
+  handle more bug fields added in the future.
 
 
 Release 0.0.4
