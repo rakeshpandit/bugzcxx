@@ -102,8 +102,7 @@ int bugzc_product_get_products(bugzc_conn *bconn, int pids[], int npids,
 				bconn->err_code = BUGZCXX_XMLRPC_FAULT_OCURRED;
 		}
 		return -1;
-	}
-	else{
+	} else {
 		xmlrpc_decompose_value(&bconn->xenv, result, 
 				"{s:A,*}", "products", &arr);
 		ret = xmlrpc_array_size(&bconn->xenv, arr);
@@ -131,8 +130,7 @@ int bugzc_product_get_products(bugzc_conn *bconn, int pids[], int npids,
 					bugzc_product_destroy_product_list(olist);
 					ret = -1;
 					break;
-				}
-				else{
+				} else {
 					bugzc_list_append_data(olist, tmp_product, 
 											sizeof(bugzc_product));
 				}
@@ -143,12 +141,10 @@ int bugzc_product_get_products(bugzc_conn *bconn, int pids[], int npids,
 }
 
 void bugzc_product_destroy_obj(bugzc_product *p){
-	if(p->name){
+	if(p->name)
 		free(p->name);
-	}
-	if(p->description){
+	if(p->description)
 		free(p->description);
-	}
 	free(p);
 }
 

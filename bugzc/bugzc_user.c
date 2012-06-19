@@ -184,8 +184,7 @@ int bugzc_user_create(bugzc_conn *bconn, const char *email,
 					BUGZCXX_XMLRPC_FAULT_OCURRED;
 		}
 		return -1;
-	}
-	else{
+	} else {
 		xmlrpc_decompose_value(&bconn->xenv, result, 
 					"{s:i,*}", "id", &id);
 		xmlrpc_DECREF(result);

@@ -69,8 +69,7 @@ int rpc_void_call_ret_s(bugzc_conn *bconn, const char *mname,
 	result = rpc_void_call(bconn, mname);
 	if(result == 0){
 		return -1;
-	}
-	else{
+	} else {
 		xmlrpc_decompose_value(&bconn->xenv, result, 
 				"{s:s,*}", vname, &tmp_ret);
 		if(strlen(tmp_ret) + 1 > sbuf){
@@ -78,8 +77,7 @@ int rpc_void_call_ret_s(bugzc_conn *bconn, const char *mname,
 			bconn->err_code = BUGZCXX_BUFFER_TOO_SMALL;
 			bconn->err_msg = (char *)
 				_bugz_errmsg[BUGZCXX_BUFFER_TOO_SMALL];
-		}
-		else if(strlen(tmp_ret) + 1 <= sbuf){
+		} else if(strlen(tmp_ret) + 1 <= sbuf){
 			strncpy(buf, tmp_ret, sbuf);
 			ret = strlen(tmp_ret);
 		}
@@ -169,8 +167,7 @@ int rpc_s_call_void(bugzc_conn *bconn, const char *mname,
 	}
 	if(result == 0){
 		ret = -1;
-	}
-	else{
+	} else {
 		xmlrpc_DECREF(result);
 		
 	}
@@ -189,8 +186,7 @@ int rpc_void_call_ret_list_int(bugzc_conn *bconn, const char *mname,
 	result = rpc_void_call(bconn, mname);
 	if(result == 0){
 		return -1;
-	}
-	else{
+	} else {
 		xmlrpc_decompose_value(&bconn->xenv, result, 
 				"{s:A,*}", vname, &arr);
 		ret = xmlrpc_array_size(&bconn->xenv, arr);
@@ -203,8 +199,7 @@ int rpc_void_call_ret_list_int(bugzc_conn *bconn, const char *mname,
 				if(val_s){
 					val_s[0] = val;
 					bugzc_list_append_data(list, (void *)val_s, sizeof(int));
-				}
-				else{
+				} else {
 					ret *= -1;
 					break;
 				}

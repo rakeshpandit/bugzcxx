@@ -113,8 +113,7 @@ bugzc_list *bugzc_list_append_node(bugzc_list *list, bugzc_node *node){
 	if(list->first == 0){
 		list->first = node;
 		list->last = node;
-	}
-	else{
+	} else {
 		node->next = 0;
 		node->previous = list->last;
 		list->last->next = node;
@@ -130,9 +129,8 @@ bugzc_list *bugzc_list_append_data(bugzc_list *list, void *d_ptr,
 	bugzc_node *node;
 	
 	node = bugzc_node_alloc();
-	if(node == 0){
+	if(node == 0)
 		return 0x0;
-	}
 	node->d_ptr = d_ptr;
 	node->d_size = d_size;
 	return bugzc_list_append_node(list, node);
