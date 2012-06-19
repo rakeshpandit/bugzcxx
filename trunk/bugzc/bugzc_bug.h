@@ -53,32 +53,6 @@ typedef struct bugzc_bug_s {
 /** @brief Use this function to instantiate a new bugzc_bug object.
  *  Normally you wouldn't need to call this regularly in your code also
  *  remember that each successful call to this function creates an in-memory
- *  object that HAS TO BE RELEASED FROM MEMORY AFTER USED for this you 
- *  must call the bugzc_bug_destroy function, DON'T FORGET IT!!!.
- *  @param conn A properly initialized bugz_conn object describing the
- *  	url of the Bugzilla server.
- *  @param id The bug's numeric id as assigned by the Bugzilla server.
- *  @param alias A null-terminated string representing alias for the bug,
- *  		aliases are assigned to bugs so normally you don't refer to
- *  		them by their bug id.
- *  @param summary A null-terminated string holding the bug summary as
- *  		entered by the reporter.
- *  @param creation_time The date and time when the bug report was entered
- *  		in the system.
- *  @param last_change_time The last day somebody perfomed a change in the
- *  		report, it could be a status change or just an issued comment
- *  @return The newly created bugzc_bug object.  In case of an error 0 will
- *  be returned and an error code along with a message through bugzc_conn
- *  object. */
-bugzc_bug *bugzc_bug_create_obj(bugzc_conn *conn, int id, const char *alias,
-				const char *summary,
-				const char *creation_time, 
-				const char *last_change_time)
-				__attribute__ ((__deprecated__));
-
-/** @brief Use this function to instantiate a new bugzc_bug object.
- *  Normally you wouldn't need to call this regularly in your code also
- *  remember that each successful call to this function creates an in-memory
  *  object that HAS TO BE RELEASED FROM MEMORY AFTER USED for this you
  *  must call the bugzc_bug_destroy function, DON'T FORGET IT!!!.
  *  @param conn A properly initialized bugz_conn object describing the
@@ -101,17 +75,9 @@ bugzc_bug *bugzc_bug_create_obj2(bugzc_conn *conn, int id, const char *alias,
 				time_t creation_tstamp,
 				time_t last_change_tstamp);
 
+
 /** @brief Call this method to release a bugzc_bug object from memory.
- *  After a succesfull call to bugzc_bug_create_obj a bugzc_bug object
- *  must be released from memory by calling this function since it will
- *  properly release memory for the whole object and its members.
- *  @param bug_obj The bugzc_obj to be released from memory. 
- *  @deprecated Please use bugzc_bug_destroy_obj2, as of BugzCXX 0.1.0 this
- *  function will be eliminated.*/
-void bugzc_bug_destroy_obj(bugzc_bug **bug_obj)
-				__attribute__ ((__deprecated__));
-/** @brief Call this method to release a bugzc_bug object from memory.
- *  After a succesfull call to bugzc_bug_create_obj a bugzc_bug object
+ *  After a succesfull call to bugzc_bug_create_obj2 a bugzc_bug object
  *  must be released from memory by calling this function since it will
  *  properly release memory for the whole object and its members.
  *  The main difference with this function and bugzc_bug_destroy_obj is that 

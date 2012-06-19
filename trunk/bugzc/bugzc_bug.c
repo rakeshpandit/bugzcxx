@@ -112,12 +112,10 @@ static bugzc_bug *xmlrpc2bug(bugzc_conn *bconn, xmlrpc_value *bug_item,
 	xmlrpc_read_datetime_sec(&bconn->xenv, xcreation_time, &b_ctime);
 	xmlrpc_read_datetime_sec(&bconn->xenv, xlast_change_time, &b_lctime);
 	xmlrpc_read_string(&bconn->xenv, xsummary, (const char **)&b_summary);
-	if(xmlrpc_value_type(xalias) == XMLRPC_TYPE_STRING){
+	if(xmlrpc_value_type(xalias) == XMLRPC_TYPE_STRING)
 		xmlrpc_read_string(&bconn->xenv, xalias, (const char **)&b_alias);
-	}
-	else{
+	else
 		b_alias = (char *)_bugz_empty_str;
-	}
 	bug_obj = bugzc_bug_create_obj2(bconn, bug_id, b_alias, b_summary,
 			b_ctime, b_lctime);
 	free(b_summary);
@@ -133,8 +131,7 @@ static bugzc_bug *xmlrpc2bug(bugzc_conn *bconn, xmlrpc_value *bug_item,
 int bugzc_bug_legal_values(bugzc_conn *bconn, const char *field,
 		const char *product_name,
 		char *list, size_t nitems,
-		size_t max_vsize)
-{
+		size_t max_vsize){
 	int ret = -1;
 	size_t r_nitems;
 	int i;
@@ -178,8 +175,7 @@ int bugzc_bug_legal_values(bugzc_conn *bconn, const char *field,
 						BUGZCXX_XMLRPC_FAULT_OCURRED;
 		}
 		return -1;
-	}
-	else{
+	} else {
 		xmlrpc_decompose_value(&bconn->xenv, result, 
 				"{s:A,*}", "values", &v_list);
 		r_nitems = xmlrpc_array_size(&bconn->xenv, v_list);
@@ -191,8 +187,7 @@ int bugzc_bug_legal_values(bugzc_conn *bconn, const char *field,
 			bconn->err_code = 
 					BUGZCXX_LEGAL_VALUES_ARRAY_TOO_SMALL;
 			ret = r_nitems * -1;
-		}
-		else{
+		} else {
 			ret = r_nitems;
 			for(i = 0; i < (int)r_nitems; i++){
 				xmlrpc_array_read_item(&bconn->xenv, v_list,
@@ -264,8 +259,7 @@ int bugzc_bug_legal_values_list(bugzc_conn *bconn, const char *field,
 						BUGZCXX_XMLRPC_FAULT_OCURRED;
 		}
 		return -1;
-	}
-	else{
+	} else {
 		xmlrpc_decompose_value(&bconn->xenv, result, 
 				"{s:A,*}", "values", &v_list);
 		r_nitems = xmlrpc_array_size(&bconn->xenv, v_list);
@@ -282,8 +276,7 @@ int bugzc_bug_legal_values_list(bugzc_conn *bconn, const char *field,
 				bconn->err_code = 
 						BUGZCXX_LEGAL_VALUES_ARRAY_TOO_SMALL;
 				ret = r_nitems * -1;
-			}
-			else{
+			} else {
 				if(bugzc_list_append_data(list, value, strlen(value) + 1) 
 						== 0x0){
 					bconn->err_msg = (char *)
@@ -311,12 +304,10 @@ bugzc_bug *bugzc_bug_create_obj(bugzc_conn *conn, int id, const char *alias,
 	bobj = malloc(sizeof(bugzc_bug));
 	if(bobj != NULL){
 		bobj->id = id;
-		if(alias == NULL){
+		if(alias == NULL)
 			bobj->alias = (char *)_bugz_empty_str;
-		}
-		else{
+		else
 			bobj->alias = strdup(alias);
-		}
 		if(bobj->alias == NULL){
 			free(bobj);
 			conn->err_code = BUGZCXX_BUGOBJ_ALLOCATION_ERROR;
@@ -324,12 +315,10 @@ bugzc_bug *bugzc_bug_create_obj(bugzc_conn *conn, int id, const char *alias,
 						_bugz_errmsg[BUGZCXX_BUGOBJ_ALLOCATION_ERROR];
 			bobj = 0;
 		}
-		if(summary == NULL){
+		if(summary == NULL)
 			bobj->summary = (char *)_bugz_empty_str;
-		}
-		else{
+		else
 			bobj->summary = strdup(summary);
-		}
 		if(bobj->summary == NULL){
 			free(bobj);
 			conn->err_code = BUGZCXX_BUGOBJ_ALLOCATION_ERROR;
@@ -339,8 +328,7 @@ bugzc_bug *bugzc_bug_create_obj(bugzc_conn *conn, int id, const char *alias,
 		}
 		if(creation_time == NULL){
 			bobj->creation_time = (char *)_bugz_empty_str;
-		}
-		else{
+		} else {
 			bobj->creation_time = strdup(creation_time);
 			strptime(bobj->creation_time, "%Y%m%dT%H:%M:%S", &tmp_tm);
 			bobj->creation_tstamp = mktime(&tmp_tm);
@@ -354,8 +342,7 @@ bugzc_bug *bugzc_bug_create_obj(bugzc_conn *conn, int id, const char *alias,
 		}
 		if(last_change_time == NULL){
 			bobj->last_change_time = (char *)_bugz_empty_str;
-		}
-		else{
+		} else {
 			bobj->last_change_time = strdup(last_change_time);
 			strptime(bobj->last_change_time, "%Y%m%dT%H:%M:%S", &tmp_tm);
 			bobj->last_change_tstamp = mktime(&tmp_tm);
@@ -367,36 +354,12 @@ bugzc_bug *bugzc_bug_create_obj(bugzc_conn *conn, int id, const char *alias,
 						_bugz_errmsg[BUGZCXX_BUGOBJ_ALLOCATION_ERROR];
 			bobj = 0;
 		}
-	}
-	else{
+	} else {
 		conn->err_code = BUGZCXX_BUGOBJ_ALLOCATION_ERROR;
 		conn->err_msg = (char *)
 					_bugz_errmsg[BUGZCXX_BUGOBJ_ALLOCATION_ERROR];
 	}
 	return bobj;
-}
-
-
-
-void bugzc_bug_destroy_obj(bugzc_bug **bug_objx){
-	bugzc_bug *bug_obj;
-	bug_obj = *bug_objx;
-	if(bug_obj != NULL){
-		if(bug_obj->alias != NULL &&
-			bug_obj->alias != _bugz_empty_str)
-			free(bug_obj->alias);
-		if(bug_obj->summary != NULL &&
-			bug_obj->summary != _bugz_empty_str)
-			free(bug_obj->summary);
-		if(bug_obj->creation_time != NULL &&
-			bug_obj->creation_time != _bugz_empty_str)
-			free(bug_obj->creation_time);
-		if(bug_obj->last_change_time != NULL &&
-			bug_obj->last_change_time != _bugz_empty_str)
-			free(bug_obj->last_change_time);
-		free(bug_obj);
-		*bug_objx = NULL;
-	}
 }
 
 void bugzc_bug_destroy_obj2(bugzc_bug *bug_obj){
