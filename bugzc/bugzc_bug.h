@@ -106,29 +106,6 @@ void bugzc_bug_destroy_list2(bugzc_list *list);
  *  @param field The field's name.
  *  @param product_name null-terminated string representing the product to
  * 		be researched.
- *  @param list An empty array of strings (double dimensiones char[][])
- *  	to be field with the required data, if the array permits it, after
- *  	the last element of subsequent items will be empty strings.
- *  @param nitems The maximum amount of empty slots in the \a list array
- *  	which can be used to store list items.
- *  @param max_vsize Maximum amount of permitted characters for a field
- *  	value.
- *  @return The amount of values in the list or a negative value on
- *  failure. 
- *  @deprecated This function will be no more when we reach 0.1.0, use
- *  bugzc_bug_legal_values_list instead. */
-int bugzc_bug_legal_values(bugzc_conn *conn, const char *field,
-				const char *product_name, 
-				char *list, size_t nitems,
-				size_t max_vsize)
-				__attribute__ ((__deprecated__));
-/** @brief Returns a list of valid values related to the given Bugzilla
- *  field for a specified product.
- *  @param conn A properly initialized bugz_conn object describing the
- *  	url of the Bugzilla server.
- *  @param field The field's name.
- *  @param product_name null-terminated string representing the product to
- * 		be researched.
  *  @param list An empty bugzc_list linked list that will store the data values
  *  @return The amount of values in the list or a negative value on
  *  failure. */
