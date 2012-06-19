@@ -28,6 +28,18 @@
 extern const char *_bugz_errmsg[] __attribute__ ((visibility ("hidden")));
 static const char *_bugz_empty_str = "";
 
+static const char *bp[] = {
+		"product",
+		"component",
+		"summary",
+		"version",
+		"description",
+		"op_sys",
+		"platform",
+		"priority",
+		"severity"
+};
+
 static void free_bugzc_obj(bugzc_conn *conn, bugzc_bug *bobj) {
 	if(bobj->summary != NULL) free(bobj->summary);
 	if(bobj->alias != NULL) free(bobj->alias);
@@ -91,7 +103,9 @@ bugzc_bug *bugzc_bug_create_obj2(bugzc_conn *conn, int id, const char *alias,
 		conn->err_msg = (char *)
 					_bugz_errmsg[BUGZCXX_BUGOBJ_ALLOCATION_ERROR];
 	}
-
+/* OOM error handling is a bad idea. Exit as soon as one gets a
+   NULL. Error handling code is never tested. This label ('exit') here
+   is for old code (which does this error handling).*/
 exit:
 	return bobj;
 }
@@ -119,7 +133,8 @@ static bugzc_bug *xmlrpc2bug(bugzc_conn *bconn, xmlrpc_value *bug_item,
 	bug_obj = bugzc_bug_create_obj2(bconn, bug_id, b_alias, b_summary,
 			b_ctime, b_lctime);
 	free(b_summary);
-	if(xmlrpc_value_type(xalias) == XMLRPC_TYPE_STRING) free(b_alias);
+	if(xmlrpc_value_type(xalias) == XMLRPC_TYPE_STRING)
+		free(b_alias);
 	xmlrpc_DECREF(xsummary);
 	xmlrpc_DECREF(xalias);
 	xmlrpc_DECREF(xcreation_time);
@@ -206,75 +221,6 @@ int bugzc_bug_legal_values_list(bugzc_conn *bconn, const char *field,
 	return ret;
 }
 
-bugzc_bug *bugzc_bug_create_obj(bugzc_conn *conn, int id, const char *alias,
-		const char *summary,
-		const char *creation_time,
-		const char *last_change_time){
-	bugzc_bug *bobj = 0;
-	struct tm tmp_tm;
-	conn->err_code = 0;
-	conn->err_msg = 0;
-	bobj = malloc(sizeof(bugzc_bug));
-	if(bobj != NULL){
-		bobj->id = id;
-		if(alias == NULL)
-			bobj->alias = (char *)_bugz_empty_str;
-		else
-			bobj->alias = strdup(alias);
-		if(bobj->alias == NULL){
-			free(bobj);
-			conn->err_code = BUGZCXX_BUGOBJ_ALLOCATION_ERROR;
-			conn->err_msg = (char *)
-						_bugz_errmsg[BUGZCXX_BUGOBJ_ALLOCATION_ERROR];
-			bobj = 0;
-		}
-		if(summary == NULL)
-			bobj->summary = (char *)_bugz_empty_str;
-		else
-			bobj->summary = strdup(summary);
-		if(bobj->summary == NULL){
-			free(bobj);
-			conn->err_code = BUGZCXX_BUGOBJ_ALLOCATION_ERROR;
-			conn->err_msg = (char *)
-						_bugz_errmsg[BUGZCXX_BUGOBJ_ALLOCATION_ERROR];
-			bobj = 0;
-		}
-		if(creation_time == NULL){
-			bobj->creation_time = (char *)_bugz_empty_str;
-		} else {
-			bobj->creation_time = strdup(creation_time);
-			strptime(bobj->creation_time, "%Y%m%dT%H:%M:%S", &tmp_tm);
-			bobj->creation_tstamp = mktime(&tmp_tm);
-		}
-		if(bobj->creation_time == NULL){
-			free(bobj);
-			conn->err_code = BUGZCXX_BUGOBJ_ALLOCATION_ERROR;
-			conn->err_msg = (char *)
-						_bugz_errmsg[BUGZCXX_BUGOBJ_ALLOCATION_ERROR];
-			bobj = 0;
-		}
-		if(last_change_time == NULL){
-			bobj->last_change_time = (char *)_bugz_empty_str;
-		} else {
-			bobj->last_change_time = strdup(last_change_time);
-			strptime(bobj->last_change_time, "%Y%m%dT%H:%M:%S", &tmp_tm);
-			bobj->last_change_tstamp = mktime(&tmp_tm);
-		}
-		if(bobj->last_change_time == NULL){
-			free(bobj);
-			conn->err_code = BUGZCXX_BUGOBJ_ALLOCATION_ERROR;
-			conn->err_msg = (char *)
-						_bugz_errmsg[BUGZCXX_BUGOBJ_ALLOCATION_ERROR];
-			bobj = 0;
-		}
-	} else {
-		conn->err_code = BUGZCXX_BUGOBJ_ALLOCATION_ERROR;
-		conn->err_msg = (char *)
-					_bugz_errmsg[BUGZCXX_BUGOBJ_ALLOCATION_ERROR];
-	}
-	return bobj;
-}
-
 void bugzc_bug_destroy_obj2(bugzc_bug *bug_obj){
 	if(bug_obj != NULL){
 		if(bug_obj->alias != NULL &&
@@ -293,17 +239,6 @@ void bugzc_bug_destroy_obj2(bugzc_bug *bug_obj){
 	}
 }
 
-static const char *bp[] = {
-		"product",
-		"component",
-		"summary",
-		"version",
-		"description",
-		"op_sys",
-		"platform",
-		"priority",
-		"severity"
-};
 int bugzc_bug_submit(bugzc_conn *bconn, const char *product, 
 		const char *component, const char *summary,
 		const char *version, const char *description,
