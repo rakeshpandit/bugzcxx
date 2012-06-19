@@ -36,14 +36,13 @@ static void free_bugzc_obj(bugzc_conn *conn, bugzc_bug *bobj) {
 	conn->err_code = BUGZCXX_BUGOBJ_ALLOCATION_ERROR;
 	conn->err_msg = (char *)
 				_bugz_errmsg[BUGZCXX_BUGOBJ_ALLOCATION_ERROR];
-	bobj = 0;
 }
 
 bugzc_bug *bugzc_bug_create_obj2(bugzc_conn *conn, int id, const char *alias,
 		const char *summary,
 		time_t creation_tstamp,
 		time_t last_change_tstamp){
-	bugzc_bug *bobj = 0;
+	bugzc_bug *bobj = NULL;
 	conn->err_code = 0;
 	conn->err_msg = 0;
 	struct tm tmp_tm;
@@ -65,7 +64,7 @@ bugzc_bug *bugzc_bug_create_obj2(bugzc_conn *conn, int id, const char *alias,
 			conn->err_code = BUGZCXX_BUGOBJ_ALLOCATION_ERROR;
 			conn->err_msg = (char *)
 						_bugz_errmsg[BUGZCXX_BUGOBJ_ALLOCATION_ERROR];
-			bobj = 0;
+			bobj = NULL;
 			goto exit;
 		}
 		bobj->creation_tstamp = creation_tstamp;
@@ -74,6 +73,7 @@ bugzc_bug *bugzc_bug_create_obj2(bugzc_conn *conn, int id, const char *alias,
 		if(strftime(bobj->creation_time,
 					DEFAULT_MAX_DATE_STRING_SIZE - 1, "%c", &tmp_tm) == 0) {
 			free_bugzc_obj(conn, bobj);
+			bobj = NULL;
 			goto exit;
 		}
 
@@ -83,6 +83,7 @@ bugzc_bug *bugzc_bug_create_obj2(bugzc_conn *conn, int id, const char *alias,
 		if(strftime(bobj->last_change_time,
 					DEFAULT_MAX_DATE_STRING_SIZE - 1, "%c", &tmp_tm) == 0) {
 			free_bugzc_obj(conn, bobj);
+			bobj = NULL;
 			goto exit;
 		}
 	} else {

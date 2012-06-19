@@ -93,7 +93,7 @@ bugzc_bug *bugzc_bug_create_obj(bugzc_conn *conn, int id, const char *alias,
  *  		time when the bug was entered in the system.
  *  @param last_change_tstamp The last day somebody perfomed a change in the
  *  		report, it could be a status change or just an issued comment
- *  @return The newly created bugzc_bug object.  In case of an error 0 will
+ *  @return The newly created bugzc_bug object.  In case of an error NULL will
  *  be returned and an error code along with a message through bugzc_conn
  *  object. */
 bugzc_bug *bugzc_bug_create_obj2(bugzc_conn *conn, int id, const char *alias,
