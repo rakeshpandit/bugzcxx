@@ -2,8 +2,10 @@
  *  Bugzilla C/C++ XML-RPC proxy
  * 
  *  Copyright (C) Juan V. Guerrero 2007
+ *  Copyright (C) Rakesh Pandit 2012
  * 
  *  Juan V. Guerrero <mindstorm2600@users.sourceforge.net>
+ *  Rakesh Pandit <rakesh@fedoraproject.org>
  * 
  *  This program is free software, distributed under the terms of
  *  the GNU General Public License Version 2. See the LICENSE file
@@ -40,14 +42,17 @@ static const char *bp[] = {
 		"severity"
 };
 
+static void assign_error(bugzc_conn *bconn, int err_code) {
+	bconn->err_msg = (char *)_bugz_errmsg[err_code];
+	bconn->err_code = err_code;
+}
+
 static void free_bugzc_obj(bugzc_conn *conn, bugzc_bug *bobj) {
 	if(bobj->summary != NULL) free(bobj->summary);
 	if(bobj->alias != NULL) free(bobj->alias);
 	free(bobj->creation_time);
 	free(bobj);
-	conn->err_code = BUGZCXX_BUGOBJ_ALLOCATION_ERROR;
-	conn->err_msg = (char *)
-				_bugz_errmsg[BUGZCXX_BUGOBJ_ALLOCATION_ERROR];
+	assign_error(conn, BUGZCXX_BUGOBJ_ALLOCATION_ERROR);
 }
 
 bugzc_bug *bugzc_bug_create_obj2(bugzc_conn *conn, int id, const char *alias,
@@ -73,9 +78,7 @@ bugzc_bug *bugzc_bug_create_obj2(bugzc_conn *conn, int id, const char *alias,
 			bobj->summary = strdup(summary);
 		if(bobj->summary == NULL || bobj->alias == NULL){
 			free(bobj);
-			conn->err_code = BUGZCXX_BUGOBJ_ALLOCATION_ERROR;
-			conn->err_msg = (char *)
-						_bugz_errmsg[BUGZCXX_BUGOBJ_ALLOCATION_ERROR];
+			assign_error(conn, BUGZCXX_BUGOBJ_ALLOCATION_ERROR);
 			bobj = NULL;
 			goto exit;
 		}
@@ -99,9 +102,7 @@ bugzc_bug *bugzc_bug_create_obj2(bugzc_conn *conn, int id, const char *alias,
 			goto exit;
 		}
 	} else {
-		conn->err_code = BUGZCXX_BUGOBJ_ALLOCATION_ERROR;
-		conn->err_msg = (char *)
-					_bugz_errmsg[BUGZCXX_BUGOBJ_ALLOCATION_ERROR];
+		assign_error(conn, BUGZCXX_BUGOBJ_ALLOCATION_ERROR);
 	}
 /* OOM error handling is a bad idea. Exit as soon as one gets a
    NULL. Error handling code is never tested. This label ('exit') here
@@ -163,28 +164,16 @@ int bugzc_bug_legal_values_list(bugzc_conn *bconn, const char *field,
 	if(bconn->xenv.fault_occurred){
 		switch(bconn->xenv.fault_code){
 			case BUGZ_WS_INVALID_FIELD_NAME:
-				bconn->err_msg = (char *)
-				_bugz_errmsg[BUGZCXX_XMLRPC_INVALID_FIELD_NAME];
-				bconn->err_code = 
-						BUGZCXX_XMLRPC_INVALID_FIELD_NAME;
+				assign_error(bconn, BUGZCXX_XMLRPC_INVALID_FIELD_NAME);
 				break;
 			case BUGZ_WS_INVALID_PRODUCT:
-				bconn->err_msg = (char *)
-				_bugz_errmsg[BUGZCXX_XMLRPC_INVALID_PRODUCT];
-				bconn->err_code = 
-						BUGZCXX_XMLRPC_INVALID_PRODUCT;
+				assign_error(bconn, BUGZCXX_XMLRPC_INVALID_PRODUCT);
 				break;
 			case BUGZ_WS_ACCOUNT_DISABLED:
-				bconn->err_msg = (char *)
-				_bugz_errmsg[BUGZCXX_XMLRPC_ACCOUNT_DISABLED];
-				bconn->err_code = 
-						BUGZCXX_XMLRPC_ACCOUNT_DISABLED;
+				assign_error(bconn, BUGZCXX_XMLRPC_ACCOUNT_DISABLED);
 				break;
 			default:
-				bconn->err_msg = (char *)
-				_bugz_errmsg[BUGZCXX_XMLRPC_FAULT_OCURRED];
-				bconn->err_code = 
-						BUGZCXX_XMLRPC_FAULT_OCURRED;
+				assign_error(bconn, BUGZCXX_XMLRPC_FAULT_OCURRED);
 		}
 		return -1;
 	} else {
@@ -199,18 +188,12 @@ int bugzc_bug_legal_values_list(bugzc_conn *bconn, const char *field,
 					"s", &tmp_item_value);
 			value = strdup(tmp_item_value);
 			if(value == 0){
-				bconn->err_msg = (char *)
-								_bugz_errmsg[BUGZCXX_LEGAL_VALUES_ARRAY_TOO_SMALL];
-				bconn->err_code = 
-						BUGZCXX_LEGAL_VALUES_ARRAY_TOO_SMALL;
+				assign_error(bconn, BUGZCXX_LEGAL_VALUES_ARRAY_TOO_SMALL);
 				ret = r_nitems * -1;
 			} else {
 				if(bugzc_list_append_data(list, value, strlen(value) + 1) 
 						== 0x0){
-					bconn->err_msg = (char *)
-									_bugz_errmsg[BUGZCXX_LEGAL_VALUES_ARRAY_TOO_SMALL];
-					bconn->err_code = 
-							BUGZCXX_LEGAL_VALUES_ARRAY_TOO_SMALL;
+					assign_error(bconn, BUGZCXX_LEGAL_VALUES_ARRAY_TOO_SMALL);
 					i = r_nitems + 1;
 				}
 			}
@@ -247,8 +230,7 @@ int bugzc_bug_submit(bugzc_conn *bconn, const char *product,
 	int ret = -1;
 	xmlrpc_value *result;
 	if(bconn->url == 0){
-		bconn->err_msg = (char *)_bugz_errmsg[BUGZCXX_NO_INITIALIZED];
-		bconn->err_code = BUGZCXX_NO_INITIALIZED;
+		assign_error(bconn, BUGZCXX_NO_INITIALIZED);
 		return -1;
 	}
 	xmlrpc_client_call2f(&bconn->xenv, bconn->xcli, bconn->url,
@@ -267,46 +249,25 @@ int bugzc_bug_submit(bugzc_conn *bconn, const char *product,
 	if(bconn->xenv.fault_occurred){
 		switch(bconn->xenv.fault_code){
 			case BUGZ_WS_INVALID_USER:
-				bconn->err_msg = (char *)
-				_bugz_errmsg[BUGZCXX_XMLRPC_INVALID_USER];
-				bconn->err_code = 
-						BUGZCXX_XMLRPC_INVALID_USER;
+				assign_error(bconn, BUGZCXX_XMLRPC_INVALID_USER);
 				break;
 			case BUGZ_WS_INVALID_SUMMARY:
-				bconn->err_msg = (char *)
-				_bugz_errmsg[BUGZCXX_XMLRPC_INVALID_SUMMARY];
-				bconn->err_code = 
-						BUGZCXX_XMLRPC_INVALID_SUMMARY;
+				assign_error(bconn, BUGZCXX_XMLRPC_INVALID_SUMMARY);
 				break;
 			case BUGZ_WS_INVALID_COMPONENT:
-				bconn->err_msg = (char *)
-				_bugz_errmsg[BUGZCXX_XMLRPC_INVALID_COMPONENT];
-				bconn->err_code = 
-						BUGZCXX_XMLRPC_INVALID_COMPONENT;
+				assign_error(bconn, BUGZCXX_XMLRPC_INVALID_COMPONENT);
 				break;
 			case BUGZ_WS_INVALID_FIELD:
-				bconn->err_msg = (char *)
-				_bugz_errmsg[BUGZCXX_XMLRPC_INVALID_FIELD_VALUE];
-				bconn->err_code = 
-						BUGZCXX_XMLRPC_INVALID_FIELD_VALUE;
+				assign_error(bconn, BUGZCXX_XMLRPC_INVALID_FIELD_VALUE);
 				break;
 			case BUGZ_WS_INVALID_PRODUCT:
-				bconn->err_msg = (char *)
-				_bugz_errmsg[BUGZCXX_XMLRPC_INVALID_PRODUCT];
-				bconn->err_code = 
-						BUGZCXX_XMLRPC_INVALID_PRODUCT;
+				assign_error(bconn, BUGZCXX_XMLRPC_INVALID_PRODUCT);
 				break;
 			case BUGZ_WS_ACCOUNT_DISABLED:
-				bconn->err_msg = (char *)
-				_bugz_errmsg[BUGZCXX_XMLRPC_ACCOUNT_DISABLED];
-				bconn->err_code = 
-						BUGZCXX_XMLRPC_ACCOUNT_DISABLED;
+				assign_error(bconn, BUGZCXX_XMLRPC_ACCOUNT_DISABLED);
 				break;
 			default:
-				bconn->err_msg = (char *)
-				_bugz_errmsg[BUGZCXX_XMLRPC_FAULT_OCURRED];
-				bconn->err_code = 
-						BUGZCXX_XMLRPC_FAULT_OCURRED;
+				assign_error(bconn, BUGZCXX_XMLRPC_FAULT_OCURRED);
 		}
 		return -1;
 	}
@@ -352,8 +313,7 @@ int bugzc_bug_get_bugs_list(bugzc_conn *bconn, unsigned int *bug_ids,
 	xmlrpc_value *bug_item;
 	bugzc_bug *bug_obj;
 	if(bconn->url == 0){
-		bconn->err_msg = (char *)_bugz_errmsg[BUGZCXX_NO_INITIALIZED];
-		bconn->err_code = BUGZCXX_NO_INITIALIZED;
+		assign_error(bconn, BUGZCXX_NO_INITIALIZED);
 		return 0;
 	}
 	bugzc_list_create(olist);
@@ -372,40 +332,22 @@ int bugzc_bug_get_bugs_list(bugzc_conn *bconn, unsigned int *bug_ids,
 	if(bconn->xenv.fault_occurred){
 		switch(bconn->xenv.fault_code){
 			case BUGZ_WS_ACCESS_DENIED:
-				bconn->err_msg = (char *)
-				_bugz_errmsg[BUGZCXX_XMLRPC_ACCESS_DENIED];
-				bconn->err_code = 
-						BUGZCXX_XMLRPC_ACCESS_DENIED;
+				assign_error(bconn, BUGZCXX_XMLRPC_ACCESS_DENIED);
 				break;
 			case BUGZ_WS_INVALID_BUG_ID:
-				bconn->err_msg = (char *)
-				_bugz_errmsg[BUGZCXX_XMLRPC_INVALID_BUG_ID];
-				bconn->err_code = 
-						BUGZCXX_XMLRPC_INVALID_BUG_ID;
+				assign_error(bconn, BUGZCXX_XMLRPC_INVALID_BUG_ID);
 				break;
 			case BUGZ_WS_INVALID_BUG_ALIAS:
-				bconn->err_msg = (char *)
-				_bugz_errmsg[BUGZCXX_XMLRPC_INVALID_BUG_ALIAS];
-				bconn->err_code = 
-						BUGZCXX_XMLRPC_INVALID_BUG_ALIAS;
+				assign_error(bconn, BUGZCXX_XMLRPC_INVALID_BUG_ALIAS);
 				break;
 			case BUGZ_WS_INVALID_USER:
-				bconn->err_msg = (char *)
-				_bugz_errmsg[BUGZCXX_XMLRPC_INVALID_USER];
-				bconn->err_code = 
-						BUGZCXX_XMLRPC_INVALID_USER;
+				assign_error(bconn, BUGZCXX_XMLRPC_INVALID_USER);
 				break;
 			case BUGZ_WS_ACCOUNT_DISABLED:
-				bconn->err_msg = (char *)
-				_bugz_errmsg[BUGZCXX_XMLRPC_ACCOUNT_DISABLED];
-				bconn->err_code = 
-						BUGZCXX_XMLRPC_ACCOUNT_DISABLED;
+				assign_error(bconn, BUGZCXX_XMLRPC_ACCOUNT_DISABLED);
 				break;
 			default:
-				bconn->err_msg = (char *)
-				_bugz_errmsg[BUGZCXX_XMLRPC_FAULT_OCURRED];
-				bconn->err_code = 
-						BUGZCXX_XMLRPC_FAULT_OCURRED;
+				assign_error(bconn, BUGZCXX_XMLRPC_FAULT_OCURRED);
 		}
 		return -1;
 	}
@@ -432,8 +374,7 @@ bugzc_bug *bugzc_bug_get_bug_info(bugzc_conn *bconn, unsigned int bug_id){
 	xmlrpc_value *bug_array = 0, *bug_item = 0;
 	bugzc_bug *bug_obj = 0;
 	if(bconn->url == 0){
-		bconn->err_msg = (char *)_bugz_errmsg[BUGZCXX_NO_INITIALIZED];
-		bconn->err_code = BUGZCXX_NO_INITIALIZED;
+		assign_error(bconn, BUGZCXX_NO_INITIALIZED);
 		return NULL;
 	}
 
@@ -459,40 +400,22 @@ bugzc_bug *bugzc_bug_get_bug_info(bugzc_conn *bconn, unsigned int bug_id){
 	if(bconn->xenv.fault_occurred){
 		switch(bconn->xenv.fault_code){
 			case BUGZ_WS_ACCESS_DENIED:
-				bconn->err_msg = (char *)
-				_bugz_errmsg[BUGZCXX_XMLRPC_ACCESS_DENIED];
-				bconn->err_code =
-						BUGZCXX_XMLRPC_ACCESS_DENIED;
+				assign_error(bconn, BUGZCXX_XMLRPC_ACCESS_DENIED);
 				break;
 			case BUGZ_WS_INVALID_BUG_ID:
-				bconn->err_msg = (char *)
-				_bugz_errmsg[BUGZCXX_XMLRPC_INVALID_BUG_ID];
-				bconn->err_code =
-						BUGZCXX_XMLRPC_INVALID_BUG_ID;
+				assign_error(bconn, BUGZCXX_XMLRPC_INVALID_BUG_ID);
 				break;
 			case BUGZ_WS_INVALID_BUG_ALIAS:
-				bconn->err_msg = (char *)
-				_bugz_errmsg[BUGZCXX_XMLRPC_INVALID_BUG_ALIAS];
-				bconn->err_code =
-						BUGZCXX_XMLRPC_INVALID_BUG_ALIAS;
+				assign_error(bconn, BUGZCXX_XMLRPC_INVALID_BUG_ALIAS);
 				break;
 			case BUGZ_WS_INVALID_USER:
-				bconn->err_msg = (char *)
-				_bugz_errmsg[BUGZCXX_XMLRPC_INVALID_USER];
-				bconn->err_code =
-						BUGZCXX_XMLRPC_INVALID_USER;
+				assign_error(bconn, BUGZCXX_XMLRPC_INVALID_USER);
 				break;
 			case BUGZ_WS_ACCOUNT_DISABLED:
-				bconn->err_msg = (char *)
-				_bugz_errmsg[BUGZCXX_XMLRPC_ACCOUNT_DISABLED];
-				bconn->err_code =
-						BUGZCXX_XMLRPC_ACCOUNT_DISABLED;
+				assign_error(bconn, BUGZCXX_XMLRPC_ACCOUNT_DISABLED);
 				break;
 			default:
-				bconn->err_msg = (char *)
-				_bugz_errmsg[BUGZCXX_XMLRPC_FAULT_OCURRED];
-				bconn->err_code =
-						BUGZCXX_XMLRPC_FAULT_OCURRED;
+				assign_error(bconn, BUGZCXX_XMLRPC_FAULT_OCURRED);
 		}
 	}
 	else{
