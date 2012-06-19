@@ -1,3 +1,0 @@
-Bugzilla C/C++ xml-rpc proxy.
-
-This is a library intended as an interface proxy with the popular Bugzilla bug tracking system to be used on C/C++ programs, this way you can automate bug creation automatically or interactively.
