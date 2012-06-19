@@ -39,19 +39,6 @@ typedef struct bugz_conn_s {
  *  @param bc A bugz_conn connection element to be initialized.
  *  @param url A null terminated string containing Bugzilla's URL, something
  * 	like: http://bugzilla.example.com/xmlrpc.cgi
- *  @param surl The amount of characters in url.
- *  @return 0 on success, any other value on failure.
- *  @deprecated Please use bugzc_init2, as of bugzcxx 0.1.0 bugzc_init will
- *  be the same as bugzc_init2
- ***************************************************************************/
-int bugzc_init(bugzc_conn *bc, const char *url, size_t surl)
-				__attribute__ ((__deprecated__));
-/** @brief Initializes bugzilla connection establishing its location url.
- *  A call to this function will not perform any connection related
- *  tests and will only initialize internal variables.
- *  @param bc A bugz_conn connection element to be initialized.
- *  @param url A null terminated string containing Bugzilla's URL, something
- * 	like: http://bugzilla.example.com/xmlrpc.cgi
  *  @return 0 on success, any other value on failure.
  ***************************************************************************/
 int bugzc_init2(bugzc_conn *bc, const char *url);

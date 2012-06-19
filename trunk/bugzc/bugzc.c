@@ -37,24 +37,6 @@ static const char *__curl_transport = "curl";
 
 static struct xmlrpc_clientparms global_xparms;
 
-int bugzc_init(bugzc_conn *bc, const char *url, size_t surl){
-	bc->err_code = 0;
-	bc->err_msg = 0;
-	/* Validate url using validate_url when it is written */
-	bc->url = malloc(surl + 1);
-	strncpy(bc->url, url, surl);
-	bc->url[surl] = '\0';
-	global_xparms.transport = __curl_transport;
-	xmlrpc_env_init(&bc->xenv);
-	xmlrpc_client_setup_global_const(&bc->xenv);
-
-	xmlrpc_client_create(&bc->xenv, XMLRPC_CLIENT_NO_FLAGS, 
-			BUGZCXX_CLIENT_NAME, BUGZCXX_VERSION_STRING, 
-			&global_xparms, 
-			sizeof(global_xparms), &bc->xcli);
-	return 0;
-}
-
 int bugzc_init2(bugzc_conn *bc, const char *url){
 	int surl, i, j, k;
 	char vbuf[DEFAULT_VERSION_STRING_SIZE];
