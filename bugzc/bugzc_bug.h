@@ -146,23 +146,6 @@ int bugzc_bug_submit(bugzc_conn *conn, const char *product,
 			const char *priority, const char *severity);
 
 /** @brief Gives detailed information about a bugid or an array of bug ids.
- *  @deprecated Instead use bugzc_bug_get_bugs_list as of BugzCXX 0.1.0 the
- *  function bugzc_bug_get_bugs will be eliminated.
- *  @param conn A properly initialized bugz_conn object describing the
- *  	url of the Bugzilla server.
- *  @param bug_ids An array of numeric bug ids to query from the Bugzilla
- *  	remote installation server.
- *  @param nbugid The amount of elements contained in the bug_ids array.
- *  @param rbugid Will return the amount of successfully retrieved elements
- *  	from the get_bugs query
- *  @return A dynamically allocated array of bugzc_bug elements which after
- *  	use most be released from memory with an appropiate call to 
- *  	bugzc_bug_destry_list. */
-bugzc_bug *bugzc_bug_get_bugs(bugzc_conn *conn, unsigned int *bug_ids,
-				size_t nbugid, size_t *rbugid)
-				__attribute__ ((__deprecated__));
-
-/** @brief Gives detailed information about a bugid or an array of bug ids.
  *  @param conn A properly initialized bugz_conn object describing the
  *  	url of the Bugzilla server.
  *  @param bug_ids An array of numeric bug ids to query from the Bugzilla
