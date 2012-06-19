@@ -1,11 +1,83 @@
-2007-07-18	Juan V. Guerrero <ryoma.nagare@gmail.com>
-	* Starting to write initial source code
+Release 0.6.0
+* Fix bugzc_bug.h header file and small correction in bugzc_list.h.
+* Renamed __xmlrpc2bug to xmlrpc2bug and marked it as static. It is an
+  internal function and is not supposed to be used by DSO consumers.
+* Changed rpc_* related internal function visibility as "hidden" so
+  that they are automatically marked as LOCAL in output DSO.
+* Added code bits to disable ssl peer/host verification. These would
+  be useful for development till no_ssl_verifypeer/host are extended
+  to our library.
+* Added curl parameter variable from xmlrpc-c client.h to initialize
+  function. It would be useful for extending no_ssl_verifypeer etc
+  options from xmlrpc library here. Increased response limit to
+  2*512k. Print fault string for all failures which happen when
+  example initialization fails. Useful for debugging.
+* Remove unused description array from get_bugs.c (example).
+* Chased and fixed a few memory leaks (mostly during bug information
+  retrieval)
+* Added initial support for runtime server versioning support
+  (Identify and enable/disable methods available in newer versions of
+  bugzilla or even disable deprecated ones based on server's
+  installation vers
+* Implemented a method for retrieval of just one bug definition from
+  server (instead of multiple bug reports) on C and C++ libraries.
+* Added one more example program for C++, it demonstrates how to query
+  information for just one bug.
+* Added and opaque member to the bugzc_bug_s structure so we can
+  handle more bug fields added in the future.
 
-2009-12-28	Juan V. Guerrero <ryoma.nagare@gmail.com>
-	* Implementing the version() and timezone() methods in the Connection class
-	* Adding a C++ example (textlogin.cpp)
-	* Adding a cleanup function (bugzc_finish) so we can release session data appropriately
-	* Closing a memory leak in rpc_void_call_ret_s() memory allocated to tmp_ret was not correctly freed before.
-	
-2010-01-08	Juan V. Guerrero <ryoma.nagare@gmail.com>
-	* Modifying configure.ac so it checks wheter the libcurl is present on the system
+
+Release 0.0.4
+In this release we've added support for UNSTABLE methods in special those found
+at Bugzilla::WebService::Product.
+Some really weird usage of dynamic arrays has been deprecated in favor of
+linked-lists, use the bugzc_list and related data-types and functions to 
+operate collections of objects.
+Deprecated functions:
+     Deprecated                Alternative
+bugzc_bug_get_bugs      bugzc_bug_get_bugs_list
+bugzc_bug_legal_values  bugzc_bug_legal_values_list
+bugzc_bug_destroy_obj   bugzc_bug_destroy_obj2
+bugzc_bug_destroy_list  bugzc_bug_destroy_list2
+
+Notes:
+In order to enable support for UNSTABLE interfaces you must run configure with
+the --enable-unstable option.
+
+
+Release 0.0.3
+
+Bugzc is feature complete, which means that all Bugzilla::Webservice 
+namespaces have been coded, however, only stable and experimental methods
+have been implemented.
+In the  next release we will see implementation of unstable interfaces for
+the ones who really need it.
+Completed namespaces and matching methods are:
+
+Bugzilla::WebService::Bugzilla
+http://www.bugzilla.org/docs/tip/html/api/Bugzilla/WebService/Bugzilla.html
+	Bugzilla Method			Bugzc equivalent
+	* version			=> bugzc_bugzilla_version
+	* timezone			=> bugzc_bugzilla_timezone
+
+Bugzilla::WebService::User
+http://www.bugzilla.org/docs/tip/html/api/Bugzilla/WebService/User.html
+	Bugzilla Method			Bugzc equivalent
+	* login				=> bugzc_user_login
+	* logout			=> bugzc_user_logout
+	* offer_account_by_email	=> bugzc_user_offer_account_by_email
+	* create			=> bugzc_user_create
+
+Bugzilla::WebService::Bug
+http://www.bugzilla.org/docs/tip/html/api/Bugzilla/WebService/Bug.html
+
+	Bugzilla Method			Bugzc equivalent
+	* legal_values			=> bugzc_bug_legal_values
+	* get_bugs			=> bugzc_bug_get_bugs
+	* create			=> bugzc_bug_submit
+
+Bugzilla::WebService::Product
+http://www.bugzilla.org/docs/tip/html/api/Bugzilla/WebService/Product.html
+Nothing from this namespace got implemented at all because none of the listed
+methods therein are experimental or stable, you should wait for another Bugzc
+release to get them.
