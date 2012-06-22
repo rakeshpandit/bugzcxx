@@ -82,7 +82,7 @@ int bugzc_init2(bugzc_conn *bconn, const char *url){
 	vmajor = strtok(vbuf, ".");
 	bconn->v_major = vmajor ? atoi(vmajor) : 0;
 	vminor = strtok(NULL, ".");
-	bconn->v_minor = vmajor ? atoi(vminor) : 0;
+	bconn->v_minor = vminor ? atoi(vminor) : 0;
 	vpatch = strtok(NULL, ".");
 	bconn->v_patch = vpatch ? atoi(vpatch) : 0;
 	return 0;
