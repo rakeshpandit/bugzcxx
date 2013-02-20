@@ -23,7 +23,7 @@ library_includedir=$(includedir)/bugzc
 
 library_include_HEADERS = $(h_sources)
 
-INCLUDES = -I$(top_dir)
+AM_CPPFLAGS = -I$(top_srcdir)
 
 lib_LTLIBRARIES=libbugzc.la
 libbugzc_la_SOURCES=$(h_sources) $(c_sources)

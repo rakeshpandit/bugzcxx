@@ -8,7 +8,7 @@
 #  the GNU General Public License Version 2. See the LICENSE file
 #  at the top of the source tree.
 
-doc_PROGRAMS = getversion gettimezone testlogin get_legal_field_values \
+bin_PROGRAMS = getversion gettimezone testlogin get_legal_field_values \
 				submit_bug get_bugs offer_account_by_email bugz_create_user \
 				get_products
 
@@ -31,4 +31,5 @@ bugz_create_user_SOURCES = bugz_create_user.c utils.c
 get_products_SOURCES = get_products.c utils.c
 
 LDADD = ../../bugzc/libbugzc.la $(XMLRPCC_LIBS)
-AM_CFLAGS = $(XMLRPCC_CFLAGS)
+AM_CFLAGS = $(XMLRPCC_CFLAGS) 
+AM_CPPFLAGS = -I$(top_srcdir)
