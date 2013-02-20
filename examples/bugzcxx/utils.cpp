@@ -13,6 +13,7 @@
 #include<iostream>
 #include<cstdlib>
 #include<cstdio>
+#include <unistd.h>
 #include"utils.h"
 
 void safe_getpass(std::string &pass){
