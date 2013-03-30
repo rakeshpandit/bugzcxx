@@ -117,7 +117,7 @@ int main(int argc, char *argv[]){
 		}
 		return 1;
 	}
-	bugzc_list_create(&list);
+	bugzc_list_init(&list);
 	printf("Selectable product ids: ");
 	if(bugzc_product_get_selectable_products(&conn, &list) < 0){
 		if(conn.err_code != 0){

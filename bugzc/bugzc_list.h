@@ -70,10 +70,10 @@ void bugzc_node_free(bugzc_node **node);
  *  @param node a reference to a node pointer. */
 void bugzc_node_free_with_data(bugzc_node **node);
 
-/** @brief Creates an properly initialzes a bugdzc_list doubly-linked list
+/** @brief Initialzes a bugzc_list doubly-linked list
  *  @param list A pointer to the list to be created
  *  @return A pointer to the list or 0x0 on failure. */
-bugzc_list *bugzc_list_create(bugzc_list *list);
+bugzc_list *bugzc_list_init(bugzc_list *list);
 
 /** @brief Destroys a bugzc_list linked list nodes associations only. 
  *  Will delete all nodes in the list one by one without releasing their

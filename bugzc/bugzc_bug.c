@@ -316,7 +316,7 @@ int bugzc_bug_get_bugs_list(bugzc_conn *bconn, unsigned int *bug_ids,
 		assign_error(bconn, BUGZCXX_NO_INITIALIZED);
 		return 0;
 	}
-	bugzc_list_create(olist);
+	bugzc_list_init(olist);
 	int_array = xmlrpc_array_new(&bconn->xenv);
 	for(i = 0; i < (int)nbugid; i++){
 		int_item = xmlrpc_build_value(&bconn->xenv, "i", bug_ids[i]);

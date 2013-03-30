@@ -42,19 +42,19 @@ static bugzc_product *__create_product(int _id, const char *_name,
 }
 
 int bugzc_product_get_selectable_products(bugzc_conn *conn, bugzc_list *olist){
-	bugzc_list_create(olist);
+	bugzc_list_init(olist);
 	return rpc_void_call_ret_list_int(conn, "Product.get_selectable_products",
 						"ids", olist);
 }
 
 int bugzc_product_get_enterable_products(bugzc_conn *conn, bugzc_list *olist){
-	bugzc_list_create(olist);
+	bugzc_list_init(olist);
 	return rpc_void_call_ret_list_int(conn, "Product.get_enterable_products",
 							"ids", olist);
 }
 
 int bugzc_product_get_accessible_products(bugzc_conn *conn, bugzc_list *olist){
-	bugzc_list_create(olist);
+	bugzc_list_init(olist);
 	return rpc_void_call_ret_list_int(conn, "Product.get_accessible_products",
 								"ids", olist);
 }
@@ -77,7 +77,7 @@ int bugzc_product_get_products(bugzc_conn *bconn, int pids[], int npids,
 	int  i, _id;
 	char *_name, *_description;
 	bugzc_product *tmp_product;
-	bugzc_list_create(olist);
+	bugzc_list_init(olist);
 	int_array = xmlrpc_array_new(&bconn->xenv);
 	for(i = 0; i < npids; i++){
 		int_item = xmlrpc_build_value(&bconn->xenv, "i", pids[i]);

@@ -96,7 +96,7 @@ int main(int argc, char *argv[]){
 		product_name[59] = 0;
 		fgets_s(product_name, 58, stdin);
 	}
-	bugzc_list_create(&list);
+	bugzc_list_init(&list);
 	if(bugzc_bug_legal_values_list(&conn, field_name, product_name, &list) < 0){
 		if(conn.err_code != 0){
 			fprintf(stderr, "\n");

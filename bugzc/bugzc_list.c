@@ -48,7 +48,7 @@ void bugzc_node_free_with_data(bugzc_node **node){
 	*node = 0;
 }
 
-bugzc_list *bugzc_list_create(bugzc_list *list){
+bugzc_list *bugzc_list_init(bugzc_list *list){
 	list->first = 0;
 	list->last = 0;
 	list->count = 0;
