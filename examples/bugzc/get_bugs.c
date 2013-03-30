@@ -18,6 +18,7 @@
 #include"utils.h"
 
 void print_bug_obj(bugzc_bug *l){
+	printf("Querying info for Bug Id #%d...\n", l->id);
 	printf("Bug id:\t\t%d\nSummary:\t%s\n", l->id, l->summary);
 	printf("Created On:\t%s (%lu)\n", l->creation_time,
 			l->creation_tstamp);
@@ -99,7 +100,6 @@ int main(int argc, char *argv[]){
 	/* Build bug array list */
 	for(i = 3; i < argc; i++){
 		sscanf(argv[i], "%d", &qi[i - 3]);
-		printf("Querying info for #%d...\n", qi[i - 3]);
 	}
 	if(bugzc_bug_get_bugs_list(&conn, qi, argc - 3, &list) >= 0){
 		print_bug_list(&list);
