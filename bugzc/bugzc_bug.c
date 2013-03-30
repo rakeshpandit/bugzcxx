@@ -120,6 +120,14 @@ static bugzc_bug *xmlrpc2bug(bugzc_conn *bconn, xmlrpc_value *bug_item,
 	bugzc_bug *bug_obj = 0;
 	xmlrpc_struct_read_value(&bconn->xenv, bug_item, "summary", &xsummary);
 	xmlrpc_struct_read_value(&bconn->xenv, bug_item, "alias", &xalias);
+	if(bconn->xenv.fault_occurred){
+		/* Some New Bugzilla releases have alias option
+		   disabled by default, hence here in this situation
+		   leading to an error if no alias is set for the
+		   bug. */
+		xmlrpc_env_clean(&bconn->xenv);
+		xmlrpc_env_init(&bconn->xenv);
+	}
 	xmlrpc_struct_read_value(&bconn->xenv, bug_item,
 							"creation_time", &xcreation_time);
 	xmlrpc_struct_read_value(&bconn->xenv, bug_item,
@@ -127,17 +135,18 @@ static bugzc_bug *xmlrpc2bug(bugzc_conn *bconn, xmlrpc_value *bug_item,
 	xmlrpc_read_datetime_sec(&bconn->xenv, xcreation_time, &b_ctime);
 	xmlrpc_read_datetime_sec(&bconn->xenv, xlast_change_time, &b_lctime);
 	xmlrpc_read_string(&bconn->xenv, xsummary, (const char **)&b_summary);
-	if(xmlrpc_value_type(xalias) == XMLRPC_TYPE_STRING)
+	if(xalias!=NULL && xmlrpc_value_type(xalias) == XMLRPC_TYPE_STRING)
 		xmlrpc_read_string(&bconn->xenv, xalias, (const char **)&b_alias);
 	else
 		b_alias = (char *)_bugz_empty_str;
 	bug_obj = bugzc_bug_create_obj2(bconn, bug_id, b_alias, b_summary,
 			b_ctime, b_lctime);
 	free(b_summary);
-	if(xmlrpc_value_type(xalias) == XMLRPC_TYPE_STRING)
+	if(xalias!=NULL && xmlrpc_value_type(xalias) == XMLRPC_TYPE_STRING)
 		free(b_alias);
 	xmlrpc_DECREF(xsummary);
-	xmlrpc_DECREF(xalias);
+	if(xalias!=NULL)
+		xmlrpc_DECREF(xalias);
 	xmlrpc_DECREF(xcreation_time);
 	xmlrpc_DECREF(xlast_change_time);
 	return bug_obj;
