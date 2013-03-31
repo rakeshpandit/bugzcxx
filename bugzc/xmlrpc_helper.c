@@ -90,41 +90,10 @@ int rpc_void_call_ret_s(bugzc_conn *bconn, const char *mname,
 }
 
 int rpc_void_call_void(bugzc_conn *bconn, const char *mname){
-	xmlrpc_value *result;
-#ifdef RESPONSE_TIME_DEBUGGING
-	struct timeval t1, t2, tr;
-	gettimeofday(&t1, 0);
-#endif
-	if(bconn->url == 0){
-		bconn->err_msg = (char *)
-						_bugz_errmsg[BUGZCXX_NO_INITIALIZED];
-		bconn->err_code = BUGZCXX_NO_INITIALIZED;
-		return -1;
-	}
-	xmlrpc_client_call2f(&bconn->xenv, bconn->xcli, bconn->url,
-			mname, &result, "()");
-#ifdef RESPONSE_TIME_DEBUGGING
-	gettimeofday(&t2, 0);
-	timersub(&t2, &t1, &tr);
-	fprintf(stderr, "Call to method %s took: %d ms\n", mname, (int)(tr.tv_usec / 1000));
-#endif
-
-	if(bconn->xenv.fault_occurred){
-		switch(bconn->xenv.fault_code){
-			case BUGZ_WS_AUTH_REQUIRED:
-				bconn->err_msg = (char *)
-					_bugz_errmsg[BUGZCXX_XMLRPC_LOGIN_REQUIRED];
-				bconn->err_code = 
-					BUGZCXX_XMLRPC_LOGIN_REQUIRED;
-				break;
-			default:
-				bconn->err_msg = (char *)
-					_bugz_errmsg[BUGZCXX_XMLRPC_FAULT_OCURRED];
-				bconn->err_code = 
-					BUGZCXX_XMLRPC_FAULT_OCURRED;
-		}
-	}
-	xmlrpc_DECREF(result);
+	xmlrpc_value *result = rpc_void_call(bconn, mname);
+        if(result == 0)
+                return -1;
+        xmlrpc_DECREF(result);
 	return 0;
 }
 
