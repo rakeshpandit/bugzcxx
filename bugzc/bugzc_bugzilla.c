@@ -22,6 +22,6 @@ int bugzc_bugzilla_version(bugzc_conn *bconn, char *vbuf, size_t vsize){
 }
 
 int bugzc_bugzilla_timezone(bugzc_conn *bconn, char *tbuf, size_t tsize){
-	return rpc_void_call_ret_s(bconn, "Bugzilla.timezone", "timezone", tbuf, tsize);
+	return rpc_void_call_ret_s(bconn, "Bugzilla.time", "tz_offset", tbuf, tsize);
 }
 
