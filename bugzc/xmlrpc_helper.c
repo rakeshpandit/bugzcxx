@@ -63,15 +63,17 @@ int rpc_void_call_ret_s(bugzc_conn *bconn, const char *mname,
 				const char *vname, 
 				char *buf, size_t sbuf){
 	int ret = -1;
-	char *tmp_ret = 0;
+	const char *tmp_ret = 0;
+        xmlrpc_value *tmp_xmlrpc = 0;
 	xmlrpc_value *result = 0;
 
 	result = rpc_void_call(bconn, mname);
 	if(result == 0){
 		return -1;
 	} else {
-		xmlrpc_decompose_value(&bconn->xenv, result, 
-				"{s:s,*}", vname, &tmp_ret);
+		xmlrpc_struct_find_value(&bconn->xenv, result, 
+				vname, &tmp_xmlrpc);
+                xmlrpc_read_string(&bconn->xenv, tmp_xmlrpc, &tmp_ret);
 		if(strlen(tmp_ret) + 1 > sbuf){
 			//Error
 			bconn->err_code = BUGZCXX_BUFFER_TOO_SMALL;
@@ -187,8 +189,8 @@ int rpc_void_call_ret_list_int(bugzc_conn *bconn, const char *mname,
 	if(result == 0){
 		return -1;
 	} else {
-		xmlrpc_decompose_value(&bconn->xenv, result, 
-				"{s:A,*}", vname, &arr);
+		xmlrpc_struct_find_value(&bconn->xenv, result, 
+				vname, &arr);
 		ret = xmlrpc_array_size(&bconn->xenv, arr);
 		for(i = 0; i < ret; i++){
 				xmlrpc_array_read_item(&bconn->xenv, arr,
