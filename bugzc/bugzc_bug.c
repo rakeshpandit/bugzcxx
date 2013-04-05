@@ -118,20 +118,13 @@ static bugzc_bug *xmlrpc2bug(bugzc_conn *bconn, xmlrpc_value *bug_item,
 	char *b_summary = 0, *b_alias = 0;
 	time_t b_ctime, b_lctime;
 	bugzc_bug *bug_obj = 0;
-	xmlrpc_struct_read_value(&bconn->xenv, bug_item, "summary", &xsummary);
-	xmlrpc_struct_read_value(&bconn->xenv, bug_item, "alias", &xalias);
-	if(bconn->xenv.fault_occurred){
-		/* Some New Bugzilla releases have alias option
-		   disabled by default, hence here in this situation
-		   leading to an error if no alias is set for the
-		   bug. */
-		xmlrpc_env_clean(&bconn->xenv);
-		xmlrpc_env_init(&bconn->xenv);
-	}
-	xmlrpc_struct_read_value(&bconn->xenv, bug_item,
-							"creation_time", &xcreation_time);
-	xmlrpc_struct_read_value(&bconn->xenv, bug_item,
-							"last_change_time", &xlast_change_time);
+	xmlrpc_struct_find_value(&bconn->xenv, bug_item, "summary", &xsummary);
+	xmlrpc_struct_find_value(&bconn->xenv, bug_item, "alias", &xalias);
+
+	xmlrpc_struct_find_value(&bconn->xenv, bug_item,
+				 "creation_time", &xcreation_time);
+	xmlrpc_struct_find_value(&bconn->xenv, bug_item,
+				 "last_change_time", &xlast_change_time);
 	xmlrpc_read_datetime_sec(&bconn->xenv, xcreation_time, &b_ctime);
 	xmlrpc_read_datetime_sec(&bconn->xenv, xlast_change_time, &b_lctime);
 	xmlrpc_read_string(&bconn->xenv, xsummary, (const char **)&b_summary);
